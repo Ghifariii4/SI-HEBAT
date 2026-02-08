@@ -8,37 +8,6 @@
 
 ---
 
-## ✨ Fitur Utama
-
-### 🎨 **Desain Duolingo-Like**
-
-- Visual ceria, friendly, dan playful
-- Warna hijau cerah (Duolingo style) dengan accent kuning dan biru
-- Banyak ilustrasi flat dan emoji style
-- Rounded corners besar untuk tampilan modern
-- Animasi smooth di setiap interaksi
-
-### 🌓 **Dark Mode**
-
-- Toggle dark/light mode yang tersimpan di localStorage
-- Smooth transition antar tema (300ms)
-- Otomatis mengikuti preferensi sistem jika belum ada pilihan
-
-### 📱 **Fully Responsive**
-
-- Mobile First Design
-- Optimal di desktop, tablet, dan mobile
-- Touch-friendly buttons dan spacing
-
-### ⚡ **Smooth Animations**
-
-- Framer Motion untuk animasi profesional
-- Fade-in & slide-up saat scroll
-- Hover effects pada cards dan buttons
-- Floating elements di background
-
----
-
 ## 📸 Preview & Demo
 
 **Lihat preview langsung**: Buka file [landing-demo.html](./landing-demo.html) di browser Anda tanpa perlu setup apapun!
