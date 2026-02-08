@@ -29,8 +29,8 @@ Buka terminal dan jalankan perintah berikut:
 
 ```bash
 # 1. Clone repository
-git clone https://github.com/username-anda/7-kebiasaan-anak.git
-cd 7-kebiasaan-anak
+git clone https://github.com/Ghifariii4/SI-HEBAT.git
+cd SI-HEBAT
 
 # 2. Install Backend Dependencies (Laravel)
 ./vendor/bin/sail composer install
