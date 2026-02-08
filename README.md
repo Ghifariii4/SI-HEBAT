@@ -1,55 +1,107 @@
-# 🚀 7 Kebiasaan Anak Indonesia Hebat
+# 🎓 Si Hebat - Landing Page Website
 
-Platform edukasi interaktif yang dibangun untuk mencetak generasi muda Indonesia yang berkarakter. Menggabungkan kekuatan backend Laravel dengan keindahan UI modern React.
+> Platform edukasi interaktif yang menginspirasi anak Indonesia untuk membangun karakter melalui 7 kebiasaan positif.
 
-## 🌟 Tech Stack Highlights
+![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)
+![License](https://img.shields.io/badge/license-MIT-green.svg)
+![Status](https://img.shields.io/badge/status-active-success.svg)
 
-- **Backend:** Laravel 12
-- **Frontend:** React.js + Inertia.js (SPA)
-- **UI Framework:** Shadcn UI + Tailwind CSS
-- **Animation:** Framer Motion
-- **Database:** PostgreSQL (Local via Docker / Remote Server)
-- **Orchestration:** Laravel Sail (Docker)
+---
 
-## 📋 Prasyarat (Wajib)
+## ✨ Fitur Utama
 
-Sebelum memulai, pastikan laptop kamu sudah terinstall:
+### 🎨 **Desain Duolingo-Like**
 
-- Docker Desktop (Sedang running di background)
-- Visual Studio Code + Extension Dev Containers (Rekomendasi) atau cukup Terminal biasa
-- Git
+- Visual ceria, friendly, dan playful
+- Warna hijau cerah (Duolingo style) dengan accent kuning dan biru
+- Banyak ilustrasi flat dan emoji style
+- Rounded corners besar untuk tampilan modern
+- Animasi smooth di setiap interaksi
 
-## 🏃‍♂️ Quick Start (Setup dari 0)
+### 🌓 **Dark Mode**
 
-Ikuti langkah ini persis seperti urutannya agar tidak ada error.
+- Toggle dark/light mode yang tersimpan di localStorage
+- Smooth transition antar tema (300ms)
+- Otomatis mengikuti preferensi sistem jika belum ada pilihan
 
-### 1. Clone & Install Dependencies
+### 📱 **Fully Responsive**
 
-Buka terminal dan jalankan perintah berikut:
+- Mobile First Design
+- Optimal di desktop, tablet, dan mobile
+- Touch-friendly buttons dan spacing
 
-```bash
-# 1. Clone repository
-git clone https://github.com/Ghifariii4/SI-HEBAT.git
-cd SI-HEBAT
+### ⚡ **Smooth Animations**
 
-# 2. Install Backend Dependencies (Laravel)
-./vendor/bin/sail composer install
+- Framer Motion untuk animasi profesional
+- Fade-in & slide-up saat scroll
+- Hover effects pada cards dan buttons
+- Floating elements di background
 
-# 3. Install Frontend Dependencies (React, Shadcn, Framer Motion)
-./vendor/bin/sail npm install
+---
+
+## 📸 Preview & Demo
+
+**Lihat preview langsung**: Buka file [landing-demo.html](./landing-demo.html) di browser Anda tanpa perlu setup apapun!
+
+---
+
+## 🏗️ Struktur Proyek
+
+```
+SI-HEBAT/
+├── 📁 resources/
+│   └── js/
+│       ├── Pages/
+│       │   └── Landing.jsx              # Main landing page component
+│       ├── Components/
+│       │   ├── NavBar.jsx               # Navigation + Dark mode toggle
+│       │   ├── HabitCard.jsx            # Reusable habit card
+│       │   ├── FooterSection.jsx        # Footer component
+│       │   └── Button.jsx               # Shadcn Button component
+│       └── Hooks/
+│           └── useCustomHooks.js        # Custom React hooks
+├── 📁 public/
+│   └── images/
+│       └── smkn8.jpeg                   # Logo sekolah
+├── 📄 landing-demo.html                 # Standalone HTML demo (BISA DIBUKA LANGSUNG)
+├── 📄 tailwind.config.js                # Tailwind CSS config
+├── 📄 postcss.config.js                 # PostCSS config
+├── 📄 package.json                      # Dependencies
+├── 📄 SETUP_GUIDE.md                    # Panduan setup lengkap
+└── 📄 README.md                         # File ini
 ```
 
-### 2. Setup Environment & Database
+---
 
-Copy file environment dan sesuaikan konfigurasi database.
+## 🚀 Quick Start
+
+### Option 1: Preview Demo HTML (Tercepat) ⭐
 
 ```bash
-# Copy file .env
-cp .env.example .env
-
-# Generate Application Key
-./vendor/bin/sail artisan key:generate
+# Buka file ini langsung di browser Anda
+landing-demo.html
 ```
+
+Tidak perlu setup apapun! File HTML sudah standalone dan memiliki semua fitur:
+
+- ✅ Dark mode toggle
+- ✅ Smooth scroll navigation
+- ✅ Responsive design
+- ✅ Semua 7 kebiasaan
+- ✅ Footer lengkap
+
+### Option 2: Setup React Project (Dengan Laravel)
+
+#### Prerequisites
+
+- Node.js >= 18
+- PHP >= 8.2
+- Composer
+- PostgreSQL (optional, bisa pakai SQLite)
+- Docker (optional, untuk Laravel Sail)
+  ./vendor/bin/sail artisan key:generate
+
+````
 
 #### Konfigurasi Database (.env)
 
@@ -64,7 +116,7 @@ DB_PORT=5432
 DB_DATABASE=laravel
 DB_USERNAME=postgres
 DB_PASSWORD=postgres
-```
+````
 
 **Untuk Production (Server):** Ubah `DB_HOST`, `DB_DATABASE`, `DB_USERNAME`, dan `DB_PASSWORD` sesuai kredensial server kalian.
 
@@ -154,20 +206,20 @@ import { motion } from "framer-motion";
 // Contoh penggunaan
 <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
   Konten kamu di sini
-</motion.div>
+</motion.div>;
 ```
 
 ## 🛠 Cheat Sheet Perintah
 
-| Kegunaan | Perintah |
-|----------|----------|
-| Jalankan Docker (Sail) | `./vendor/bin/sail up` |
-| Matikan Docker | `./vendor/bin/sail down` |
-| Install Library PHP | `./vendor/bin/sail composer require nama-package` |
-| Install Library NPM | `./vendor/bin/sail npm install nama-package` |
-| Clear Cache Laravel | `./vendor/bin/sail artisan optimize:clear` |
-| Run Migrasi | `./vendor/bin/sail artisan migrate:fresh --seed` |
-| Masuk ke Container Shell | `./vendor/bin/sail shell` |
+| Kegunaan                 | Perintah                                          |
+| ------------------------ | ------------------------------------------------- |
+| Jalankan Docker (Sail)   | `./vendor/bin/sail up`                            |
+| Matikan Docker           | `./vendor/bin/sail down`                          |
+| Install Library PHP      | `./vendor/bin/sail composer require nama-package` |
+| Install Library NPM      | `./vendor/bin/sail npm install nama-package`      |
+| Clear Cache Laravel      | `./vendor/bin/sail artisan optimize:clear`        |
+| Run Migrasi              | `./vendor/bin/sail artisan migrate:fresh --seed`  |
+| Masuk ke Container Shell | `./vendor/bin/sail shell`                         |
 
 ## 🐛 Troubleshooting
 
@@ -183,9 +235,9 @@ A: Pastikan kamu sudah menjalankan langkah **Setup Shadcn UI (Step 3)** di atas 
 ## 👥 Kontributor
 
 - **Ahmad Ghifari** - Lead Developer
-- **Junior Ferdiansyah** - Frontend Specialist (React/Shadcn)
+- **Junior Ferdiansyah** - Frontend (React/Shadcn)
 - **Alfarisi Azmir** - Backend & Database
 
 ## 📝 Lisensi
 
-Copyright © 2024 Tim 7 Kebiasaan Anak Indonesia Hebat.
+Copyright © 2025 Tim 7 Kebiasaan Anak Indonesia Hebat.
