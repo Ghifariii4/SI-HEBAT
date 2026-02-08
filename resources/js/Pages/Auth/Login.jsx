@@ -1,10 +1,8 @@
-<<<<<<< HEAD
 import { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { Link, router, Head } from '@inertiajs/react';
 import { motion } from 'framer-motion';
 
 export default function Login() {
-  const navigate = useNavigate();
   const [role, setRole] = useState('siswa');
   const [guruType, setGuruType] = useState('pns');
   const [loading, setLoading] = useState(false);
@@ -20,18 +18,18 @@ export default function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    
+
     // Simple validation
     const newErrors = {};
     if (!formData.password) newErrors.password = 'Password wajib diisi';
-    
+
     if (role === 'siswa' && !formData.nis) newErrors.nis = 'NIS wajib diisi';
     if (role === 'guru' && guruType === 'pns' && !formData.nip) newErrors.nip = 'NIP wajib diisi';
     if (role === 'guru' && guruType === 'honorer' && !formData.nama_lengkap) newErrors.nama_lengkap = 'Nama lengkap wajib diisi';
     if (role === 'orangtua' && !formData.email) newErrors.email = 'Email wajib diisi';
-    
+
     setErrors(newErrors);
-    
+
     if (Object.keys(newErrors).length > 0) {
       setLoading(false);
       return;
@@ -40,25 +38,23 @@ export default function Login() {
     // TODO: Send to backend API
     // For now, just navigate to dashboard
     setTimeout(() => {
-      navigate('/'); // Placeholder - akan diganti dengan dashboard route
+      router.visit('/'); // Placeholder - akan diganti dengan dashboard route
       setLoading(false);
     }, 1000);
   };
 
   const handleRoleChange = (newRole) => {
     setRole(newRole);
-    setData('role', newRole);
   };
 
   const RoleButton = ({ value, label }) => (
     <motion.button
       type="button"
       onClick={() => handleRoleChange(value)}
-      className={`py-3 px-4 rounded-xl font-semibold transition-all duration-300 ${
-        role === value
+      className={`py-3 px-4 rounded-xl font-semibold transition-all duration-300 ${role === value
           ? 'bg-green-600 text-white shadow-lg'
           : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-      }`}
+        }`}
       whileHover={{ scale: 1.05 }}
       whileTap={{ scale: 0.95 }}
     >
@@ -70,11 +66,10 @@ export default function Login() {
     <motion.button
       type="button"
       onClick={onClick}
-      className={`flex-1 py-2 px-3 rounded-xl font-semibold transition-all duration-300 ${
-        active
+      className={`flex-1 py-2 px-3 rounded-xl font-semibold transition-all duration-300 ${active
           ? 'bg-yellow-400 text-black shadow-md'
           : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-      }`}
+        }`}
       whileHover={{ scale: 1.05 }}
       whileTap={{ scale: 0.95 }}
     >
@@ -90,9 +85,8 @@ export default function Login() {
         placeholder={placeholder}
         value={value}
         onChange={onChange}
-        className={`w-full px-4 py-3 rounded-xl border-2 focus:outline-none focus:ring-2 focus:ring-green-500 transition ${
-          error ? 'border-red-500' : 'border-gray-300'
-        }`}
+        className={`w-full px-4 py-3 rounded-xl border-2 focus:outline-none focus:ring-2 focus:ring-green-500 transition ${error ? 'border-red-500' : 'border-gray-300'
+          }`}
       />
       {error && <p className="text-xs text-red-500">{error}</p>}
     </div>
@@ -100,6 +94,7 @@ export default function Login() {
 
   return (
     <div className="min-h-screen relative flex items-center justify-center px-4 py-8">
+      <Head title="Login - Si Hebat" />
       {/* Background */}
       <div
         className="absolute inset-0 bg-cover bg-center"
@@ -145,7 +140,7 @@ export default function Login() {
                 label="NIS (Nomor Induk Siswa)"
                 placeholder="Masukkan NIS Anda"
                 value={formData.nis}
-                onChange={(e) => setFormData({...formData, nis: e.target.value})}
+                onChange={(e) => setFormData({ ...formData, nis: e.target.value })}
                 error={errors.nis}
               />
               <InputField
@@ -153,7 +148,7 @@ export default function Login() {
                 type="password"
                 placeholder="Masukkan password"
                 value={formData.password}
-                onChange={(e) => setFormData({...formData, password: e.target.value})}
+                onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                 error={errors.password}
               />
             </motion.div>
@@ -192,7 +187,7 @@ export default function Login() {
                     label="NIP"
                     placeholder="Masukkan NIP Anda"
                     value={formData.nip}
-                    onChange={(e) => setFormData({...formData, nip: e.target.value})}
+                    onChange={(e) => setFormData({ ...formData, nip: e.target.value })}
                     error={errors.nip}
                   />
                   <InputField
@@ -200,7 +195,7 @@ export default function Login() {
                     type="password"
                     placeholder="Masukkan password"
                     value={formData.password}
-                    onChange={(e) => setFormData({...formData, password: e.target.value})}
+                    onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                     error={errors.password}
                   />
                 </motion.div>
@@ -217,7 +212,7 @@ export default function Login() {
                     label="Nama Lengkap"
                     placeholder="Masukkan nama lengkap"
                     value={formData.nama_lengkap}
-                    onChange={(e) => setFormData({...formData, nama_lengkap: e.target.value})}
+                    onChange={(e) => setFormData({ ...formData, nama_lengkap: e.target.value })}
                     error={errors.nama_lengkap}
                   />
                   <InputField
@@ -225,7 +220,7 @@ export default function Login() {
                     type="password"
                     placeholder="Masukkan password"
                     value={formData.password}
-                    onChange={(e) => setFormData({...formData, password: e.target.value})}
+                    onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                     error={errors.password}
                   />
                 </motion.div>
@@ -246,7 +241,7 @@ export default function Login() {
                 type="email"
                 placeholder="email@contoh.com"
                 value={formData.email}
-                onChange={(e) => setFormData({...formData, email: e.target.value})}
+                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                 error={errors.email}
               />
               <InputField
@@ -254,7 +249,7 @@ export default function Login() {
                 type="password"
                 placeholder="Masukkan password"
                 value={formData.password}
-                onChange={(e) => setFormData({...formData, password: e.target.value})}
+                onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                 error={errors.password}
               />
             </motion.div>
@@ -296,105 +291,4 @@ export default function Login() {
       </motion.div>
     </div>
   );
-=======
-import Checkbox from '@/Components/Checkbox';
-import InputError from '@/Components/InputError';
-import InputLabel from '@/Components/InputLabel';
-import PrimaryButton from '@/Components/PrimaryButton';
-import TextInput from '@/Components/TextInput';
-import GuestLayout from '@/Layouts/GuestLayout';
-import { Head, Link, useForm } from '@inertiajs/react';
-
-export default function Login({ status, canResetPassword }) {
-    const { data, setData, post, processing, errors, reset } = useForm({
-        email: '',
-        password: '',
-        remember: false,
-    });
-
-    const submit = (e) => {
-        e.preventDefault();
-
-        post(route('login'), {
-            onFinish: () => reset('password'),
-        });
-    };
-
-    return (
-        <GuestLayout>
-            <Head title="Log in" />
-
-            {status && (
-                <div className="mb-4 text-sm font-medium text-green-600">
-                    {status}
-                </div>
-            )}
-
-            <form onSubmit={submit}>
-                <div>
-                    <InputLabel htmlFor="email" value="Email" />
-
-                    <TextInput
-                        id="email"
-                        type="email"
-                        name="email"
-                        value={data.email}
-                        className="mt-1 block w-full"
-                        autoComplete="username"
-                        isFocused={true}
-                        onChange={(e) => setData('email', e.target.value)}
-                    />
-
-                    <InputError message={errors.email} className="mt-2" />
-                </div>
-
-                <div className="mt-4">
-                    <InputLabel htmlFor="password" value="Password" />
-
-                    <TextInput
-                        id="password"
-                        type="password"
-                        name="password"
-                        value={data.password}
-                        className="mt-1 block w-full"
-                        autoComplete="current-password"
-                        onChange={(e) => setData('password', e.target.value)}
-                    />
-
-                    <InputError message={errors.password} className="mt-2" />
-                </div>
-
-                <div className="mt-4 block">
-                    <label className="flex items-center">
-                        <Checkbox
-                            name="remember"
-                            checked={data.remember}
-                            onChange={(e) =>
-                                setData('remember', e.target.checked)
-                            }
-                        />
-                        <span className="ms-2 text-sm text-gray-600">
-                            Remember me
-                        </span>
-                    </label>
-                </div>
-
-                <div className="mt-4 flex items-center justify-end">
-                    {canResetPassword && (
-                        <Link
-                            href={route('password.request')}
-                            className="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                        >
-                            Forgot your password?
-                        </Link>
-                    )}
-
-                    <PrimaryButton className="ms-4" disabled={processing}>
-                        Log in
-                    </PrimaryButton>
-                </div>
-            </form>
-        </GuestLayout>
-    );
->>>>>>> 24cc638 (Initial setup: Laravel Sail, React, Inertia, and Shadcn UI)
 }

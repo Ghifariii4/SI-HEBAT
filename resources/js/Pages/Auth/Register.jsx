@@ -1,10 +1,8 @@
-<<<<<<< HEAD
 import { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { Link, router, Head } from '@inertiajs/react';
 import { motion } from 'framer-motion';
 
 export default function Register() {
-  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     nama_lengkap: '',
@@ -37,7 +35,7 @@ export default function Register() {
     // TODO: Send to backend API
     // For now, just redirect to login
     setTimeout(() => {
-      navigate('/login');
+      router.visit('/login');
       setLoading(false);
     }, 1000);
   };
@@ -50,9 +48,8 @@ export default function Register() {
         placeholder={placeholder}
         value={value}
         onChange={onChange}
-        className={`w-full px-4 py-3 rounded-xl border-2 focus:outline-none focus:ring-2 focus:ring-green-500 transition ${
-          error ? 'border-red-500' : 'border-gray-300'
-        }`}
+        className={`w-full px-4 py-3 rounded-xl border-2 focus:outline-none focus:ring-2 focus:ring-green-500 transition ${error ? 'border-red-500' : 'border-gray-300'
+          }`}
       />
       {error && <p className="text-xs text-red-500">{error}</p>}
     </div>
@@ -60,6 +57,7 @@ export default function Register() {
 
   return (
     <div className="min-h-screen relative flex items-center justify-center px-4 py-8">
+      <Head title="Register - Si Hebat" />
       {/* Background */}
       <div
         className="absolute inset-0 bg-cover bg-center"
@@ -90,7 +88,7 @@ export default function Register() {
             label="Nama Lengkap"
             placeholder="Masukkan nama lengkap Anda"
             value={formData.nama_lengkap}
-            onChange={(e) => setFormData({...formData, nama_lengkap: e.target.value})}
+            onChange={(e) => setFormData({ ...formData, nama_lengkap: e.target.value })}
             error={errors.nama_lengkap}
           />
 
@@ -99,7 +97,7 @@ export default function Register() {
             type="email"
             placeholder="email@contoh.com"
             value={formData.email}
-            onChange={(e) => setFormData({...formData, email: e.target.value})}
+            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
             error={errors.email}
           />
 
@@ -107,7 +105,7 @@ export default function Register() {
             label="NIS Anak"
             placeholder="Masukkan NIS anak Anda"
             value={formData.nis_anak}
-            onChange={(e) => setFormData({...formData, nis_anak: e.target.value})}
+            onChange={(e) => setFormData({ ...formData, nis_anak: e.target.value })}
             error={errors.nis_anak}
           />
 
@@ -116,7 +114,7 @@ export default function Register() {
             type="password"
             placeholder="Minimal 8 karakter"
             value={formData.password}
-            onChange={(e) => setFormData({...formData, password: e.target.value})}
+            onChange={(e) => setFormData({ ...formData, password: e.target.value })}
             error={errors.password}
           />
 
@@ -125,7 +123,7 @@ export default function Register() {
             type="password"
             placeholder="Ketik ulang password"
             value={formData.password_confirmation}
-            onChange={(e) => setFormData({...formData, password_confirmation: e.target.value})}
+            onChange={(e) => setFormData({ ...formData, password_confirmation: e.target.value })}
             error={errors.password_confirmation}
           />
 
@@ -158,125 +156,4 @@ export default function Register() {
       </motion.div>
     </div>
   );
-=======
-import InputError from '@/Components/InputError';
-import InputLabel from '@/Components/InputLabel';
-import PrimaryButton from '@/Components/PrimaryButton';
-import TextInput from '@/Components/TextInput';
-import GuestLayout from '@/Layouts/GuestLayout';
-import { Head, Link, useForm } from '@inertiajs/react';
-
-export default function Register() {
-    const { data, setData, post, processing, errors, reset } = useForm({
-        name: '',
-        email: '',
-        password: '',
-        password_confirmation: '',
-    });
-
-    const submit = (e) => {
-        e.preventDefault();
-
-        post(route('register'), {
-            onFinish: () => reset('password', 'password_confirmation'),
-        });
-    };
-
-    return (
-        <GuestLayout>
-            <Head title="Register" />
-
-            <form onSubmit={submit}>
-                <div>
-                    <InputLabel htmlFor="name" value="Name" />
-
-                    <TextInput
-                        id="name"
-                        name="name"
-                        value={data.name}
-                        className="mt-1 block w-full"
-                        autoComplete="name"
-                        isFocused={true}
-                        onChange={(e) => setData('name', e.target.value)}
-                        required
-                    />
-
-                    <InputError message={errors.name} className="mt-2" />
-                </div>
-
-                <div className="mt-4">
-                    <InputLabel htmlFor="email" value="Email" />
-
-                    <TextInput
-                        id="email"
-                        type="email"
-                        name="email"
-                        value={data.email}
-                        className="mt-1 block w-full"
-                        autoComplete="username"
-                        onChange={(e) => setData('email', e.target.value)}
-                        required
-                    />
-
-                    <InputError message={errors.email} className="mt-2" />
-                </div>
-
-                <div className="mt-4">
-                    <InputLabel htmlFor="password" value="Password" />
-
-                    <TextInput
-                        id="password"
-                        type="password"
-                        name="password"
-                        value={data.password}
-                        className="mt-1 block w-full"
-                        autoComplete="new-password"
-                        onChange={(e) => setData('password', e.target.value)}
-                        required
-                    />
-
-                    <InputError message={errors.password} className="mt-2" />
-                </div>
-
-                <div className="mt-4">
-                    <InputLabel
-                        htmlFor="password_confirmation"
-                        value="Confirm Password"
-                    />
-
-                    <TextInput
-                        id="password_confirmation"
-                        type="password"
-                        name="password_confirmation"
-                        value={data.password_confirmation}
-                        className="mt-1 block w-full"
-                        autoComplete="new-password"
-                        onChange={(e) =>
-                            setData('password_confirmation', e.target.value)
-                        }
-                        required
-                    />
-
-                    <InputError
-                        message={errors.password_confirmation}
-                        className="mt-2"
-                    />
-                </div>
-
-                <div className="mt-4 flex items-center justify-end">
-                    <Link
-                        href={route('login')}
-                        className="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                    >
-                        Already registered?
-                    </Link>
-
-                    <PrimaryButton className="ms-4" disabled={processing}>
-                        Register
-                    </PrimaryButton>
-                </div>
-            </form>
-        </GuestLayout>
-    );
->>>>>>> 24cc638 (Initial setup: Laravel Sail, React, Inertia, and Shadcn UI)
 }
