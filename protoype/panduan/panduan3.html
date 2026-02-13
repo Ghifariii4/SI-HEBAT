@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panduan Poin & Level - TunasHebat</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Teko:wght@500;600&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { 
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                        game: ['"Teko"', 'sans-serif']
+                    },
+                    colors: { 
+                        brand: { 50: '#f0f9ff', 100: '#e0f2fe', 500: '#0ea5e9', 600: '#0284c7', 900: '#0c4a6e' },
+                        gold: { 400: '#FACC15', 500: '#EAB308' }
+                    },
+                    animation: {
+                        'float': 'float 4s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        float: { '0%, 100%': { transform: 'translateY(0)' }, '50%': { transform: 'translateY(-10px)' } }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-brand-50 font-sans text-slate-700">
+
+    <!-- NAVBAR -->
+    <nav class="bg-white/80 backdrop-blur-md sticky top-0 z-50 border-b border-slate-200 px-6 py-4 flex items-center justify-between shadow-sm">
+        <div class="flex items-center gap-4">
+            <button onclick="window.location.href='dashboard.html'" class="w-10 h-10 rounded-xl bg-white border border-slate-200 flex items-center justify-center text-slate-600 hover:bg-brand-50 transition">
+                <i class="ph ph-arrow-left text-xl font-bold"></i>
+            </button>
+            <h1 class="font-bold text-lg text-slate-800">Panduan Sistem Poin</h1>
+        </div>
+        <div class="hidden md:block text-xs font-medium text-brand-600 bg-brand-100 px-3 py-1 rounded-full">
+            Fair Play & Kejujuran
+        </div>
+    </nav>
+
+    <!-- HERO SECTION -->
+    <header class="bg-gradient-to-br from-brand-500 to-blue-600 text-white py-12 px-6 relative overflow-hidden">
+        <div class="max-w-4xl mx-auto relative z-10 text-center">
+            <div class="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm border border-white/30 px-4 py-1.5 rounded-full text-xs font-bold mb-4 animate-float">
+                <i class="ph ph-star-fill text-yellow-400"></i> Cara Menjadi Top Rank
+            </div>
+            <h1 class="text-4xl md:text-5xl font-extrabold mb-4">Panen Poin, Bangun Karakter</h1>
+            <p class="text-brand-100 text-lg max-w-2xl mx-auto">
+                Sistem poin TunasHebat dirancang untuk menghargai usahamu. Semakin rajin, lengkap, dan jujur kamu mengisi jurnal, semakin cepat kamu naik level!
+            </p>
+        </div>
+        
+        <!-- Decoration -->
+        <i class="ph ph-medal-fill text-9xl absolute -bottom-10 -right-10 text-white/10 rotate-12"></i>
+        <i class="ph ph-trophy-fill text-8xl absolute top-10 -left-10 text-white/10 -rotate-12"></i>
+    </header>
+
+    <!-- MAIN CONTENT -->
+    <main class="max-w-5xl mx-auto px-4 py-12 -mt-8 relative z-20">
+
+        <!-- 3 PILAR UTAMA -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
+            <!-- Pilar 1 -->
+            <div class="bg-white p-6 rounded-3xl shadow-lg border-b-4 border-brand-500 text-center">
+                <div class="w-14 h-14 bg-brand-100 text-brand-600 rounded-2xl flex items-center justify-center mx-auto mb-4 text-3xl">
+                    <i class="ph ph-clock-countdown"></i>
+                </div>
+                <h3 class="font-bold text-lg text-slate-800 mb-2">Ketepatan Waktu</h3>
+                <p class="text-sm text-slate-500">Makin pagi bangun, makin banyak poin. Makin larut tidur, poin makin sedikit.</p>
+            </div>
+            <!-- Pilar 2 -->
+            <div class="bg-white p-6 rounded-3xl shadow-lg border-b-4 border-yellow-400 text-center">
+                <div class="w-14 h-14 bg-yellow-100 text-yellow-600 rounded-2xl flex items-center justify-center mx-auto mb-4 text-3xl">
+                    <i class="ph ph-image"></i>
+                </div>
+                <h3 class="font-bold text-lg text-slate-800 mb-2">Bukti Nyata</h3>
+                <p class="text-sm text-slate-500">Menyertakan foto bukti kegiatan memberikan <strong>Bonus Poin Besar</strong> dibanding hanya check-in.</p>
+            </div>
+            <!-- Pilar 3 -->
+            <div class="bg-white p-6 rounded-3xl shadow-lg border-b-4 border-red-500 text-center">
+                <div class="w-14 h-14 bg-red-100 text-red-500 rounded-2xl flex items-center justify-center mx-auto mb-4 text-3xl">
+                    <i class="ph ph-heart"></i>
+                </div>
+                <h3 class="font-bold text-lg text-slate-800 mb-2">Kejujuran</h3>
+                <p class="text-sm text-slate-500">Sistem mendeteksi kejujuranmu. Jika berbohong, poin akan hangus. Tuhan Maha Melihat.</p>
+            </div>
+        </div>
+
+        <!-- BREAKDOWN PER MENU -->
+        <h2 class="text-2xl font-bold text-slate-800 mb-6 flex items-center gap-2 border-l-4 border-brand-500 pl-4">
+            Rincian Poin Aktivitas
+        </h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-16">
+            
+            <!-- 1. BANGUN PAGI -->
+            <div class="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm relative overflow-hidden group hover:border-yellow-300 transition">
+                <div class="absolute top-0 right-0 bg-yellow-100 text-yellow-700 text-[10px] font-bold px-3 py-1 rounded-bl-xl">Max: 115 Poin</div>
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="w-10 h-10 bg-yellow-50 text-yellow-500 rounded-xl flex items-center justify-center text-xl"><i class="ph ph-sun"></i></div>
+                    <h3 class="font-bold text-slate-700">Bangun Pagi</h3>
+                </div>
+                <div class="space-y-3">
+                    <div class="flex justify-between text-sm items-center bg-slate-50 p-2 rounded-lg">
+                        <span>04:00 - 04:30</span>
+                        <span class="font-bold text-green-600">+100 Poin (Sempurna)</span>
+                    </div>
+                    <div class="flex justify-between text-sm items-center bg-slate-50 p-2 rounded-lg">
+                        <span>04:31 - 05:00</span>
+                        <span class="font-bold text-brand-600">+80 Poin</span>
+                    </div>
+                    <div class="flex justify-between text-sm items-center bg-slate-50 p-2 rounded-lg">
+                        <span>> 07:00</span>
+                        <span class="font-bold text-red-500">+10 Poin (Telat)</span>
+                    </div>
+                    <div class="flex justify-between text-xs items-center text-slate-400 mt-2">
+                        <span><i class="ph ph-check-square"></i> Rapikan Kasur</span>
+                        <span class="font-bold text-yellow-500">+10 Bonus</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2. IBADAH -->
+            <div class="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm relative overflow-hidden group hover:border-emerald-300 transition">
+                <div class="absolute top-0 right-0 bg-emerald-100 text-emerald-700 text-[10px] font-bold px-3 py-1 rounded-bl-xl">Max: 110 Poin</div>
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="w-10 h-10 bg-emerald-50 text-emerald-500 rounded-xl flex items-center justify-center text-xl"><i class="ph ph-hands-praying"></i></div>
+                    <h3 class="font-bold text-slate-700">Beribadah</h3>
+                </div>
+                <div class="space-y-2 text-sm">
+                    <p class="text-slate-500">Poin berbeda berdasarkan lokasi:</p>
+                    <ul class="list-disc list-inside space-y-1 ml-1 text-slate-600">
+                        <li><strong>Ibadah Sendiri:</strong> 50 Poin</li>
+                        <li><strong>Berjamaah/Di Tempat Ibadah:</strong> 80 Poin</li>
+                    </ul>
+                    <div class="bg-emerald-50 border border-emerald-100 p-3 rounded-lg mt-3">
+                        <p class="text-xs font-bold text-emerald-700 mb-1"><i class="ph ph-camera"></i> Bonus Foto:</p>
+                        <p class="text-xs text-emerald-600">Upload foto di tempat ibadah = <strong>+30 Poin</strong>.</p>
+                        <p class="text-[10px] text-emerald-500 italic mt-1">*Jika tanpa foto, ada popup "Ujian Kejujuran".</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3. OLAHRAGA -->
+            <div class="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm relative overflow-hidden group hover:border-red-300 transition">
+                <div class="absolute top-0 right-0 bg-red-100 text-red-700 text-[10px] font-bold px-3 py-1 rounded-bl-xl">Max: 130 Poin</div>
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="w-10 h-10 bg-red-50 text-red-500 rounded-xl flex items-center justify-center text-xl"><i class="ph ph-person-simple-run"></i></div>
+                    <h3 class="font-bold text-slate-700">Olahraga</h3>
+                </div>
+                <div class="space-y-3">
+                    <p class="text-xs text-slate-400">Berdasarkan durasi latihan:</p>
+                    <div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden flex">
+                        <div class="w-1/3 bg-red-300"></div>
+                        <div class="w-1/3 bg-red-400"></div>
+                        <div class="w-1/3 bg-red-500"></div>
+                    </div>
+                    <div class="flex justify-between text-[10px] font-bold text-slate-500">
+                        <span>15 Mnt (40 Poin)</span>
+                        <span>30 Mnt (70 Poin)</span>
+                        <span>60+ Mnt (100 Poin)</span>
+                    </div>
+                    <div class="flex justify-between text-xs items-center text-slate-400 mt-2 border-t pt-2">
+                        <span><i class="ph ph-camera"></i> Upload Foto Keringat</span>
+                        <span class="font-bold text-red-500">+30 Bonus</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 4. MAKAN SEHAT -->
+            <div class="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm relative overflow-hidden group hover:border-orange-300 transition">
+                <div class="absolute top-0 right-0 bg-orange-100 text-orange-700 text-[10px] font-bold px-3 py-1 rounded-bl-xl">Max: 130 Poin</div>
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="w-10 h-10 bg-orange-50 text-orange-500 rounded-xl flex items-center justify-center text-xl"><i class="ph ph-carrot"></i></div>
+                    <h3 class="font-bold text-slate-700">Makan Sehat</h3>
+                </div>
+                <div class="grid grid-cols-2 gap-2 text-xs">
+                    <div class="bg-slate-50 p-2 rounded text-center">Karbo (+20)</div>
+                    <div class="bg-slate-50 p-2 rounded text-center">Lauk (+20)</div>
+                    <div class="bg-slate-50 p-2 rounded text-center">Sayur (+20)</div>
+                    <div class="bg-slate-50 p-2 rounded text-center">Buah (+20)</div>
+                </div>
+                <div class="mt-3 text-xs bg-orange-50 p-2 rounded text-orange-600 font-bold text-center">
+                    Lengkap 4 Sehat = Bonus Kombo +20 Poin!
+                </div>
+            </div>
+
+            <!-- 5. GEMAR BELAJAR -->
+            <div class="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm relative overflow-hidden group hover:border-blue-300 transition">
+                <div class="absolute top-0 right-0 bg-blue-100 text-blue-700 text-[10px] font-bold px-3 py-1 rounded-bl-xl">Max: 130 Poin</div>
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="w-10 h-10 bg-blue-50 text-blue-500 rounded-xl flex items-center justify-center text-xl"><i class="ph ph-book-open"></i></div>
+                    <h3 class="font-bold text-slate-700">Gemar Belajar</h3>
+                </div>
+                <div class="space-y-2 text-sm text-slate-600">
+                    <div class="flex justify-between border-b border-slate-50 pb-2">
+                        <span>Aktivitas Belajar</span>
+                        <span class="font-bold">50 Poin</span>
+                    </div>
+                    <div class="flex justify-between border-b border-slate-50 pb-2">
+                        <span><i class="ph ph-camera"></i> Foto Bukti</span>
+                        <span class="font-bold text-blue-500">+40 Poin</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span><i class="ph ph-pencil"></i> Ringkasan Materi</span>
+                        <span class="font-bold text-blue-500">+40 Poin</span>
+                    </div>
+                    <p class="text-[10px] text-slate-400 mt-2 italic">*Catatan dinilai tinggi karena melatih literasi.</p>
+                </div>
+            </div>
+
+            <!-- 6. TIDUR CEPAT -->
+            <div class="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm relative overflow-hidden group hover:border-indigo-300 transition">
+                <div class="absolute top-0 right-0 bg-indigo-100 text-indigo-700 text-[10px] font-bold px-3 py-1 rounded-bl-xl">Max: 125 Poin</div>
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="w-10 h-10 bg-indigo-50 text-indigo-500 rounded-xl flex items-center justify-center text-xl"><i class="ph ph-moon-stars"></i></div>
+                    <h3 class="font-bold text-slate-700">Tidur Cepat</h3>
+                </div>
+                <div class="space-y-3">
+                    <div class="flex justify-between text-sm items-center bg-slate-50 p-2 rounded-lg">
+                        <span>19:00 - 21:00</span>
+                        <span class="font-bold text-green-600">+100 Poin (Ideal)</span>
+                    </div>
+                    <div class="flex justify-between text-sm items-center bg-slate-50 p-2 rounded-lg">
+                        <span>> 22:00</span>
+                        <span class="font-bold text-red-500">+20 Poin (Begadang)</span>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2 mt-2">
+                        <div class="text-[10px] bg-indigo-50 p-1 rounded text-center text-indigo-600">Sikat Gigi (+10)</div>
+                        <div class="text-[10px] bg-indigo-50 p-1 rounded text-center text-indigo-600">Cuci Muka (+10)</div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- RANK SYSTEM -->
+        <h2 class="text-2xl font-bold text-slate-800 mb-6 flex items-center gap-2 border-l-4 border-brand-500 pl-4">
+            Tingkatan Rank (Level)
+        </h2>
+        
+        <div class="bg-white rounded-3xl border border-slate-100 p-6 overflow-x-auto">
+            <div class="flex justify-between min-w-[600px] relative">
+                <!-- Line -->
+                <div class="absolute top-8 left-0 w-full h-1 bg-slate-100 z-0"></div>
+
+                <!-- Rank 1 -->
+                <div class="relative z-10 flex flex-col items-center text-center w-1/5">
+                    <div class="w-16 h-16 bg-slate-200 rounded-full border-4 border-white flex items-center justify-center text-2xl mb-2">🌱</div>
+                    <h4 class="font-bold text-slate-700 text-sm">Tunas Pemula</h4>
+                    <p class="text-xs text-slate-400">Lvl 1 - 5</p>
+                </div>
+
+                <!-- Rank 2 -->
+                <div class="relative z-10 flex flex-col items-center text-center w-1/5">
+                    <div class="w-16 h-16 bg-orange-100 rounded-full border-4 border-white flex items-center justify-center text-2xl mb-2 text-orange-500"><i class="ph ph-book-bookmark"></i></div>
+                    <h4 class="font-bold text-slate-700 text-sm">Siswa Rajin</h4>
+                    <p class="text-xs text-slate-400">Lvl 6 - 15</p>
+                </div>
+
+                <!-- Rank 3 -->
+                <div class="relative z-10 flex flex-col items-center text-center w-1/5">
+                    <div class="w-16 h-16 bg-slate-300 rounded-full border-4 border-white flex items-center justify-center text-2xl mb-2 text-slate-600"><i class="ph ph-star"></i></div>
+                    <h4 class="font-bold text-slate-700 text-sm">Bintang Kelas</h4>
+                    <p class="text-xs text-slate-400">Lvl 16 - 30</p>
+                </div>
+
+                <!-- Rank 4 -->
+                <div class="relative z-10 flex flex-col items-center text-center w-1/5">
+                    <div class="w-16 h-16 bg-yellow-100 rounded-full border-4 border-white flex items-center justify-center text-2xl mb-2 text-yellow-500"><i class="ph ph-medal"></i></div>
+                    <h4 class="font-bold text-slate-700 text-sm">Teladan</h4>
+                    <p class="text-xs text-slate-400">Lvl 31 - 50</p>
+                </div>
+
+                <!-- Rank 5 -->
+                <div class="relative z-10 flex flex-col items-center text-center w-1/5">
+                    <div class="w-16 h-16 bg-brand-100 rounded-full border-4 border-white flex items-center justify-center text-2xl mb-2 text-brand-600"><i class="ph ph-crown"></i></div>
+                    <h4 class="font-bold text-brand-600 text-sm">Cendekiawan</h4>
+                    <p class="text-xs text-brand-400">Lvl 50+</p>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <footer class="bg-white border-t border-slate-200 py-8 text-center text-slate-400 text-xs">
+        <p>&copy; 2025 TunasHebat. Kejujuran adalah mata uang paling berharga.</p>
+    </footer>
+
+</body>
+</html>
