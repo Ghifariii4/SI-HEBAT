@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Toko Item - TunasHebat</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Teko:wght@500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { 
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                        game: ['"Teko"', 'sans-serif']
+                    },
+                    colors: { 
+                        brand: { 50: '#f0f9ff', 100: '#e0f2fe', 500: '#0ea5e9', 600: '#0284c7' },
+                        rarity: {
+                            common: '#94a3b8',
+                            rare: '#3b82f6',
+                            epic: '#a855f7',
+                            legend: '#eab308',
+                            mythic: '#ef4444'
+                        }
+                    },
+                    animation: {
+                        'float': 'float 4s ease-in-out infinite',
+                        'shine': 'shine 3s infinite',
+                        'spin-slow': 'spin 10s linear infinite',
+                        'pulse-fast': 'pulse 0.1s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'flash': 'flash 0.5s infinite',
+                    },
+                    keyframes: {
+                        float: { '0%, 100%': { transform: 'translateY(0)' }, '50%': { transform: 'translateY(-10px)' } },
+                        shine: { '0%': { backgroundPosition: '200% center' }, '100%': { backgroundPosition: '-200% center' } },
+                        flash: { '0%, 100%': { opacity: 1 }, '50%': { opacity: 0.5 } }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* --- RARITY CARD STYLES --- */
+        .card-common { border: 2px solid #cbd5e1; background: linear-gradient(180deg, #fff 0%, #f1f5f9 100%); }
+        .card-rare { border: 2px solid #60a5fa; background: linear-gradient(180deg, #eff6ff 0%, #dbeafe 100%); box-shadow: 0 0 10px rgba(59, 130, 246, 0.2); }
+        .card-epic { border: 2px solid #c084fc; background: linear-gradient(180deg, #faf5ff 0%, #f3e8ff 100%); box-shadow: 0 0 15px rgba(168, 85, 247, 0.3); }
+        .card-legend { border: 2px solid #facc15; background: linear-gradient(180deg, #fefce8 0%, #fef9c3 100%); box-shadow: 0 0 20px rgba(234, 179, 8, 0.4); }
+        
+        /* --- AVATAR BASE --- */
+        .avatar-preview-container { position: relative; width: 100px; height: 100px; margin: 0 auto; display: flex; align-items: center; justify-content: center; border-radius: 50%; }
+        .avatar-img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; position: relative; z-index: 10; border: 3px solid white; }
+
+        /* --- BORDERS (SKINS) --- */
+        .skin-neko::before, .skin-neko::after { content: ''; position: absolute; top: -10px; width: 30px; height: 30px; background: #f472b6; z-index: 0; border-radius: 4px; border: 2px solid white; }
+        .skin-neko::before { left: 5px; transform: rotate(-15deg); }
+        .skin-neko::after { right: 5px; transform: rotate(15deg); }
+        
+        .skin-spike { background: conic-gradient(from 0deg, red, transparent 10%, red 20%, transparent 30%, red 40%, transparent 50%, red 60%, transparent 70%, red 80%, transparent 90%, red 100%); padding: 5px; animation: spin-slow 20s linear infinite; }
+        
+        .skin-angel::before, .skin-angel::after { content: '🪽'; position: absolute; top: 10px; font-size: 40px; z-index: 20; filter: drop-shadow(0 0 5px cyan); }
+        .skin-angel::before { left: -25px; transform: scaleX(-1); }
+        .skin-angel::after { right: -25px; }
+        
+        .skin-king::before { content: '👑'; position: absolute; top: -35px; left: 50%; transform: translateX(-50%) rotate(-5deg); font-size: 40px; z-index: 20; animation: float 2s infinite; filter: drop-shadow(0 0 10px gold); }
+        .skin-king .avatar-img { border: 4px solid #fbbf24; box-shadow: 0 0 20px #f59e0b; }
+
+        .skin-glitch .avatar-img { border: 2px solid transparent; box-shadow: -3px 0 #00ffff, 3px 0 #ff00ff; animation: pulse-fast 0.2s infinite; }
+        .skin-nature .avatar-img { border: 4px dashed #22c55e; }
+        .skin-nature::after { content: '🌿'; position: absolute; bottom: -5px; right: -5px; font-size: 24px; z-index: 20; }
+        .skin-water { border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%; animation: spin-slow 5s linear infinite alternate; background: #38bdf8; padding: 4px; }
+        .skin-galaxy { background: linear-gradient(45deg, #6366f1, #a855f7, #ec4899); padding: 4px; animation: spin-slow 2s linear infinite; }
+
+        /* --- VISUAL EFFECTS (NEW!) --- */
+        /* 1. INFERNO */
+        .effect-inferno { box-shadow: 0 -10px 20px rgba(255, 69, 0, 0.8), 0 0 20px rgba(255, 140, 0, 0.6); animation: infernoPulse 1s infinite alternate; }
+        @keyframes infernoPulse { 0% { box-shadow: 0 -10px 20px rgba(255, 69, 0, 0.8); } 100% { box-shadow: 0 -15px 40px rgba(255, 0, 0, 1), 0 0 30px rgba(255, 165, 0, 0.8); } }
+
+        /* 2. THUNDER */
+        .effect-thunder { border: 2px solid rgba(255, 255, 0, 0.5); animation: thunderFlash 0.3s infinite; }
+        @keyframes thunderFlash { 0%, 100% { box-shadow: 0 0 5px yellow; border-color: transparent; } 50% { box-shadow: 0 0 30px white; border-color: white; } }
+
+        /* 3. SAKURA */
+        .effect-sakura::before { content: '🌸'; position: absolute; top: -20px; left: -10px; animation: float 3s infinite; }
+        .effect-sakura::after { content: '🌸'; position: absolute; bottom: -20px; right: -10px; animation: float 4s infinite reverse; }
+
+        /* 4. HOLY LIGHT */
+        .effect-holy::after { content: ''; position: absolute; inset: -20px; background: conic-gradient(from 0deg, transparent, white, transparent); animation: spin-slow 3s linear infinite; opacity: 0.5; z-index: 0; border-radius: 50%; }
+
+        /* 5. TOXIC */
+        .effect-toxic { box-shadow: 0 0 20px #4ade80, inset 0 0 20px #4ade80; animation: pulse-fast 2s infinite; }
+        .effect-toxic::before { content: '☠️'; position: absolute; bottom: -10px; left: 50%; transform: translateX(-50%); font-size: 20px; z-index: 20; }
+
+        /* Glass Panel */
+        .glass-panel { background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.5); }
+    </style>
+</head>
+<body class="bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] bg-brand-50 min-h-screen text-slate-700 pb-24 overflow-x-hidden font-sans">
+
+    <!-- NAVBAR -->
+    <nav class="glass-panel sticky top-0 z-50 px-4 py-3 flex items-center justify-between shadow-lg">
+        <div class="flex items-center gap-3">
+            <button onclick="window.location.href='dashboard.html'" class="w-10 h-10 bg-white rounded-xl border border-slate-200 flex items-center justify-center text-slate-600 hover:bg-brand-50 transition">
+                <i class="ph ph-arrow-left text-xl font-bold"></i>
+            </button>
+            <div class="flex flex-col">
+                <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">SHOP</span>
+                <span class="font-game text-2xl font-bold text-brand-600 leading-none">TOKO SULTAN</span>
+            </div>
+        </div>
+        <div class="flex items-center gap-2 bg-slate-800 text-white px-4 py-1.5 rounded-full border-2 border-gold-400 shadow-[0_0_15px_rgba(234,179,8,0.4)]">
+            <i class="ph ph-coin-vertical-fill text-gold-400 text-lg animate-pulse"></i>
+            <span class="font-bold font-game text-xl tracking-wide" id="user-points">1,250</span>
+        </div>
+    </nav>
+
+    <!-- LIVE PREVIEW SECTION -->
+    <section class="relative pt-6 pb-12 px-4 bg-gradient-to-b from-brand-100 to-transparent">
+        <div class="max-w-md mx-auto relative z-10">
+            <div class="text-center mb-4">
+                <span class="bg-white/50 backdrop-blur-sm px-3 py-1 rounded-full text-[10px] font-bold text-brand-600 uppercase border border-white">Mode Pratinjau</span>
+            </div>
+            
+            <div class="bg-white rounded-[2rem] shadow-2xl border-4 border-white overflow-hidden relative transition-all duration-500 transform hover:scale-105">
+                <!-- Banner -->
+                <div class="h-32 bg-slate-200 relative overflow-hidden">
+                    <img id="preview-banner" src="https://images.unsplash.com/photo-1579546929518-9e396f3cc809?q=80&w=1000" class="w-full h-full object-cover transition-all duration-500">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+                </div>
+                
+                <!-- Avatar -->
+                <div class="px-6 pb-6 relative">
+                    <div class="flex justify-center -mt-12 mb-3">
+                        <!-- CONTAINER UTAMA EFEK & BORDER -->
+                        <div id="preview-frame-container" class="avatar-preview-container">
+                            <img src="https://i.pravatar.cc/300?img=12" class="avatar-img shadow-lg">
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <h3 class="font-game text-2xl font-bold text-slate-800">BUDI SANTOSO</h3>
+                        <p class="text-xs text-slate-500 font-bold">Cendekiawan • Lvl 12</p>
+                    </div>
+                </div>
+
+                <div id="preview-price-tag" class="absolute top-4 right-4 bg-slate-900/80 text-white px-3 py-1 rounded-lg backdrop-blur-md opacity-0 transition-opacity">
+                    <span class="text-xs font-bold">Harga: </span>
+                    <span class="text-gold-400 font-bold" id="preview-price-val">0</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SHOP MENU -->
+    <main class="max-w-4xl mx-auto px-4 -mt-4 relative z-20">
+        
+        <!-- Filter Tabs -->
+        <div class="flex gap-2 mb-6 overflow-x-auto no-scrollbar pb-2">
+            <button onclick="renderShop('border')" id="btn-border" class="flex-none px-6 py-3 bg-brand-500 text-white rounded-xl font-bold shadow-lg shadow-brand-500/30 transition">
+                <i class="ph ph-frame-corners"></i> Bingkai
+            </button>
+            <button onclick="renderShop('banner')" id="btn-banner" class="flex-none px-6 py-3 bg-white text-slate-500 border border-slate-200 rounded-xl font-bold hover:bg-slate-50 transition">
+                <i class="ph ph-image"></i> Banner
+            </button>
+            <button onclick="renderShop('effect')" id="btn-effect" class="flex-none px-6 py-3 bg-white text-slate-500 border border-slate-200 rounded-xl font-bold hover:bg-slate-50 transition">
+                <i class="ph ph-magic-wand"></i> Efek
+            </button>
+        </div>
+
+        <!-- ITEMS GRID -->
+        <div id="shop-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+            <!-- JS Injection -->
+        </div>
+
+    </main>
+
+    <!-- BUY MODAL -->
+    <div id="modal-buy" class="fixed inset-0 z-[60] flex items-center justify-center bg-slate-900/80 backdrop-blur-sm hidden opacity-0 transition-opacity duration-300">
+        <div class="bg-white w-full max-w-sm rounded-3xl p-6 text-center shadow-2xl transform scale-90 transition-transform duration-300 relative overflow-hidden" id="modal-content">
+            <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-transparent via-white to-transparent opacity-50 animate-shine"></div>
+            <div class="w-20 h-20 bg-brand-50 rounded-full flex items-center justify-center mx-auto mb-4 text-4xl animate-bounce">
+                <i class="ph ph-shopping-cart-simple-fill text-brand-500"></i>
+            </div>
+            <h3 class="font-game text-3xl font-bold text-slate-800 mb-1">Konfirmasi</h3>
+            <p class="text-slate-500 text-sm mb-6">Beli item <span id="buy-name" class="font-bold text-brand-600">Nama Item</span>?</p>
+            <div class="bg-slate-100 rounded-xl p-3 mb-6 flex justify-between items-center">
+                <span class="text-xs font-bold text-slate-500">Total Harga</span>
+                <div class="flex items-center gap-1">
+                    <i class="ph ph-coin-vertical-fill text-gold-500"></i>
+                    <span id="buy-price" class="font-bold text-slate-800 text-lg">500</span>
+                </div>
+            </div>
+            <div class="grid grid-cols-2 gap-3">
+                <button onclick="closeModal()" class="py-3 rounded-xl font-bold text-slate-500 hover:bg-slate-100 transition">Batal</button>
+                <button onclick="confirmPurchase()" class="py-3 rounded-xl font-bold text-white bg-gradient-to-r from-brand-500 to-blue-600 shadow-lg shadow-brand-500/30 hover:scale-105 transition">BELI</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const shopItems = [
+            // BORDERS
+            { id: 'b1', type: 'border', name: 'Neko Pink', price: 300, rarity: 'rare', css: 'skin-neko', img: '' },
+            { id: 'b2', type: 'border', name: 'Warrior Spike', price: 500, rarity: 'epic', css: 'skin-spike', img: '' },
+            { id: 'b3', type: 'border', name: 'Angel Wings', price: 800, rarity: 'legend', css: 'skin-angel', img: '' },
+            { id: 'b4', type: 'border', name: 'King Crown', price: 1000, rarity: 'legend', css: 'skin-king', img: '' },
+            { id: 'b5', type: 'border', name: 'Cyber Glitch', price: 600, rarity: 'epic', css: 'skin-glitch', img: '' },
+            { id: 'b6', type: 'border', name: 'Nature Vine', price: 250, rarity: 'common', css: 'skin-nature', img: '' },
+            { id: 'b7', type: 'border', name: 'Aqua Flow', price: 400, rarity: 'rare', css: 'skin-water', img: '' },
+            { id: 'b8', type: 'border', name: 'Galaxy Void', price: 1200, rarity: 'mythic', css: 'skin-galaxy', img: '' },
+            
+            // BANNERS
+            { id: 'ba1', type: 'banner', name: 'Pixel City', price: 350, rarity: 'rare', css: '', img: 'https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=500' },
+            { id: 'ba2', type: 'banner', name: 'Golden Palace', price: 900, rarity: 'legend', css: '', img: 'https://images.unsplash.com/photo-1599940824399-b87987ce0799?q=80&w=500' },
+            { id: 'ba3', type: 'banner', name: 'Magical Forest', price: 400, rarity: 'rare', css: '', img: 'https://images.unsplash.com/photo-1511497584788-876760111969?q=80&w=500' },
+            { id: 'ba4', type: 'banner', name: 'Cyberpunk', price: 600, rarity: 'epic', css: '', img: 'https://images.unsplash.com/photo-1535295972055-1c762f4483e5?q=80&w=500' },
+            { id: 'ba5', type: 'banner', name: 'Blue Sky', price: 100, rarity: 'common', css: '', img: 'https://images.unsplash.com/photo-1595878715977-2e8f8df18ea8?q=80&w=500' },
+            
+            // EFFECTS (NEW!)
+            { id: 'e1', type: 'effect', name: 'Inferno Aura', price: 800, rarity: 'mythic', css: 'effect-inferno', img: '' },
+            { id: 'e2', type: 'effect', name: 'Zeus Thunder', price: 700, rarity: 'legend', css: 'effect-thunder', img: '' },
+            { id: 'e3', type: 'effect', name: 'Sakura Fall', price: 400, rarity: 'rare', css: 'effect-sakura', img: '' },
+            { id: 'e4', type: 'effect', name: 'Cyber Glitch', price: 600, rarity: 'epic', css: 'skin-glitch', img: '' },
+            { id: 'e5', type: 'effect', name: 'Holy Light', price: 900, rarity: 'legend', css: 'effect-holy', img: '' },
+            { id: 'e6', type: 'effect', name: 'Toxic Gas', price: 500, rarity: 'epic', css: 'effect-toxic', img: '' }
+        ];
+
+        let selectedItem = null;
+        let currentTab = 'border';
+
+        document.addEventListener('DOMContentLoaded', () => { renderShop('border'); });
+
+        function renderShop(filterType) {
+            currentTab = filterType;
+            const grid = document.getElementById('shop-grid');
+            grid.innerHTML = '';
+
+            // Update Tabs
+            ['border', 'banner', 'effect'].forEach(t => {
+                const btn = document.getElementById(`btn-${t}`);
+                if(t === filterType) {
+                    btn.className = "flex-none px-6 py-3 bg-brand-500 text-white rounded-xl font-bold shadow-lg transition transform hover:scale-105";
+                } else {
+                    btn.className = "flex-none px-6 py-3 bg-white text-slate-500 border border-slate-200 rounded-xl font-bold hover:bg-slate-50 transition";
+                }
+            });
+
+            const items = shopItems.filter(i => i.type === filterType);
+
+            items.forEach(item => {
+                let rarityColor = 'text-slate-500';
+                let cardClass = 'card-common';
+                
+                if(item.rarity === 'rare') { rarityColor = 'text-blue-500'; cardClass = 'card-rare'; }
+                if(item.rarity === 'epic') { rarityColor = 'text-purple-500'; cardClass = 'card-epic'; }
+                if(item.rarity === 'legend') { rarityColor = 'text-yellow-500'; cardClass = 'card-legend'; }
+                if(item.rarity === 'mythic') { rarityColor = 'text-red-500'; cardClass = 'card-legend border-red-500'; }
+
+                const div = document.createElement('div');
+                div.className = `${cardClass} p-3 rounded-2xl relative group cursor-pointer transition transform hover:-translate-y-1 hover:shadow-xl`;
+                div.onclick = () => previewItem(item);
+
+                let visualContent = '';
+                if(item.type === 'border' || item.type === 'effect') {
+                    // Preview CSS Effect in Small Box
+                    visualContent = `
+                        <div class="h-24 flex items-center justify-center mb-2 bg-white/50 rounded-xl overflow-hidden">
+                            <div class="${item.css} w-16 h-16 rounded-full bg-slate-300 relative flex items-center justify-center transition">
+                                ${item.type === 'border' ? '<div class="w-full h-full bg-slate-300 rounded-full border-2 border-white"></div>' : ''}
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    visualContent = `<div class="h-24 mb-2 rounded-xl overflow-hidden border-2 border-white shadow-sm"><img src="${item.img}" class="w-full h-full object-cover"></div>`;
+                }
+
+                div.innerHTML = `
+                    <div class="absolute top-2 left-2 bg-white/80 backdrop-blur-md px-2 py-0.5 rounded text-[9px] font-bold uppercase ${rarityColor}">${item.rarity}</div>
+                    ${visualContent}
+                    <h4 class="font-bold text-slate-700 text-sm truncate">${item.name}</h4>
+                    <div class="flex items-center justify-between mt-2">
+                        <div class="flex items-center gap-1 text-gold-500 font-bold text-sm"><i class="ph ph-coin-vertical-fill"></i> ${item.price}</div>
+                        <button onclick="event.stopPropagation(); buyItem('${item.id}')" class="bg-brand-500 text-white text-xs px-3 py-1.5 rounded-lg font-bold hover:bg-brand-600 transition shadow-md">Beli</button>
+                    </div>
+                `;
+                grid.appendChild(div);
+            });
+        }
+
+        function previewItem(item) {
+            const previewPrice = document.getElementById('preview-price-tag');
+            const previewVal = document.getElementById('preview-price-val');
+            previewVal.innerText = item.price;
+            previewPrice.classList.remove('opacity-0');
+
+            const container = document.getElementById('preview-frame-container');
+            const banner = document.getElementById('preview-banner');
+
+            if(item.type === 'border') {
+                container.className = `avatar-preview-container ${item.css}`;
+            } else if(item.type === 'banner') {
+                banner.src = item.img;
+            } else if(item.type === 'effect') {
+                // Keep border, add effect class
+                container.className = `avatar-preview-container ${item.css}`; 
+            }
+        }
+
+        function buyItem(id) {
+            selectedItem = shopItems.find(i => i.id === id);
+            document.getElementById('buy-name').innerText = selectedItem.name;
+            document.getElementById('buy-price').innerText = selectedItem.price;
+            const modal = document.getElementById('modal-buy');
+            const content = document.getElementById('modal-content');
+            modal.classList.remove('hidden');
+            setTimeout(() => { modal.classList.remove('opacity-0'); content.classList.remove('scale-90'); }, 10);
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('modal-buy');
+            const content = document.getElementById('modal-content');
+            modal.classList.add('opacity-0');
+            content.classList.add('scale-90');
+            setTimeout(() => { modal.classList.add('hidden'); }, 300);
+        }
+
+        function confirmPurchase() {
+            closeModal();
+            confetti({ particleCount: 200, spread: 120, origin: { y: 0.6 }, colors: ['#eab308', '#0ea5e9'] });
+            let currentPoints = parseInt(document.getElementById('user-points').innerText.replace(',',''));
+            if(currentPoints >= selectedItem.price) {
+                currentPoints -= selectedItem.price;
+                document.getElementById('user-points').innerText = currentPoints.toLocaleString();
+            } else {
+                alert("Poin tidak cukup!");
+            }
+        }
+    </script>
+</body>
+</html>
