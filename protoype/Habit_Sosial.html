@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jurnal Sosial - TunasHebat</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    
+    <!-- Confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['"Plus Jakarta Sans"', 'sans-serif'] },
+                    colors: { 
+                        brand: { 50: '#f0f9ff', 100: '#e0f2fe', 500: '#0ea5e9', 600: '#0284c7' },
+                        social: { 
+                            green: '#10b981', // Lingkungan
+                            orange: '#f97316' // Interaksi
+                        }
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'bounce-slow': 'bounce 3s infinite',
+                        'wiggle': 'wiggle 2s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        float: { '0%, 100%': { transform: 'translateY(0)' }, '50%': { transform: 'translateY(-15px)' } },
+                        wiggle: { '0%, 100%': { transform: 'rotate(-5deg)' }, '50%': { transform: 'rotate(5deg)' } }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-brand-50 min-h-screen relative overflow-x-hidden font-sans text-slate-700">
+
+    <!-- BACKGROUND IMAGE (Fixed) -->
+    <div class="fixed inset-0 z-0 pointer-events-none">
+        <!-- Gambar Latar -->
+        <img src="https://media.istockphoto.com/id/1149263420/id/vektor/ilustrasi-kartun-orang-berjalan-di-taman-kota.jpg?s=170667a&w=0&k=20&c=iNvkd_EIsSpQXnI9rJUTH8VteVsNll__ptxiNnaDq40=" 
+             class="w-full h-full object-cover" 
+             alt="Background Taman Kota">
+        <!-- Overlay Putih Transparan (Agar teks terbaca) -->
+        <div class="absolute inset-0 bg-white/80 backdrop-blur-[2px]"></div>
+    </div>
+    
+    <!-- NAVBAR -->
+    <nav class="p-6 flex items-center gap-4 relative z-20">
+        <button onclick="window.location.href='dashboard.html'" class="w-10 h-10 bg-white/80 backdrop-blur-md rounded-xl flex items-center justify-center text-brand-600 hover:bg-white transition border border-white/60 shadow-sm cursor-pointer">
+            <i class="ph ph-arrow-left text-xl font-bold"></i>
+        </button>
+        <div>
+            <h1 class="font-bold text-lg text-slate-800 drop-shadow-sm">Jurnal Sosial</h1>
+            <p class="text-slate-600 text-xs font-medium">Peduli lingkungan, dekat dengan sesama</p>
+        </div>
+    </nav>
+
+    <!-- MAIN CONTENT -->
+    <main class="px-4 pb-32 relative z-20 w-full max-w-4xl mx-auto mt-8">
+        
+        <div class="text-center mb-10">
+            <h2 class="text-3xl font-extrabold text-slate-800 mb-2 drop-shadow-sm">Apa kontribusimu hari ini?</h2>
+            <p class="text-slate-600 font-medium">Pilih jenis kegiatan sosial yang kamu lakukan.</p>
+        </div>
+
+        <!-- SPLIT CARDS -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+            
+            <!-- 1. BERSIH LINGKUNGAN -->
+            <div onclick="openModal('env')" role="button" class="group bg-white/90 backdrop-blur-sm rounded-[2.5rem] p-8 border-2 border-slate-100 hover:border-emerald-400 hover:shadow-xl hover:-translate-y-2 transition-all cursor-pointer relative overflow-hidden h-full flex flex-col justify-between">
+                <!-- Decorative BG Shape (Pointer Events None agar tidak blokir klik) -->
+                <div class="absolute top-0 right-0 w-32 h-32 bg-emerald-50 rounded-bl-[100%] transition-transform group-hover:scale-125 z-0 pointer-events-none"></div>
+                
+                <div class="relative z-10 flex flex-col items-center text-center">
+                    <div class="w-20 h-20 bg-emerald-100 rounded-full flex items-center justify-center text-emerald-600 mb-6 shadow-sm group-hover:bg-emerald-500 group-hover:text-white transition-colors">
+                        <i class="ph ph-trash text-4xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-slate-800 mb-2">Bersih Lingkungan</h3>
+                    <p class="text-sm text-slate-500 mb-6">Kerja bakti, membuang sampah, atau merapikan taman.</p>
+                    <span class="text-xs font-bold text-emerald-600 bg-emerald-50 px-4 py-2 rounded-full group-hover:bg-white transition pointer-events-none">
+                        + Input Foto Bukti
+                    </span>
+                </div>
+            </div>
+
+            <!-- 2. BERSOSIALISASI -->
+            <div onclick="openModal('social')" role="button" class="group bg-white/90 backdrop-blur-sm rounded-[2.5rem] p-8 border-2 border-slate-100 hover:border-orange-400 hover:shadow-xl hover:-translate-y-2 transition-all cursor-pointer relative overflow-hidden h-full flex flex-col justify-between">
+                <!-- Decorative BG Shape (Pointer Events None agar tidak blokir klik) -->
+                <div class="absolute top-0 right-0 w-32 h-32 bg-orange-50 rounded-bl-[100%] transition-transform group-hover:scale-125 z-0 pointer-events-none"></div>
+                
+                <div class="relative z-10 flex flex-col items-center text-center">
+                    <div class="w-20 h-20 bg-orange-100 rounded-full flex items-center justify-center text-orange-600 mb-6 shadow-sm group-hover:bg-orange-500 group-hover:text-white transition-colors">
+                        <i class="ph ph-chats-teardrop text-4xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-slate-800 mb-2">Bersosialisasi</h3>
+                    <p class="text-sm text-slate-500 mb-6">Ikut acara warga, rapat, atau mengobrol dengan tetangga.</p>
+                    <span class="text-xs font-bold text-orange-600 bg-orange-50 px-4 py-2 rounded-full group-hover:bg-white transition pointer-events-none">
+                        + Catat Kegiatan
+                    </span>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- DYNAMIC MODAL FORM -->
+    <div id="modal-social" class="fixed inset-0 z-50 flex items-end sm:items-center justify-center pointer-events-none opacity-0 transition-opacity duration-300">
+        <!-- Backdrop -->
+        <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity" onclick="closeModal()"></div>
+        
+        <!-- Modal Content -->
+        <div id="modal-card" class="bg-white w-full max-w-lg rounded-t-[2.5rem] sm:rounded-[2.5rem] p-8 relative transform translate-y-full sm:translate-y-10 transition-transform duration-300 pointer-events-auto shadow-2xl overflow-y-auto max-h-[90vh]">
+            
+            <div class="w-16 h-1.5 bg-slate-200 rounded-full mx-auto mb-8"></div>
+
+            <!-- Header -->
+            <div class="text-center mb-8">
+                <div id="modal-icon-container" class="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 text-3xl shadow-sm border">
+                    <i id="modal-icon" class="ph ph-question"></i>
+                </div>
+                <h3 id="modal-title" class="text-2xl font-bold text-slate-800">Judul Kegiatan</h3>
+                <p class="text-slate-400 text-sm">Ceritakan pengalaman baikmu hari ini.</p>
+            </div>
+
+            <!-- Form Container -->
+            <div id="form-content" class="space-y-5">
+                <!-- Content injected via JS -->
+            </div>
+
+            <!-- Submit Button -->
+            <button onclick="saveData()" id="btn-save" class="w-full mt-8 py-4 text-white font-bold rounded-2xl shadow-lg transition transform active:scale-95 flex items-center justify-center gap-2">
+                <i class="ph ph-paper-plane-right text-xl"></i>
+                Simpan Laporan
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // CONFIG MENU
+        const menuData = {
+            env: {
+                title: "Bersih Lingkungan",
+                icon: "ph-trash",
+                theme: "emerald",
+                html: `
+                    <div>
+                        <label class="block text-sm font-bold text-slate-700 mb-2">Lokasi / Tempat</label>
+                        <div class="relative">
+                            <i class="ph ph-map-pin absolute left-4 top-3.5 text-slate-400 text-lg"></i>
+                            <input type="text" placeholder="Contoh: Halaman Rumah / Selokan Jalan" class="w-full pl-11 pr-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:border-emerald-500 focus:outline-none transition">
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-bold text-slate-700 mb-2">Upload Foto Bukti</label>
+                        <label class="flex flex-col items-center justify-center w-full h-32 border-2 border-slate-300 border-dashed rounded-2xl cursor-pointer bg-slate-50 hover:bg-emerald-50 hover:border-emerald-400 transition group">
+                            <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                                <i class="ph ph-camera text-3xl text-slate-400 group-hover:text-emerald-500 mb-2 transition"></i>
+                                <p id="file-name" class="text-xs text-slate-500 group-hover:text-emerald-600"><span class="font-semibold">Klik untuk upload</span> foto kegiatan</p>
+                            </div>
+                            <input type="file" class="hidden" onchange="updateFileName(this)" accept="image/*">
+                        </label>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-bold text-slate-700 mb-2">Deskripsi (Opsional)</label>
+                        <textarea rows="2" placeholder="Apa yang kamu bersihkan?" class="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:border-emerald-500 focus:outline-none transition resize-none"></textarea>
+                    </div>
+                `
+            },
+            social: {
+                title: "Ikut Acara / Sosial",
+                icon: "ph-chats-teardrop",
+                theme: "orange",
+                html: `
+                    <div>
+                        <label class="block text-sm font-bold text-slate-700 mb-2">Nama Kegiatan</label>
+                        <div class="relative">
+                            <i class="ph ph-confetti absolute left-4 top-3.5 text-slate-400 text-lg"></i>
+                            <input type="text" placeholder="Contoh: Rapat Karang Taruna / Ngobrol Santai" class="w-full pl-11 pr-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:border-orange-500 focus:outline-none transition">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-bold text-slate-700 mb-2">Ceritakan Pengalamanmu</label>
+                        <textarea rows="4" placeholder="Siapa saja yang hadir? Apa yang dibahas?" class="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:border-orange-500 focus:outline-none transition resize-none"></textarea>
+                    </div>
+                `
+            }
+        };
+
+        let currentTheme = '';
+
+        // --- MODAL LOGIC ---
+        function openModal(type) {
+            const data = menuData[type];
+            currentTheme = data.theme;
+
+            // UI Update
+            document.getElementById('modal-title').innerText = data.title;
+            
+            const iconBox = document.getElementById('modal-icon-container');
+            const icon = document.getElementById('modal-icon');
+            const btn = document.getElementById('btn-save');
+
+            // Set Colors dynamic based on theme
+            if(data.theme === 'emerald') {
+                iconBox.className = "w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 text-3xl shadow-sm border border-emerald-100 bg-emerald-100 text-emerald-600";
+                btn.className = "w-full mt-8 py-4 bg-emerald-500 hover:bg-emerald-600 text-white font-bold rounded-2xl shadow-lg transition transform active:scale-95 flex items-center justify-center gap-2";
+            } else {
+                iconBox.className = "w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 text-3xl shadow-sm border border-orange-100 bg-orange-100 text-orange-600";
+                btn.className = "w-full mt-8 py-4 bg-orange-500 hover:bg-orange-600 text-white font-bold rounded-2xl shadow-lg transition transform active:scale-95 flex items-center justify-center gap-2";
+            }
+            
+            icon.className = `ph ${data.icon}`;
+            document.getElementById('form-content').innerHTML = data.html;
+
+            // Animate In
+            const modal = document.getElementById('modal-social');
+            const card = document.getElementById('modal-card');
+            modal.classList.remove('pointer-events-none', 'opacity-0');
+            setTimeout(() => {
+                card.classList.remove('translate-y-full', 'sm:translate-y-10');
+            }, 10);
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('modal-social');
+            const card = document.getElementById('modal-card');
+            card.classList.add('translate-y-full', 'sm:translate-y-10');
+            setTimeout(() => {
+                modal.classList.add('pointer-events-none', 'opacity-0');
+            }, 300);
+        }
+
+        // --- FILE UPLOAD PREVIEW ---
+        function updateFileName(input) {
+            const fileName = input.files[0]?.name;
+            const label = document.getElementById('file-name');
+            if(fileName) {
+                label.innerHTML = `<span class="text-emerald-600 font-bold">${fileName}</span><br>Siap diupload!`;
+            }
+        }
+
+        // --- SAVE DATA ---
+        function saveData() {
+            // Simple validation check
+            const inputs = document.querySelectorAll('#form-content input');
+            let filled = false;
+            inputs.forEach(i => { if(i.value) filled = true; }); // Loose validation
+
+            if(!filled && inputs.length > 0) {
+                alert("Isi dulu datanya ya!");
+                return;
+            }
+
+            // Confetti
+            const colors = currentTheme === 'emerald' ? ['#10b981', '#34d399', '#ffffff'] : ['#f97316', '#fbbf24', '#ffffff'];
+            confetti({
+                particleCount: 150,
+                spread: 100,
+                origin: { y: 0.6 },
+                colors: colors
+            });
+
+            setTimeout(() => {
+                closeModal();
+            }, 800);
+        }
+    </script>
+</body>
+</html>
