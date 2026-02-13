@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jurnal Bangun Pagi - TunasHebat</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Digital-7+Mono&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['"Plus Jakarta Sans"', 'sans-serif'], digital: ['"Courier New"', 'monospace'] },
+                    colors: { 
+                        brand: { 50: '#f0f9ff', 500: '#0ea5e9', 600: '#0284c7' },
+                        sun: { 400: '#FACC15', 500: '#EAB308' },
+                        alarm: { 500: '#ef4444', 900: '#450a0a' } // Warna khusus Alarm
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'alarm-throb': 'alarm-throb 0.8s ease-in-out infinite alternate', // Animasi Denyut Cepat
+                    },
+                    keyframes: {
+                        float: { '0%, 100%': { transform: 'translateY(0)' }, '50%': { transform: 'translateY(-20px)' } },
+                        'alarm-throb': { 
+                            '0%': { boxShadow: '0 0 0 0 rgba(239, 68, 68, 0.4)', transform: 'scale(1)' }, 
+                            '100%': { boxShadow: '0 0 20px 10px rgba(239, 68, 68, 0.1)', transform: 'scale(1.02)' } 
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gradient-to-b from-sky-300 to-brand-50 min-h-screen flex flex-col relative overflow-hidden font-sans text-slate-700 transition-colors duration-1000" id="body-bg">
+
+    <!-- DECORATION: Sun & Clouds -->
+    <div class="absolute top-10 right-10 md:top-20 md:right-32 w-32 h-32 md:w-48 md:h-48 bg-sun-400 rounded-full blur-[40px] opacity-60 animate-pulse"></div>
+    <div class="absolute top-16 right-16 md:top-24 md:right-36 w-24 h-24 md:w-40 md:h-40 bg-gradient-to-tr from-orange-400 to-yellow-300 rounded-full shadow-[0_0_60px_rgba(253,224,71,0.6)] animate-float z-0"></div>
+    
+    <div class="absolute top-32 left-10 opacity-40 animate-float" style="animation-delay: 1s;">
+        <i class="ph ph-cloud-fill text-6xl text-white"></i>
+    </div>
+    <div class="absolute top-64 right-10 opacity-30 animate-float" style="animation-delay: 3s;">
+        <i class="ph ph-cloud-fill text-8xl text-white"></i>
+    </div>
+
+    <!-- NAVBAR -->
+    <nav class="p-6 flex items-center gap-4 z-10">
+        <button onclick="window.location.href='dashboard.html'" class="w-10 h-10 bg-white/30 backdrop-blur-md rounded-xl flex items-center justify-center text-white hover:bg-white/50 transition border border-white/40">
+            <i class="ph ph-arrow-left text-xl font-bold"></i>
+        </button>
+        <h1 class="text-white font-bold text-lg drop-shadow-md">Kembali ke Dashboard</h1>
+    </nav>
+
+    <!-- MAIN CONTENT -->
+    <main class="flex-1 flex flex-col items-center justify-center px-6 pb-20 z-10 w-full max-w-lg mx-auto">
+        
+        <!-- CARD UTAMA -->
+        <div class="bg-white/90 backdrop-blur-xl p-8 rounded-[2.5rem] shadow-2xl w-full border border-white relative overflow-hidden transition-all duration-500" id="main-card">
+            
+            <!-- Dynamic Heading -->
+            <div class="text-center mb-6">
+                <div id="habit-badge" class="inline-flex items-center gap-2 bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full text-xs font-bold mb-2 transition-colors duration-500">
+                    <i class="ph ph-sun-dim-fill"></i> Jurnal Pagi
+                </div>
+                <h2 id="page-title" class="text-3xl font-bold text-slate-800 transition-all duration-500">Sudah Bangun?</h2>
+                <p class="text-slate-500 text-sm font-medium transition-colors duration-500" id="rule-display">Loading aturan...</p>
+            </div>
+
+            <!-- DIGITAL CLOCK CONTAINER -->
+            <!-- ID 'clock-container' akan dimanipulasi JS untuk efek merah -->
+            <div id="clock-container" class="bg-slate-900 rounded-2xl p-6 mb-8 text-center border-4 border-slate-800 shadow-inner relative transition-all duration-500 ease-in-out">
+                
+                <div class="flex justify-center items-end gap-2 font-mono tracking-widest leading-none">
+                    <!-- Jam -->
+                    <span id="clock-time" class="text-5xl md:text-6xl font-bold font-digital text-green-400 transition-colors duration-500">00:00</span>
+                    <!-- Detik -->
+                    <span id="clock-sec" class="text-xl md:text-2xl text-green-700 mb-1 font-digital transition-colors duration-500">00</span>
+                </div>
+                
+                <div id="clock-date" class="text-slate-500 text-xs mt-2 uppercase tracking-widest font-bold transition-colors duration-500">
+                    -- --- ----
+                </div>
+                
+                <!-- Ikon Lonceng (Muncul saat telat) -->
+                <div id="alarm-icon" class="absolute top-2 right-2 hidden animate-bounce">
+                    <i class="ph ph-bell-ringing-fill text-red-500 text-xl"></i>
+                </div>
+            </div>
+
+            <!-- Input Form -->
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm font-bold text-slate-700 mb-1">Catatan Pagi (Opsional)</label>
+                    <textarea id="note-input" rows="2" placeholder="Apa rencanamu hari ini?" class="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 outline-none transition text-sm resize-none"></textarea>
+                </div>
+
+                <button onclick="checkIn()" id="btn-checkin" class="w-full py-4 bg-gradient-to-r from-yellow-400 to-orange-500 hover:from-yellow-500 hover:to-orange-600 text-white font-bold rounded-2xl shadow-lg shadow-orange-500/30 transition transform active:scale-95 flex items-center justify-center gap-2 text-lg">
+                    <i class="ph ph-alarm text-2xl"></i>
+                    Check-in Sekarang
+                </button>
+            </div>
+        </div>
+
+        <!-- Quote Area -->
+        <div class="mt-8 text-center text-brand-900/80 max-w-xs">
+            <p id="quote-text" class="text-sm italic font-medium">"Kemenangan pertama hari ini adalah mengalahkan selimutmu sendiri."</p>
+        </div>
+
+    </main>
+
+    <!-- SUCCESS MODAL (Tepat Waktu) -->
+    <div id="modal-success" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm hidden opacity-0 transition-opacity duration-300">
+        <div class="bg-white rounded-3xl p-8 max-w-sm w-full mx-4 text-center transform scale-90 transition-transform duration-300" id="modal-content-success">
+            <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4 animate-bounce">
+                <i class="ph ph-trophy-fill text-4xl text-green-500"></i>
+            </div>
+            <h3 class="text-2xl font-bold text-slate-800 mb-2">Hebat! Tepat Waktu!</h3>
+            <p class="text-slate-500 mb-6">Poin +50 telah ditambahkan. Kamu produktif sekali!</p>
+            <button onclick="closeModal('success')" class="w-full py-3 bg-green-500 text-white font-bold rounded-xl hover:bg-green-600 transition">
+                Lanjut
+            </button>
+        </div>
+    </div>
+
+    <!-- LATE MODAL (Telat) -->
+    <div id="modal-late" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm hidden opacity-0 transition-opacity duration-300">
+        <div class="bg-white rounded-3xl p-8 max-w-sm w-full mx-4 text-center transform scale-90 transition-transform duration-300" id="modal-content-late">
+            <div class="w-20 h-20 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <i class="ph ph-clock-counter-clockwise-fill text-4xl text-red-500"></i>
+            </div>
+            <h3 class="text-2xl font-bold text-slate-800 mb-2">Kamu Telat!</h3>
+            <p class="text-slate-500 mb-6">Jangan biasakan telat ya. Poin kamu tidak bertambah maksimal hari ini.</p>
+            <button onclick="closeModal('late')" class="w-full py-3 bg-slate-800 text-white font-bold rounded-xl hover:bg-slate-900 transition">
+                Aku Janji Lebih Baik
+            </button>
+        </div>
+    </div>
+
+    <!-- SCRIPT LOGIKA -->
+    <script>
+        // Variabel Global
+        let isLate = false;
+        let limitHour = 7; // Default
+
+        function updateClock() {
+            const now = new Date();
+            let hours = now.getHours();
+            let minutes = now.getMinutes();
+            let seconds = now.getSeconds();
+            const day = now.getDay(); // 0 = Minggu, 6 = Sabtu
+
+            // Format Waktu
+            const displayH = String(hours).padStart(2, '0');
+            const displayM = String(minutes).padStart(2, '0');
+            const displayS = String(seconds).padStart(2, '0');
+
+            // Update Teks Jam
+            document.getElementById('clock-time').textContent = `${displayH}:${displayM}`;
+            document.getElementById('clock-sec').textContent = displayS;
+
+            // Update Tanggal
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            document.getElementById('clock-date').textContent = now.toLocaleDateString('id-ID', options);
+
+            // LOGIKA BATAS WAKTU
+            const isWeekend = (day === 0 || day === 6);
+            limitHour = isWeekend ? 6 : 7;
+            const currentMinutes = (hours * 60) + minutes;
+            const limitMinutes = limitHour * 60;
+
+            // Tampilkan Aturan
+            document.getElementById('rule-display').innerHTML = isWeekend 
+                ? `Akhir Pekan. Batas: <strong>06:00</strong> WIB`
+                : `Hari Sekolah. Batas: <strong>07:00</strong> WIB`;
+
+            // CEK APAKAH TELAT (Real Time)
+            checkLateStatus(currentMinutes, limitMinutes);
+        }
+
+        function checkLateStatus(currentMin, limitMin) {
+            const clockContainer = document.getElementById('clock-container');
+            const clockTime = document.getElementById('clock-time');
+            const clockSec = document.getElementById('clock-sec');
+            const clockDate = document.getElementById('clock-date');
+            const pageTitle = document.getElementById('page-title');
+            const habitBadge = document.getElementById('habit-badge');
+            const alarmIcon = document.getElementById('alarm-icon');
+
+            if (currentMin > limitMin) {
+                // KONDISI TELAT (MERAH DENYUT)
+                isLate = true;
+                
+                // Ubah Tampilan Jam -> Merah Alarm
+                clockContainer.className = "bg-red-950 rounded-2xl p-6 mb-8 text-center border-4 border-red-600 relative transition-all duration-300 animate-alarm-throb";
+                clockTime.className = "text-5xl md:text-6xl font-bold font-digital text-red-500 transition-colors duration-300";
+                clockSec.className = "text-xl md:text-2xl text-red-700 mb-1 font-digital transition-colors duration-300";
+                clockDate.className = "text-red-400 text-xs mt-2 uppercase tracking-widest font-bold transition-colors duration-300";
+                
+                // Ubah Teks Judul
+                pageTitle.textContent = "KAMU TELAT!";
+                pageTitle.className = "text-3xl font-extrabold text-red-600 tracking-wider transition-all duration-300";
+                
+                // Badge & Icon
+                habitBadge.className = "inline-flex items-center gap-2 bg-red-100 text-red-700 px-3 py-1 rounded-full text-xs font-bold mb-2 transition-colors";
+                alarmIcon.classList.remove('hidden');
+
+            } else {
+                // KONDISI TEPAT WAKTU (NORMAL)
+                isLate = false;
+                
+                // Reset Tampilan Jam -> Normal
+                clockContainer.className = "bg-slate-900 rounded-2xl p-6 mb-8 text-center border-4 border-slate-800 shadow-inner relative transition-all duration-300";
+                clockTime.className = "text-5xl md:text-6xl font-bold font-digital text-green-400 transition-colors duration-300";
+                clockSec.className = "text-xl md:text-2xl text-green-700 mb-1 font-digital transition-colors duration-300";
+                clockDate.className = "text-slate-500 text-xs mt-2 uppercase tracking-widest font-bold transition-colors duration-300";
+                
+                // Reset Teks Judul
+                pageTitle.textContent = "Sudah Bangun?";
+                pageTitle.className = "text-3xl font-bold text-slate-800 transition-all duration-300";
+
+                // Badge & Icon
+                habitBadge.className = "inline-flex items-center gap-2 bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full text-xs font-bold mb-2 transition-colors";
+                alarmIcon.classList.add('hidden');
+            }
+        }
+
+        // --- BUTTON ACTION ---
+        function checkIn() {
+            if (isLate) {
+                // Tampilkan Modal Telat
+                const modal = document.getElementById('modal-late');
+                const content = document.getElementById('modal-content-late');
+                modal.classList.remove('hidden');
+                setTimeout(() => {
+                    modal.classList.remove('opacity-0');
+                    content.classList.remove('scale-90');
+                    content.classList.add('scale-100');
+                }, 10);
+            } else {
+                // Tampilkan Modal Sukses (Konfeti)
+                playConfetti();
+                const modal = document.getElementById('modal-success');
+                const content = document.getElementById('modal-content-success');
+                modal.classList.remove('hidden');
+                setTimeout(() => {
+                    modal.classList.remove('opacity-0');
+                    content.classList.remove('scale-90');
+                    content.classList.add('scale-100');
+                }, 10);
+            }
+        }
+
+        function playConfetti() {
+            var duration = 3 * 1000;
+            var animationEnd = Date.now() + duration;
+            var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 60 };
+            function randomInRange(min, max) { return Math.random() * (max - min) + min; }
+            var interval = setInterval(function() {
+                var timeLeft = animationEnd - Date.now();
+                if (timeLeft <= 0) { return clearInterval(interval); }
+                var particleCount = 50 * (timeLeft / duration);
+                confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } }));
+                confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } }));
+            }, 250);
+        }
+
+        function closeModal(type) {
+            const modal = document.getElementById(`modal-${type}`);
+            modal.classList.add('opacity-0');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                window.location.href = 'dashboard.html';
+            }, 300);
+        }
+
+        // Jalankan Jam
+        setInterval(updateClock, 1000);
+        updateClock(); // Init
+    </script>
+</body>
+</html>
