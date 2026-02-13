@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Peringkat Juara - TunasHebat</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Teko:wght@500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { 
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                        game: ['"Teko"', 'sans-serif']
+                    },
+                    colors: { 
+                        brand: { 50: '#f0f9ff', 100: '#e0f2fe', 500: '#0ea5e9', 600: '#0284c7' },
+                        gold: { 300: '#fde047', 400: '#FACC15', 500: '#EAB308' },
+                        rank: {
+                            1: '#fbbf24', // Gold
+                            2: '#94a3b8', // Silver
+                            3: '#b45309'  // Bronze
+                        }
+                    },
+                    animation: {
+                        'float': 'float 3s ease-in-out infinite',
+                        'shimmer': 'shimmer 2s infinite',
+                    },
+                    keyframes: {
+                        float: { '0%, 100%': { transform: 'translateY(0)' }, '50%': { transform: 'translateY(-5px)' } },
+                        shimmer: { '0%': { backgroundPosition: '200% center' }, '100%': { backgroundPosition: '-200% center' } }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        
+        /* Podium Styles */
+        .podium-1 { transform: scale(1.1); z-index: 10; border-color: #fbbf24; box-shadow: 0 10px 25px -5px rgba(251, 191, 36, 0.4); }
+        .podium-2 { transform: translateY(10px); border-color: #94a3b8; }
+        .podium-3 { transform: translateY(15px); border-color: #b45309; }
+
+        /* Streak Flame */
+        .fire-anim { animation: pulse-fire 1.5s infinite; }
+        @keyframes pulse-fire { 0% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.1); opacity: 0.8; } 100% { transform: scale(1); opacity: 1; } }
+        
+        /* Banner Clip for List Items */
+        .banner-mask {
+            -webkit-mask-image: linear-gradient(to right, black 20%, transparent 100%);
+            mask-image: linear-gradient(to right, black 20%, transparent 100%);
+        }
+    </style>
+</head>
+<body class="bg-brand-50 min-h-screen font-sans text-slate-700 pb-24">
+
+    <!-- NAVBAR -->
+    <nav class="bg-white/80 backdrop-blur-md sticky top-0 z-40 border-b border-slate-200 px-4 py-3 shadow-sm">
+        <div class="max-w-3xl mx-auto flex items-center gap-4">
+            <button onclick="window.location.href='dashboard.html'" class="w-10 h-10 rounded-xl bg-white border border-slate-200 flex items-center justify-center text-slate-600 hover:bg-brand-50 transition">
+                <i class="ph ph-arrow-left text-xl font-bold"></i>
+            </button>
+            <div>
+                <h1 class="font-game text-2xl font-bold text-slate-800 leading-none">PAPAN PERINGKAT</h1>
+                <p class="text-[10px] text-slate-500 font-bold uppercase tracking-wider">Kompetisi Sehat, Prestasi Hebat</p>
+            </div>
+        </div>
+    </nav>
+
+    <!-- FILTER CATEGORY (Scrollable) -->
+    <div class="bg-white border-b border-slate-100 py-3 sticky top-[65px] z-30 shadow-sm">
+        <div class="max-w-3xl mx-auto px-4 flex gap-2 overflow-x-auto no-scrollbar" id="filter-container">
+            <button onclick="filterRank('sekolah')" class="filter-btn active whitespace-nowrap px-4 py-1.5 rounded-full text-xs font-bold border border-brand-200 bg-brand-500 text-white transition">
+                Semua Sekolah
+            </button>
+            <button onclick="filterRank('angkatan')" class="filter-btn whitespace-nowrap px-4 py-1.5 rounded-full text-xs font-bold border border-slate-200 text-slate-500 bg-white hover:bg-slate-50 transition">
+                Per Angkatan
+            </button>
+            <!-- Jurusan Group -->
+            <div class="h-6 w-[1px] bg-slate-200 mx-1 self-center"></div>
+            <button onclick="filterRank('rpl')" class="filter-btn whitespace-nowrap px-4 py-1.5 rounded-full text-xs font-bold border border-slate-200 text-slate-500 bg-white hover:bg-slate-50 transition">RPL</button>
+            <button onclick="filterRank('akl')" class="filter-btn whitespace-nowrap px-4 py-1.5 rounded-full text-xs font-bold border border-slate-200 text-slate-500 bg-white hover:bg-slate-50 transition">AKL</button>
+            <button onclick="filterRank('mp')" class="filter-btn whitespace-nowrap px-4 py-1.5 rounded-full text-xs font-bold border border-slate-200 text-slate-500 bg-white hover:bg-slate-50 transition">MP</button>
+            <button onclick="filterRank('br')" class="filter-btn whitespace-nowrap px-4 py-1.5 rounded-full text-xs font-bold border border-slate-200 text-slate-500 bg-white hover:bg-slate-50 transition">BR</button>
+            <button onclick="filterRank('bd')" class="filter-btn whitespace-nowrap px-4 py-1.5 rounded-full text-xs font-bold border border-slate-200 text-slate-500 bg-white hover:bg-slate-50 transition">BD</button>
+            <button onclick="filterRank('manlog')" class="filter-btn whitespace-nowrap px-4 py-1.5 rounded-full text-xs font-bold border border-slate-200 text-slate-500 bg-white hover:bg-slate-50 transition">Manlog</button>
+            <button onclick="filterRank('ulw')" class="filter-btn whitespace-nowrap px-4 py-1.5 rounded-full text-xs font-bold border border-slate-200 text-slate-500 bg-white hover:bg-slate-50 transition">ULW</button>
+            <!-- Kelas -->
+            <div class="h-6 w-[1px] bg-slate-200 mx-1 self-center"></div>
+            <button onclick="filterRank('kelas')" class="filter-btn whitespace-nowrap px-4 py-1.5 rounded-full text-xs font-bold border border-slate-200 text-slate-500 bg-white hover:bg-slate-50 transition">Per Kelas</button>
+        </div>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <main class="max-w-3xl mx-auto px-4 pt-6">
+        
+        <!-- TOP 3 PODIUM -->
+        <div class="flex justify-center items-end mb-10 gap-2 sm:gap-6 pt-4" id="podium-container">
+            <!-- Rank 2 -->
+            <div class="flex flex-col items-center podium-2 cursor-pointer" onclick="showProfile(1)">
+                <div class="relative">
+                    <div class="w-20 h-20 rounded-full border-4 border-slate-300 overflow-hidden bg-slate-200">
+                        <img src="https://i.pravatar.cc/300?img=11" class="w-full h-full object-cover">
+                    </div>
+                    <div class="absolute -bottom-3 left-1/2 -translate-x-1/2 bg-slate-300 text-slate-700 text-xs font-bold px-2 py-0.5 rounded shadow-sm">#2</div>
+                </div>
+                <div class="mt-4 text-center">
+                    <p class="font-bold text-sm text-slate-700">Rizky B.</p>
+                    <p class="text-[10px] font-bold text-slate-400">2,100 XP</p>
+                </div>
+            </div>
+
+            <!-- Rank 1 (King) -->
+            <div class="flex flex-col items-center podium-1 cursor-pointer" onclick="showProfile(0)">
+                <div class="relative">
+                    <i class="ph ph-crown-fill text-3xl text-gold-400 absolute -top-8 left-1/2 -translate-x-1/2 animate-float"></i>
+                    <div class="w-24 h-24 rounded-full border-4 border-gold-400 overflow-hidden bg-gold-100 shadow-lg relative">
+                        <img src="https://i.pravatar.cc/300?img=32" class="w-full h-full object-cover">
+                        <!-- Frame Effect -->
+                        <div class="absolute inset-0 border-4 border-yellow-200 rounded-full opacity-50"></div>
+                    </div>
+                    <div class="absolute -bottom-3 left-1/2 -translate-x-1/2 bg-gradient-to-r from-gold-400 to-yellow-500 text-white text-xs font-bold px-3 py-0.5 rounded shadow-md border border-white">#1 JUARA</div>
+                </div>
+                <div class="mt-5 text-center">
+                    <p class="font-bold text-base text-slate-800">Siti Aminah</p>
+                    <p class="text-xs font-bold text-gold-500">2,400 XP</p>
+                    <div class="flex items-center justify-center gap-1 mt-1 text-[10px] text-red-500 font-bold bg-red-50 px-2 py-0.5 rounded-full w-max mx-auto">
+                        <i class="ph ph-fire-fill"></i> 15 Hari
+                    </div>
+                </div>
+            </div>
+
+            <!-- Rank 3 -->
+            <div class="flex flex-col items-center podium-3 cursor-pointer" onclick="showProfile(2)">
+                <div class="relative">
+                    <div class="w-20 h-20 rounded-full border-4 border-orange-700 overflow-hidden bg-orange-100">
+                        <img src="https://i.pravatar.cc/300?img=5" class="w-full h-full object-cover">
+                    </div>
+                    <div class="absolute -bottom-3 left-1/2 -translate-x-1/2 bg-orange-700 text-white text-xs font-bold px-2 py-0.5 rounded shadow-sm">#3</div>
+                </div>
+                <div class="mt-4 text-center">
+                    <p class="font-bold text-sm text-slate-700">Dewi P.</p>
+                    <p class="text-[10px] font-bold text-slate-400">1,950 XP</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- LIST RANK 4+ -->
+        <div class="space-y-3 pb-20" id="rank-list">
+            <!-- Items injected via JS -->
+        </div>
+
+    </main>
+
+    <!-- STICKY USER RANK (YOUR RANK) -->
+    <div class="fixed bottom-0 left-0 w-full bg-white border-t border-slate-200 p-4 shadow-[0_-5px_20px_rgba(0,0,0,0.05)] z-40">
+        <div class="max-w-3xl mx-auto flex items-center gap-4 cursor-pointer hover:bg-slate-50 transition rounded-xl p-2" onclick="showProfile(99)"> <!-- ID 99 for You -->
+            <div class="font-game text-xl font-bold text-slate-400 w-6 text-center">15</div>
+            <div class="relative w-12 h-12">
+                <img src="https://i.pravatar.cc/300?img=12" class="w-full h-full rounded-full border-2 border-brand-500 object-cover">
+                <div class="absolute -top-1 -right-1 bg-brand-500 text-white text-[8px] px-1 rounded font-bold">YOU</div>
+            </div>
+            <div class="flex-1">
+                <h4 class="font-bold text-slate-800 text-sm">Budi Santoso</h4>
+                <div class="flex items-center gap-2 text-[10px] text-slate-500">
+                    <span class="bg-slate-100 px-1.5 py-0.5 rounded">Lvl 12</span>
+                    <span class="text-brand-500 font-bold">Cendekiawan</span>
+                </div>
+            </div>
+            <div class="text-right">
+                <p class="font-game text-xl font-bold text-brand-600">1,250</p>
+                <div class="flex items-center justify-end gap-1 text-[10px] text-red-500 font-bold">
+                    <i class="ph ph-fire-fill"></i> 5
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PLAYER PROFILE MODAL -->
+    <div id="modal-profile" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/80 backdrop-blur-sm hidden opacity-0 transition-opacity duration-300">
+        <div id="modal-card" class="bg-white w-full max-w-sm rounded-[2rem] overflow-hidden shadow-2xl transform scale-90 transition-transform duration-300 relative">
+            
+            <!-- Close Button -->
+            <button onclick="closeModal()" class="absolute top-4 right-4 z-20 bg-black/20 hover:bg-black/40 text-white p-2 rounded-full backdrop-blur-md transition">
+                <i class="ph ph-x text-lg"></i>
+            </button>
+
+            <!-- Banner Area -->
+            <div class="h-32 bg-slate-200 relative">
+                <img id="modal-banner" src="" class="w-full h-full object-cover">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+            </div>
+
+            <!-- Avatar & Main Info -->
+            <div class="px-6 relative text-center -mt-12">
+                <div class="inline-block relative">
+                    <img id="modal-avatar" src="" class="w-24 h-24 rounded-full border-4 border-white shadow-lg bg-white object-cover relative z-10">
+                    <!-- Frame Decoration (CSS) -->
+                    <div id="modal-frame" class="absolute inset-[-5px] rounded-full border-4 border-transparent z-0"></div>
+                </div>
+                
+                <h3 id="modal-name" class="font-game text-3xl font-bold text-slate-800 mt-2 leading-none">Nama Pemain</h3>
+                <div class="flex items-center justify-center gap-2 mt-1">
+                    <span id="modal-rank-badge" class="text-[10px] font-bold bg-brand-100 text-brand-600 px-2 py-0.5 rounded uppercase tracking-wider">Rank Name</span>
+                    <span class="text-[10px] font-bold bg-slate-100 text-slate-500 px-2 py-0.5 rounded">Lvl <span id="modal-lvl">0</span></span>
+                </div>
+            </div>
+
+            <!-- Stats Grid -->
+            <div class="p-6 grid grid-cols-2 gap-4">
+                <div class="bg-slate-50 p-3 rounded-2xl border border-slate-100 text-center">
+                    <div class="text-xs text-slate-400 font-bold uppercase mb-1">Total Poin</div>
+                    <div class="font-game text-2xl font-bold text-brand-600" id="modal-points">0</div>
+                </div>
+                <div class="bg-red-50 p-3 rounded-2xl border border-red-100 text-center relative overflow-hidden">
+                    <div class="absolute -right-2 -bottom-2 text-red-100"><i class="ph ph-fire-fill text-5xl"></i></div>
+                    <div class="text-xs text-red-400 font-bold uppercase mb-1 relative z-10">Streak</div>
+                    <div class="font-game text-2xl font-bold text-red-500 relative z-10 flex items-center justify-center gap-1">
+                        <i class="ph ph-fire-fill text-lg fire-anim"></i> <span id="modal-streak">0</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Badges -->
+            <div class="px-6 pb-8">
+                <h4 class="text-xs font-bold text-slate-400 uppercase mb-3 text-center">Koleksi Lencana</h4>
+                <div class="flex justify-center gap-3" id="modal-badges">
+                    <!-- Injected via JS -->
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- JS LOGIC -->
+    <script>
+        // MOCK DATA (Simulasi Database)
+        const players = [
+            { id: 0, name: "Siti Aminah", rank: "Master", level: 15, points: 2400, streak: 15, avatar: "https://i.pravatar.cc/300?img=32", banner: "https://images.unsplash.com/photo-1579546929518-9e396f3cc809?q=80&w=500", badges: ['sun', 'book', 'star'] },
+            { id: 1, name: "Rizky Billar", rank: "Expert", level: 14, points: 2100, streak: 10, avatar: "https://i.pravatar.cc/300?img=11", banner: "https://images.unsplash.com/photo-1557683316-973673baf926?q=80&w=500", badges: ['sun', 'book'] },
+            { id: 2, name: "Dewi Persik", rank: "Expert", level: 13, points: 1950, streak: 8, avatar: "https://i.pravatar.cc/300?img=5", banner: "https://images.unsplash.com/photo-1614850523459-c2f4c699c52e?q=80&w=500", badges: ['book'] },
+            { id: 3, name: "Andi Law", rank: "Elite", level: 12, points: 1800, streak: 5, avatar: "https://i.pravatar.cc/300?img=13", banner: "https://images.unsplash.com/photo-1605806616949-1e87b487bc2a?q=80&w=500", badges: ['sun'] },
+            { id: 4, name: "Joko Anwar", rank: "Elite", level: 11, points: 1750, streak: 3, avatar: "https://i.pravatar.cc/300?img=59", banner: "https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=500", badges: [] },
+            { id: 99, name: "Budi Santoso", rank: "Cendekiawan", level: 12, points: 1250, streak: 5, avatar: "https://i.pravatar.cc/300?img=12", banner: "https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?q=80&w=500", badges: ['sun', 'book'] }, // You
+        ];
+
+        // RENDER LIST (Rank 4 onwards)
+        function renderList() {
+            const listContainer = document.getElementById('rank-list');
+            // Mock list generation (Start from rank 4)
+            const remainingPlayers = [players[3], players[4], 
+                { id: 5, name: "Tina Toon", rank: "Elite", points: 1600, avatar: "https://i.pravatar.cc/300?img=44", banner: "" },
+                { id: 6, name: "Deddy C.", rank: "Elite", points: 1550, avatar: "https://i.pravatar.cc/300?img=33", banner: "" }
+            ];
+
+            remainingPlayers.forEach((p, index) => {
+                const rank = index + 4;
+                const div = document.createElement('div');
+                div.className = "flex items-center gap-4 bg-white p-3 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition cursor-pointer group";
+                div.onclick = () => showProfile(p.id < 10 ? p.id : 3); // Fallback ID for demo
+
+                div.innerHTML = `
+                    <div class="font-game text-xl font-bold text-slate-400 w-6 text-center">${rank}</div>
+                    <div class="relative w-12 h-12 flex-shrink-0">
+                        <img src="${p.avatar}" class="w-full h-full rounded-full object-cover border border-slate-200 group-hover:scale-105 transition">
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <h4 class="font-bold text-slate-800 text-sm truncate group-hover:text-brand-600 transition">${p.name}</h4>
+                        <p class="text-[10px] text-slate-400 font-bold uppercase">${p.rank}</p>
+                    </div>
+                    <div class="text-right">
+                        <div class="font-game text-lg font-bold text-slate-600">${p.points}</div>
+                    </div>
+                `;
+                listContainer.appendChild(div);
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', renderList);
+
+        // FILTER LOGIC (Visual Only)
+        function filterRank(type) {
+            // Update Active Button
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.className = "filter-btn whitespace-nowrap px-4 py-1.5 rounded-full text-xs font-bold border border-slate-200 text-slate-500 bg-white hover:bg-slate-50 transition";
+            });
+            event.target.className = "filter-btn active whitespace-nowrap px-4 py-1.5 rounded-full text-xs font-bold border border-brand-200 bg-brand-500 text-white transition";
+            
+            // Simulate Loading
+            const list = document.getElementById('rank-list');
+            list.style.opacity = '0.5';
+            setTimeout(() => { list.style.opacity = '1'; }, 300);
+        }
+
+        // SHOW PROFILE MODAL
+        function showProfile(id) {
+            const player = players.find(p => p.id === id) || players[3]; // Fallback
+            
+            // Populate Data
+            document.getElementById('modal-name').innerText = player.name;
+            document.getElementById('modal-rank-badge').innerText = player.rank;
+            document.getElementById('modal-lvl').innerText = player.level || 10;
+            document.getElementById('modal-points').innerText = player.points;
+            document.getElementById('modal-streak').innerText = player.streak + " Hari";
+            document.getElementById('modal-avatar').src = player.avatar;
+            document.getElementById('modal-banner').src = player.banner || "https://images.unsplash.com/photo-1557683316-973673baf926?q=80&w=500";
+
+            // Render Badges
+            const badgeContainer = document.getElementById('modal-badges');
+            badgeContainer.innerHTML = '';
+            if(player.badges && player.badges.length > 0) {
+                player.badges.forEach(b => {
+                    let icon = b === 'sun' ? 'ph-sun-dim-fill text-yellow-400' : (b === 'book' ? 'ph-book-open-fill text-blue-400' : 'ph-star-fill text-purple-400');
+                    badgeContainer.innerHTML += `
+                        <div class="w-10 h-10 bg-slate-50 rounded-full border border-slate-200 flex items-center justify-center shadow-sm">
+                            <i class="ph ${icon} text-xl"></i>
+                        </div>
+                    `;
+                });
+            } else {
+                badgeContainer.innerHTML = '<span class="text-[10px] text-slate-300 italic">Belum ada lencana</span>';
+            }
+
+            // Show Modal
+            const modal = document.getElementById('modal-profile');
+            const card = document.getElementById('modal-card');
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                card.classList.remove('scale-90');
+                card.classList.add('scale-100');
+            }, 10);
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('modal-profile');
+            const card = document.getElementById('modal-card');
+            modal.classList.add('opacity-0');
+            card.classList.remove('scale-100');
+            card.classList.add('scale-90');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 300);
+        }
+    </script>
+</body>
+</html>
