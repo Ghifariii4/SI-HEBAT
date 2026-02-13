@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Siswa - TunasHebat</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Chart.js (Untuk Grafik) -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['"Plus Jakarta Sans"', 'sans-serif'] },
+                    colors: { 
+                        brand: { 50: '#f0f9ff', 100: '#e0f2fe', 200:'#bae6fd', 500: '#0ea5e9', 600: '#0284c7', 900: '#0c4a6e' },
+                        gold: { 400: '#FACC15', 500: '#EAB308' }
+                    },
+                    animation: {
+                        'pulse-fast': 'pulse 1s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'wiggle': 'wiggle 1s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        wiggle: { '0%, 100%': { transform: 'rotate(-3deg)' }, '50%': { transform: 'rotate(3deg)' } }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        .avatar-border-epic {
+            background: linear-gradient(45deg, #38bdf8, #818cf8);
+            padding: 3px; border-radius: 50%; animation: pulse-glow 3s infinite;
+        }
+        @keyframes pulse-glow { 0%, 100% { box-shadow: 0 0 5px rgba(56, 189, 248, 0.5); } 50% { box-shadow: 0 0 15px rgba(56, 189, 248, 0.8); } }
+
+        /* Calendar Heatmap Colors */
+        .cal-red { background-color: #fecaca; border: 1px solid #ef4444; color: #b91c1c; }
+        .cal-yellow { background-color: #fef08a; border: 1px solid #eab308; color: #a16207; }
+        .cal-green { background-color: #bbf7d0; border: 1px solid #22c55e; color: #15803d; }
+        .cal-empty { background-color: #f1f5f9; border: 1px solid #e2e8f0; color: #94a3b8; }
+    </style>
+</head>
+<body class="bg-brand-50 text-slate-600 font-sans h-screen overflow-hidden flex">
+
+    <!-- SIDEBAR (Desktop) -->
+    <aside class="hidden md:flex w-64 bg-white border-r border-slate-100 flex-col justify-between p-6 z-20 shadow-sm">
+        <div>
+            <div class="flex items-center gap-2 mb-10 text-brand-600">
+                <i class="ph ph-star-four-fill text-2xl"></i>
+                <span class="font-bold text-xl tracking-tight">TunasHebat</span>
+            </div>
+            
+            <nav class="space-y-2">
+                <a href="#" class="flex items-center gap-3 px-4 py-3 bg-brand-50 text-brand-600 font-bold rounded-xl transition">
+                    <i class="ph ph-squares-four text-xl"></i> Beranda
+                </a>
+                <a href="profile.html" class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:bg-slate-50 hover:text-slate-700 font-medium rounded-xl transition">
+                    <i class="ph ph-user text-xl"></i> Profil Saya
+                </a>
+                <a href="leaderboard.html" class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:bg-slate-50 hover:text-slate-700 font-medium rounded-xl transition">
+                    <i class="ph ph-trophy text-xl"></i> Peringkat
+                </a>
+                <a href="shop.html" class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:bg-slate-50 hover:text-slate-700 font-medium rounded-xl transition">
+                    <i class="ph ph-storefront text-xl"></i> Toko Skin
+                </a>
+            </nav>
+        </div>
+        <button onclick="window.location.href='index.html'" class="flex items-center gap-2 text-slate-400 hover:text-red-500 transition font-medium text-sm">
+            <i class="ph ph-sign-out text-lg"></i> Keluar
+        </button>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="flex-1 overflow-y-auto relative no-scrollbar">
+        
+        <!-- HEADER -->
+        <header class="bg-white border-b border-slate-100 sticky top-0 z-30 px-6 py-4 flex justify-between items-center shadow-sm">
+            <div class="flex items-center gap-4">
+                <div class="md:hidden text-brand-600 text-xl font-bold">TunasHebat</div>
+                <!-- Mini Profile -->
+                <div class="hidden md:flex items-center gap-3 cursor-pointer" onclick="window.location.href='profile.html'">
+                    <div class="avatar-border-epic w-12 h-12">
+                        <img src="https://i.pravatar.cc/300?img=12" class="w-full h-full rounded-full border-2 border-white">
+                    </div>
+                    <div>
+                        <h2 class="font-bold text-slate-800 leading-tight">Halo, Budi!</h2>
+                        <div class="flex items-center gap-2 text-xs font-bold text-slate-400">
+                            <span class="bg-brand-100 text-brand-600 px-1.5 py-0.5 rounded">Lvl 12</span>
+                            <div class="w-24 h-2 bg-slate-100 rounded-full overflow-hidden">
+                                <div class="bg-brand-500 w-[70%] h-full rounded-full"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-4">
+                <div class="flex items-center gap-2 bg-slate-50 border border-slate-200 px-4 py-2 rounded-full shadow-sm cursor-pointer hover:bg-slate-100 transition" onclick="window.location.href='shop.html'">
+                    <i class="ph ph-coin-vertical-fill text-gold-500 text-xl"></i>
+                    <span class="font-bold text-slate-700">1,250</span>
+                    <i class="ph ph-plus-circle-fill text-brand-500 hover:scale-110 transition"></i>
+                </div>
+            </div>
+        </header>
+
+        <div class="p-4 md:p-8 max-w-7xl mx-auto pb-24 md:pb-8">
+            <div class="flex flex-col lg:flex-row gap-8">
+                
+                <!-- LEFT COLUMN: Content Utama -->
+                <div class="flex-1 space-y-8">
+                    
+                    <!-- 1. GRAPH SECTION & STREAK CALENDAR -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <!-- Grafik (2/3 width) -->
+                        <section class="md:col-span-2 bg-white p-6 rounded-3xl border border-slate-100 shadow-sm">
+                            <div class="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4">
+                                <div>
+                                    <h3 class="font-bold text-lg text-slate-800">Statistik Progress</h3>
+                                    <p class="text-xs text-slate-400">Konsistensi 7 Kebiasaan Kamu</p>
+                                </div>
+                                <div class="flex bg-slate-100 p-1 rounded-xl">
+                                    <button onclick="updateChart('week')" id="btn-week" class="px-3 py-1 text-xs font-bold rounded-lg bg-white shadow-sm text-brand-600 transition">Minggu</button>
+                                    <button onclick="updateChart('month')" id="btn-month" class="px-3 py-1 text-xs font-bold rounded-lg text-slate-500 hover:text-slate-700 transition">Bulan</button>
+                                </div>
+                            </div>
+                            <div class="relative h-48 w-full">
+                                <canvas id="progressChart"></canvas>
+                            </div>
+                        </section>
+
+                        <!-- Calendar Heatmap (1/3 width) -->
+                        <section class="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm flex flex-col justify-between">
+                            <div>
+                                <div class="flex justify-between items-center mb-4">
+                                    <h3 class="font-bold text-slate-800 flex items-center gap-2">
+                                        <i class="ph ph-fire-fill text-orange-500"></i> Streak
+                                    </h3>
+                                    <span class="text-2xl font-bold text-orange-500">5 Hari</span>
+                                </div>
+                                <p class="text-xs text-slate-400 mb-4">Riwayat aktivitas mingguanmu.</p>
+                                
+                                <!-- Heatmap Grid -->
+                                <div class="grid grid-cols-7 gap-2 text-center text-[10px] font-bold">
+                                    <span class="text-slate-300">S</span>
+                                    <span class="text-slate-300">S</span>
+                                    <span class="text-slate-300">R</span>
+                                    <span class="text-slate-300">K</span>
+                                    <span class="text-slate-300">J</span>
+                                    <span class="text-slate-300">S</span>
+                                    <span class="text-slate-300">M</span>
+                                    
+                                    <!-- Days -->
+                                    <div class="aspect-square rounded-md cal-green flex items-center justify-center">✓</div>
+                                    <div class="aspect-square rounded-md cal-green flex items-center justify-center">✓</div>
+                                    <div class="aspect-square rounded-md cal-red flex items-center justify-center">✗</div>
+                                    <div class="aspect-square rounded-md cal-yellow flex items-center justify-center">-</div>
+                                    <div class="aspect-square rounded-md cal-green flex items-center justify-center">✓</div>
+                                    <div class="aspect-square rounded-md cal-empty flex items-center justify-center"></div>
+                                    <div class="aspect-square rounded-md cal-empty flex items-center justify-center"></div>
+                                </div>
+                            </div>
+                            <div class="mt-4 pt-4 border-t border-slate-100 flex justify-between text-[10px] text-slate-400">
+                                <span class="flex items-center gap-1"><div class="w-2 h-2 rounded-full bg-red-400"></div> Absen</span>
+                                <span class="flex items-center gap-1"><div class="w-2 h-2 rounded-full bg-yellow-400"></div> Jarang</span>
+                                <span class="flex items-center gap-1"><div class="w-2 h-2 rounded-full bg-green-500"></div> Rajin</span>
+                            </div>
+                        </section>
+                    </div>
+
+                    <!-- 2. 7 HABITS GRID (MENU UTAMA) -->
+                    <section>
+                        <h3 class="font-bold text-lg text-slate-800 mb-4 flex items-center gap-2">
+                            <i class="ph ph-list-checks text-brand-500"></i> Menu Jurnal Hari Ini
+                        </h3>
+                        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                            
+                            <!-- 1. BANGUN PAGI -->
+                            <div onclick="window.location.href='habit-wakeup.html'" class="bg-white p-4 rounded-2xl border border-slate-100 hover:border-brand-400 hover:shadow-lg transition-all cursor-pointer group relative">
+                                <div class="w-10 h-10 bg-yellow-50 rounded-xl flex items-center justify-center text-yellow-500 mb-3 text-xl group-hover:scale-110 transition">
+                                    <i class="ph ph-sun"></i>
+                                </div>
+                                <h4 class="font-bold text-slate-700 text-sm">Bangun Pagi</h4>
+                                <p class="text-[10px] text-slate-400 mt-1">Target: 04:30</p>
+                                <div class="absolute top-3 right-3 w-2 h-2 rounded-full bg-slate-200 group-hover:bg-green-500 transition"></div>
+                            </div>
+
+                            <!-- 2. BERIBADAH -->
+                            <div onclick="window.location.href='Habit_Ibadah.html'" class="bg-white p-4 rounded-2xl border border-slate-100 hover:border-brand-400 hover:shadow-lg transition-all cursor-pointer group relative">
+                                <div class="w-10 h-10 bg-emerald-50 rounded-xl flex items-center justify-center text-emerald-500 mb-3 text-xl group-hover:scale-110 transition">
+                                    <i class="ph ph-hands-praying"></i>
+                                </div>
+                                <h4 class="font-bold text-slate-700 text-sm">Beribadah</h4>
+                                <p class="text-[10px] text-slate-400 mt-1">Input Sesuai Agama</p>
+                            </div>
+
+                            <!-- 3. OLAHRAGA -->
+                            <div onclick="window.location.href='Habit_Olahraga.html'" class="bg-white p-4 rounded-2xl border border-slate-100 hover:border-brand-400 hover:shadow-lg transition-all cursor-pointer group relative">
+                                <div class="w-10 h-10 bg-red-50 rounded-xl flex items-center justify-center text-red-500 mb-3 text-xl group-hover:scale-110 transition">
+                                    <i class="ph ph-person-simple-run"></i>
+                                </div>
+                                <h4 class="font-bold text-slate-700 text-sm">Olahraga</h4>
+                                <p class="text-[10px] text-slate-400 mt-1">Input Aktivitas</p>
+                            </div>
+
+                            <!-- 4. MAKAN SEHAT -->
+                            <div onclick="window.location.href='Habit_Makan_Sehat.html'" class="bg-white p-4 rounded-2xl border border-slate-100 hover:border-brand-400 hover:shadow-lg transition-all cursor-pointer group relative">
+                                <div class="w-10 h-10 bg-orange-50 rounded-xl flex items-center justify-center text-orange-500 mb-3 text-xl group-hover:scale-110 transition">
+                                    <i class="ph ph-carrot"></i>
+                                </div>
+                                <h4 class="font-bold text-slate-700 text-sm">Makan Sehat</h4>
+                                <p class="text-[10px] text-slate-400 mt-1">4 Sehat 5 Sempurna</p>
+                            </div>
+
+                            <!-- 5. GEMAR BELAJAR -->
+                            <div onclick="window.location.href='Habit_Belajar.html'" class="bg-white p-4 rounded-2xl border border-slate-100 hover:border-brand-400 hover:shadow-lg transition-all cursor-pointer group relative">
+                                <div class="w-10 h-10 bg-blue-50 rounded-xl flex items-center justify-center text-blue-500 mb-3 text-xl group-hover:scale-110 transition">
+                                    <i class="ph ph-book-open"></i>
+                                </div>
+                                <h4 class="font-bold text-slate-700 text-sm">Gemar Belajar</h4>
+                                <p class="text-[10px] text-slate-400 mt-1">Catatan/Buku/Karya</p>
+                            </div>
+
+                            <!-- 6. BERMASYARAKAT -->
+                            <div onclick="window.location.href='Habit_Sosial.html'" class="bg-white p-4 rounded-2xl border border-slate-100 hover:border-brand-400 hover:shadow-lg transition-all cursor-pointer group relative">
+                                <div class="w-10 h-10 bg-purple-50 rounded-xl flex items-center justify-center text-purple-500 mb-3 text-xl group-hover:scale-110 transition">
+                                    <i class="ph ph-users"></i>
+                                </div>
+                                <h4 class="font-bold text-slate-700 text-sm">Sosial</h4>
+                                <p class="text-[10px] text-slate-400 mt-1">Lingkungan & Lisan</p>
+                            </div>
+
+                            <!-- 7. TIDUR CEPAT -->
+                            <div onclick="window.location.href='habit_sleep.html'" class="bg-white p-4 rounded-2xl border border-slate-100 hover:border-brand-400 hover:shadow-lg transition-all cursor-pointer group relative md:col-span-2 lg:col-span-2">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 bg-indigo-50 rounded-xl flex items-center justify-center text-indigo-500 mb-0 text-xl group-hover:scale-110 transition">
+                                        <i class="ph ph-moon-stars"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-bold text-slate-700 text-sm">Tidur Cepat</h4>
+                                        <p class="text-[10px] text-slate-400">Target Jam 21:00 WIB</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+
+                <!-- RIGHT COLUMN: Leaderboard & Widgets -->
+                <div class="w-full lg:w-80 space-y-6">
+                    
+                    <!-- WISHLIST / TARGET HARIAN -->
+                    <div class="bg-white rounded-3xl p-6 border border-slate-100 shadow-sm relative overflow-hidden">
+                        <!-- Header -->
+                        <div class="flex justify-between items-center mb-4 relative z-10">
+                            <h3 class="font-bold text-slate-800 flex items-center gap-2 text-sm">
+                                <i class="ph ph-list-numbers text-brand-500"></i> Target Hari Ini
+                            </h3>
+                            <button class="text-xs bg-slate-100 p-1 rounded hover:bg-slate-200"><i class="ph ph-plus-bold"></i></button>
+                        </div>
+
+                        <!-- List Items -->
+                        <div class="space-y-3 relative z-10">
+                            <!-- Item 1: Normal -->
+                            <div class="flex items-center gap-3 p-2 hover:bg-slate-50 rounded-lg transition group">
+                                <input type="checkbox" class="w-4 h-4 rounded text-brand-500 focus:ring-brand-500 border-gray-300">
+                                <div class="flex-1">
+                                    <p class="text-xs font-bold text-slate-700">Mengerjakan PR Math</p>
+                                    <p class="text-[10px] text-slate-400">14:00 WIB</p>
+                                </div>
+                            </div>
+                            
+                            <!-- Item 2: ALARM (Waktu Mepet/Lewat) -->
+                            <div class="flex items-center gap-3 p-2 bg-red-50 border border-red-100 rounded-lg transition animate-pulse">
+                                <input type="checkbox" class="w-4 h-4 rounded text-red-500 focus:ring-red-500 border-red-300">
+                                <div class="flex-1">
+                                    <p class="text-xs font-bold text-red-700">Sholat Dzuhur!</p>
+                                    <p class="text-[10px] text-red-500 font-bold flex items-center gap-1">
+                                        <i class="ph ph-alarm animate-wiggle"></i> Segera!
+                                    </p>
+                                </div>
+                            </div>
+
+                            <!-- Item 3: Normal -->
+                            <div class="flex items-center gap-3 p-2 hover:bg-slate-50 rounded-lg transition group">
+                                <input type="checkbox" class="w-4 h-4 rounded text-brand-500 border-gray-300">
+                                <div class="flex-1">
+                                    <p class="text-xs font-bold text-slate-700">Rapikan Kamar</p>
+                                    <p class="text-[10px] text-slate-400">16:00 WIB</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- LEADERBOARD HARIAN -->
+                    <div class="bg-white rounded-3xl p-6 border border-slate-100 shadow-sm">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="font-bold text-slate-800 flex items-center gap-2 text-sm">
+                                <i class="ph ph-crown-simple-fill text-gold-500"></i> Top Poin Hari Ini
+                            </h3>
+                            <a href="leaderboard.html" class="text-[10px] font-bold text-brand-500 hover:underline">Lihat Semua</a>
+                        </div>
+                        
+                        <div class="space-y-3">
+                            <!-- Top 1 -->
+                            <div class="flex items-center gap-3 p-2 rounded-xl bg-yellow-50/50 border border-yellow-100">
+                                <div class="font-bold text-gold-500 w-4 text-center text-sm">1</div>
+                                <div class="relative">
+                                    <img src="https://i.pravatar.cc/150?img=32" class="w-8 h-8 rounded-full border border-gold-400">
+                                    <i class="ph ph-crown-fill text-gold-500 absolute -top-2 -right-1 text-xs"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <p class="text-xs font-bold text-slate-800">Siti Aminah</p>
+                                    <p class="text-[10px] text-slate-400">+450 Poin Hari Ini</p>
+                                </div>
+                            </div>
+                            <!-- Top 2 -->
+                            <div class="flex items-center gap-3 p-2 rounded-xl hover:bg-slate-50 transition">
+                                <div class="font-bold text-slate-400 w-4 text-center text-sm">2</div>
+                                <img src="https://i.pravatar.cc/150?img=11" class="w-8 h-8 rounded-full border border-slate-200">
+                                <div class="flex-1">
+                                    <p class="text-xs font-bold text-slate-800">Rizky B.</p>
+                                    <p class="text-[10px] text-slate-400">+320 Poin</p>
+                                </div>
+                            </div>
+                            <!-- You -->
+                            <div class="flex items-center gap-3 p-2 bg-brand-50 rounded-xl border border-brand-100 mt-2">
+                                <div class="font-bold text-brand-600 w-4 text-center text-sm">5</div>
+                                <img src="https://i.pravatar.cc/300?img=12" class="w-8 h-8 rounded-full border border-brand-400">
+                                <div class="flex-1">
+                                    <p class="text-xs font-bold text-slate-800">Anda</p>
+                                    <p class="text-[10px] text-slate-400">+150 Poin</p>
+                                </div>
+                                <i class="ph ph-caret-up text-green-500 font-bold"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Skin Shop Promo -->
+                    <div onclick="window.location.href='shop.html'" class="bg-gradient-to-br from-indigo-500 to-purple-600 rounded-3xl p-5 text-white relative overflow-hidden text-center cursor-pointer hover:scale-[1.02] transition">
+                        <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-20"></div>
+                        <i class="ph ph-paint-brush-broad text-4xl mb-2 opacity-80 inline-block"></i>
+                        <h4 class="font-bold text-sm mb-1">Kustomisasi Profil</h4>
+                        <p class="text-[10px] text-indigo-100 mb-3">Beli border & banner dengan poinmu.</p>
+                        <button class="bg-white text-indigo-600 text-xs font-bold px-4 py-2 rounded-full hover:scale-105 transition shadow-lg">
+                            Ke Toko
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- MOBILE NAV -->
+    <nav class="md:hidden fixed bottom-0 w-full bg-white border-t border-slate-100 flex justify-around py-3 pb-5 z-40 text-slate-400">
+        <a href="#" class="flex flex-col items-center gap-1 text-brand-600">
+            <i class="ph ph-squares-four-fill text-2xl"></i>
+        </a>
+        <a href="profile.html" class="flex flex-col items-center gap-1 hover:text-brand-500 transition">
+            <i class="ph ph-user text-2xl"></i>
+        </a>
+        <a href="leaderboard.html" class="flex flex-col items-center gap-1 hover:text-brand-500 transition">
+            <i class="ph ph-trophy text-2xl"></i>
+        </a>
+        <a href="shop.html" class="flex flex-col items-center gap-1 hover:text-brand-500 transition">
+            <i class="ph ph-storefront text-2xl"></i>
+        </a>
+    </nav>
+
+    <!-- JAVASCRIPT -->
+    <script>
+        // Chart Logic
+        const ctx = document.getElementById('progressChart').getContext('2d');
+        const dataWeek = [60, 80, 75, 90, 85, 95, 100];
+        const dataMonth = [70, 75, 80, 85]; 
+
+        let myChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab', 'Min'],
+                datasets: [{
+                    label: 'Skor (%)',
+                    data: dataWeek,
+                    borderColor: '#0ea5e9',
+                    backgroundColor: 'rgba(14, 165, 233, 0.1)',
+                    borderWidth: 3,
+                    pointBackgroundColor: '#ffffff',
+                    pointBorderColor: '#0ea5e9',
+                    pointBorderWidth: 2,
+                    pointRadius: 4,
+                    tension: 0.4,
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    y: { beginAtZero: true, max: 100, grid: { borderDash: [5, 5] }, ticks: { font: { size: 10 } } },
+                    x: { grid: { display: false }, ticks: { font: { size: 10 } } }
+                }
+            }
+        });
+
+        function updateChart(period) {
+            ['week', 'month'].forEach(p => {
+                const btn = document.getElementById(`btn-${p}`);
+                btn.className = p === period 
+                    ? "px-3 py-1 text-xs font-bold rounded-lg bg-white shadow-sm text-brand-600 transition"
+                    : "px-3 py-1 text-xs font-bold rounded-lg text-slate-500 hover:text-slate-700 transition";
+            });
+
+            if (period === 'week') {
+                myChart.data.labels = ['Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab', 'Min'];
+                myChart.data.datasets[0].data = dataWeek;
+            } else {
+                myChart.data.labels = ['Minggu 1', 'Minggu 2', 'Minggu 3', 'Minggu 4'];
+                myChart.data.datasets[0].data = dataMonth;
+            }
+            myChart.update();
+        }
+    </script>
+</body>
+</html>
