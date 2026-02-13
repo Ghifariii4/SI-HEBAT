@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profil Saya - TunasHebat</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Teko:wght@500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { 
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                        game: ['"Teko"', 'sans-serif']
+                    },
+                    colors: { 
+                        brand: { 50: '#f0f9ff', 100: '#e0f2fe', 200: '#bae6fd', 500: '#0ea5e9', 600: '#0284c7', 900: '#0c4a6e' },
+                        gold: { 300: '#fde047', 400: '#FACC15', 500: '#EAB308', 600: '#ca8a04' },
+                    },
+                    animation: {
+                        'spin-slow': 'spin 10s linear infinite',
+                        'shimmer': 'shimmer 2s infinite',
+                        'float': 'float 4s ease-in-out infinite',
+                        'pulse-wave': 'pulseWave 3s infinite',
+                    },
+                    keyframes: {
+                        shimmer: {
+                            '0%': { transform: 'translateX(-100%)' },
+                            '100%': { transform: 'translateX(100%)' }
+                        },
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-8px)' }
+                        },
+                        pulseWave: {
+                            '0%': { boxShadow: '0 0 0 0px rgba(14, 165, 233, 0.4)' },
+                            '100%': { boxShadow: '0 0 0 25px rgba(14, 165, 233, 0)' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        
+        /* WAVE COLORS */
+        .card-wave-blue { animation: pulseWaveBlue 3s infinite; }
+        @keyframes pulseWaveBlue { 0% { box-shadow: 0 0 0 0px rgba(14, 165, 233, 0.4); } 100% { box-shadow: 0 0 0 20px rgba(14, 165, 233, 0); } }
+        
+        .card-wave-gold { animation: pulseWaveGold 3s infinite; }
+        @keyframes pulseWaveGold { 0% { box-shadow: 0 0 0 0px rgba(234, 179, 8, 0.4); } 100% { box-shadow: 0 0 0 20px rgba(234, 179, 8, 0); } }
+
+        .card-wave-red { animation: pulseWaveRed 3s infinite; }
+        @keyframes pulseWaveRed { 0% { box-shadow: 0 0 0 0px rgba(239, 68, 68, 0.4); } 100% { box-shadow: 0 0 0 20px rgba(239, 68, 68, 0); } }
+
+        /* BORDERS */
+        .avatar-frame { position: relative; display: flex; align-items: center; justify-content: center; z-index: 10; }
+        
+        .frame-legend .frame-ring {
+            position: absolute; inset: -6px; border-radius: 50%;
+            border: 6px solid #fbbf24;
+            box-shadow: 0 0 15px rgba(245, 158, 11, 0.5);
+        }
+        .frame-legend::before { 
+            content: '👑'; font-size: 2.5rem; position: absolute; top: -35px; left: 50%; transform: translateX(-50%) rotate(-5deg); z-index: 20;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2)); animation: float 2s ease-in-out infinite;
+        }
+
+        .frame-mythic .frame-ring {
+            position: absolute; inset: -8px; border-radius: 50%;
+            background: linear-gradient(45deg, #ef4444, #b91c1c); padding: 4px;
+            box-shadow: 0 0 20px rgba(239, 68, 68, 0.4);
+            clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+        }
+
+        .tab-btn.active {
+            color: #0ea5e9; border-bottom: 3px solid #0ea5e9; background-color: #e0f2fe;
+        }
+        
+        /* Glass effect for navbar */
+        .glass-nav {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-brand-100 via-brand-50 to-white min-h-screen font-sans text-slate-700 pb-20 overflow-x-hidden">
+
+    <!-- DEKORASI BACKGROUND (Awan Abstrak) -->
+    <div class="fixed top-0 left-0 w-full h-full pointer-events-none z-0 overflow-hidden">
+        <div class="absolute -top-20 -right-20 w-96 h-96 bg-brand-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-float"></div>
+        <div class="absolute top-1/2 -left-20 w-72 h-72 bg-blue-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-float" style="animation-delay: 2s;"></div>
+    </div>
+
+    <!-- NAVBAR -->
+    <nav class="glass-nav sticky top-0 z-50 px-6 py-4 flex items-center justify-between shadow-sm">
+        <div class="flex items-center gap-4">
+            <button onclick="window.location.href='dashboard.html'" class="w-10 h-10 rounded-xl bg-white hover:bg-brand-50 border border-brand-100 flex items-center justify-center transition text-brand-600 shadow-sm">
+                <i class="ph ph-arrow-left text-xl font-bold"></i>
+            </button>
+            <h1 class="font-bold text-lg text-slate-800 tracking-wide">PROFIL SAYA</h1>
+        </div>
+        <div class="flex items-center gap-2 bg-white px-4 py-1.5 rounded-full border border-brand-200 shadow-sm">
+            <i class="ph ph-coin-vertical-fill text-gold-500 text-lg"></i>
+            <span class="font-bold text-slate-700 text-sm" id="header-points">1,250</span>
+        </div>
+    </nav>
+
+    <!-- MAIN CONTAINER -->
+    <main class="max-w-4xl mx-auto mt-8 px-4 relative z-10">
+        
+        <!-- PROFILE CARD -->
+        <div id="profile-card" class="bg-white/80 backdrop-blur-md rounded-[2.5rem] shadow-xl border border-white/60 overflow-hidden relative card-wave-gold transition-all duration-500">
+            
+            <!-- 1. BANNER (Image) -->
+            <div class="relative h-64 md:h-80 bg-brand-100 group overflow-hidden">
+                <img id="profile-banner" src="https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?q=80&w=1974" class="w-full h-full object-cover" alt="Banner">
+                <!-- Overlay Biru Transparan -->
+                <div class="absolute inset-0 bg-brand-900/20 mix-blend-overlay"></div>
+                
+                <label class="absolute top-4 right-4 bg-white/80 hover:bg-white text-brand-600 p-2 rounded-xl cursor-pointer backdrop-blur-md transition opacity-0 group-hover:opacity-100 shadow-lg">
+                    <i class="ph ph-camera text-xl"></i>
+                    <input type="file" class="hidden" accept="image/*" onchange="previewImage(this, 'profile-banner')">
+                </label>
+            </div>
+
+            <!-- 2. AVATAR & INFO (Layout Diperbaiki) -->
+            <div class="px-6 md:px-10 pb-8 relative">
+                
+                <!-- Container Flex Avatar & Nama -->
+                <div class="flex flex-col md:flex-row items-center md:items-end -mt-16 mb-8 gap-4 md:gap-8">
+                    
+                    <!-- Avatar Area -->
+                    <div class="relative group z-20">
+                        <div id="active-frame" class="avatar-frame frame-legend w-36 h-36 md:w-44 md:h-44 bg-white rounded-full shadow-lg">
+                            <div class="frame-ring"></div>
+                            <img id="profile-avatar" src="https://i.pravatar.cc/300?img=12" class="w-full h-full object-cover rounded-full border-4 border-white relative z-10">
+                        </div>
+                        <label class="absolute bottom-0 right-0 bg-brand-500 hover:bg-brand-600 text-white w-10 h-10 rounded-full flex items-center justify-center cursor-pointer shadow-lg z-30 border-4 border-white transition transform hover:scale-110">
+                            <i class="ph ph-camera-plus text-lg"></i>
+                            <input type="file" class="hidden" accept="image/*" onchange="previewImage(this, 'profile-avatar')">
+                        </label>
+                    </div>
+
+                    <!-- Info Area (Diturunkan agar tidak tabrakan) -->
+                    <div class="flex-1 text-center md:text-left pt-2 md:pt-0 md:mb-4">
+                        <div class="flex flex-col md:flex-row items-center md:items-center gap-2 mb-1">
+                            <h2 class="text-3xl md:text-4xl font-bold text-slate-800 tracking-tight" id="display-name">BUDI SANTOSO</h2>
+                            <!-- Rank Badge -->
+                            <div class="bg-gradient-to-r from-yellow-100 to-white border border-yellow-300 text-yellow-700 text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider flex items-center gap-1 shadow-sm">
+                                <i class="ph ph-crown-simple-fill"></i> Cendekiawan
+                            </div>
+                        </div>
+                        
+                        <p class="text-slate-500 text-sm font-medium mb-3">Level 12 • ID: 882910</p>
+                        
+                        <!-- XP Bar -->
+                        <div class="w-full md:w-80 bg-brand-100 h-4 rounded-full overflow-hidden border border-brand-200 relative mx-auto md:mx-0">
+                            <div class="h-full bg-gradient-to-r from-brand-400 to-brand-600 w-[75%] relative rounded-full">
+                                <div class="absolute inset-0 bg-white/30 animate-shimmer"></div>
+                            </div>
+                            <span class="absolute inset-0 flex items-center justify-center text-[9px] font-bold text-brand-900 drop-shadow-sm">3500 / 5000 XP</span>
+                        </div>
+                    </div>
+
+                    <!-- Edit Button -->
+                    <button onclick="switchTab('edit')" class="w-full md:w-auto py-2.5 px-6 bg-white border-2 border-brand-100 hover:border-brand-500 hover:text-brand-600 text-slate-600 font-bold rounded-xl text-sm transition shadow-sm md:mb-4">
+                        <i class="ph ph-pencil-simple"></i> Edit Data
+                    </button>
+                </div>
+
+                <!-- TABS -->
+                <div class="flex border-b border-brand-200 mb-8 bg-brand-50/50 rounded-t-xl overflow-hidden">
+                    <button onclick="switchTab('overview')" id="tab-overview" class="tab-btn active flex-1 py-4 text-sm font-bold text-brand-400 transition hover:bg-brand-50">RINGKASAN</button>
+                    <button onclick="switchTab('inventory')" id="tab-inventory" class="tab-btn flex-1 py-4 text-sm font-bold text-brand-400 transition hover:bg-brand-50">INVENTORI</button>
+                    <button onclick="switchTab('edit')" id="tab-edit" class="tab-btn flex-1 py-4 text-sm font-bold text-brand-400 transition hover:bg-brand-50">EDIT</button>
+                </div>
+
+                <!-- CONTENT -->
+                <div class="min-h-[300px]">
+                    
+                    <!-- TAB 1: OVERVIEW -->
+                    <div id="content-overview" class="space-y-10 animate-fade-in">
+                        
+                        <!-- Stats Cards (Blue Themed) -->
+                        <div class="grid grid-cols-3 gap-4">
+                            <div class="bg-gradient-to-br from-white to-brand-50 p-4 rounded-2xl border border-brand-100 text-center shadow-sm">
+                                <h4 class="text-3xl font-game font-bold text-brand-600">12</h4>
+                                <p class="text-[10px] text-brand-400 uppercase tracking-widest font-bold">Level</p>
+                            </div>
+                            <div class="bg-gradient-to-br from-white to-yellow-50 p-4 rounded-2xl border border-yellow-100 text-center shadow-sm">
+                                <h4 class="text-3xl font-game font-bold text-gold-500">24</h4>
+                                <p class="text-[10px] text-yellow-600 uppercase tracking-widest font-bold">Streak</p>
+                            </div>
+                            <div class="bg-gradient-to-br from-white to-emerald-50 p-4 rounded-2xl border border-emerald-100 text-center shadow-sm">
+                                <h4 class="text-3xl font-game font-bold text-emerald-500">Top 5</h4>
+                                <p class="text-[10px] text-emerald-600 uppercase tracking-widest font-bold">Rank</p>
+                            </div>
+                        </div>
+
+                        <!-- Badges -->
+                        <div>
+                            <div class="flex items-center justify-between mb-6">
+                                <h3 class="font-bold text-lg text-slate-800 border-l-4 border-brand-500 pl-3">Lencana Pencapaian</h3>
+                                <span class="text-xs font-bold text-brand-500 bg-brand-50 px-2 py-1 rounded-lg">3 / 8 Terbuka</span>
+                            </div>
+
+                            <div class="grid grid-cols-2 sm:grid-cols-4 gap-6">
+                                <!-- Badge Unlocked -->
+                                <div class="flex flex-col items-center group cursor-pointer bg-white p-4 rounded-2xl border border-brand-100 hover:shadow-md transition hover:border-brand-300">
+                                    <div class="w-16 h-16 mb-3 relative">
+                                        <i class="ph ph-sun-dim-fill text-6xl text-yellow-400 badge-icon group-hover:scale-110"></i>
+                                    </div>
+                                    <span class="text-xs font-bold text-slate-700">Pejuang Subuh</span>
+                                    <p class="text-[10px] text-slate-400 text-center mt-1">Bangun pagi 30 hari</p>
+                                </div>
+                                <!-- Badge Unlocked -->
+                                <div class="flex flex-col items-center group cursor-pointer bg-white p-4 rounded-2xl border border-brand-100 hover:shadow-md transition hover:border-brand-300">
+                                    <div class="w-16 h-16 mb-3 relative">
+                                        <i class="ph ph-book-open-text-fill text-6xl text-blue-400 badge-icon group-hover:scale-110"></i>
+                                    </div>
+                                    <span class="text-xs font-bold text-slate-700">Kutu Buku</span>
+                                    <p class="text-[10px] text-slate-400 text-center mt-1">Membaca 50 buku</p>
+                                </div>
+                                <!-- Badge Locked -->
+                                <div class="flex flex-col items-center p-4 rounded-2xl border border-dashed border-slate-300 bg-slate-50/50">
+                                    <div class="w-16 h-16 mb-3 relative badge-locked transition">
+                                        <i class="ph ph-heartbeat-fill text-6xl text-red-400"></i>
+                                        <i class="ph ph-lock-key-fill absolute inset-0 m-auto text-2xl text-slate-500 drop-shadow-md"></i>
+                                    </div>
+                                    <span class="text-xs font-bold text-slate-400">Atlet Sekolah</span>
+                                    <div class="w-full mt-2 space-y-1">
+                                        <div class="w-full h-1.5 bg-slate-200 rounded-full overflow-hidden">
+                                            <div class="h-full bg-slate-400 w-[30%]"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- TAB 2: INVENTORI -->
+                    <div id="content-inventory" class="hidden space-y-10">
+                        <div>
+                            <h3 class="font-bold text-lg text-slate-800 border-l-4 border-brand-500 pl-3 mb-6">Bingkai Avatar</h3>
+                            <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                                <!-- Default -->
+                                <div onclick="changeFrame('', 'blue')" class="bg-white p-4 rounded-xl border-2 border-brand-100 hover:border-brand-400 cursor-pointer flex flex-col items-center group transition shadow-sm hover:shadow-md">
+                                    <div class="w-14 h-14 rounded-full bg-slate-200 border-4 border-white shadow-sm mb-3"></div>
+                                    <span class="text-xs font-bold text-slate-600">Basic</span>
+                                </div>
+                                <!-- Legend (Gold) -->
+                                <div onclick="changeFrame('frame-legend', 'gold')" class="bg-white p-4 rounded-xl border-2 border-yellow-100 hover:border-yellow-400 cursor-pointer flex flex-col items-center group transition shadow-sm hover:shadow-md relative overflow-hidden">
+                                    <div class="absolute -top-3 text-lg animate-bounce">👑</div>
+                                    <div class="w-14 h-14 rounded-full border-4 border-yellow-400 shadow-[0_0_10px_gold] mb-3 mt-1 bg-slate-100"></div>
+                                    <span class="text-xs font-bold text-yellow-600">Cendekiawan</span>
+                                </div>
+                                <!-- Mythic (Red) -->
+                                <div onclick="changeFrame('frame-mythic', 'red')" class="bg-white p-4 rounded-xl border-2 border-red-100 hover:border-red-400 cursor-pointer flex flex-col items-center group transition shadow-sm hover:shadow-md">
+                                    <div class="w-14 h-14 rounded-full bg-gradient-to-br from-red-500 to-red-700 p-0.5 mb-3 shadow-[0_0_10px_red]">
+                                        <div class="w-full h-full bg-white rounded-full"></div>
+                                    </div>
+                                    <span class="text-xs font-bold text-red-600">Siswa Teladan</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- TAB 3: EDIT -->
+                    <div id="content-edit" class="hidden max-w-lg space-y-5">
+                        <div>
+                            <label class="text-xs font-bold text-slate-500 uppercase mb-1 block">Nama Lengkap</label>
+                            <input type="text" value="Budi Santoso" class="w-full bg-brand-50 border border-brand-200 rounded-xl px-4 py-3 text-slate-800 focus:border-brand-500 outline-none transition">
+                        </div>
+                        <div>
+                            <label class="text-xs font-bold text-slate-500 uppercase mb-1 block">Bio Singkat</label>
+                            <textarea class="w-full bg-brand-50 border border-brand-200 rounded-xl px-4 py-3 text-slate-800 focus:border-brand-500 outline-none resize-none" rows="3">Belajar hari ini, memimpin esok hari.</textarea>
+                        </div>
+                        <button onclick="saveProfile()" class="w-full py-3 bg-brand-600 hover:bg-brand-500 text-white font-bold rounded-xl transition shadow-lg">Simpan Perubahan</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        function switchTab(tabName) {
+            ['overview', 'inventory', 'edit'].forEach(t => {
+                document.getElementById(`content-${t}`).classList.add('hidden');
+                document.getElementById(`tab-${t}`).classList.remove('active');
+            });
+            document.getElementById(`content-${tabName}`).classList.remove('hidden');
+            document.getElementById(`tab-${tabName}`).classList.add('active');
+        }
+
+        function changeFrame(frameClass, waveColor) {
+            const frame = document.getElementById('active-frame');
+            const card = document.getElementById('profile-card');
+            
+            frame.className = "avatar-frame w-36 h-36 md:w-44 md:h-44 bg-white rounded-full shadow-lg"; 
+            if(frameClass) frame.classList.add(frameClass);
+
+            card.classList.remove('card-wave-blue', 'card-wave-gold', 'card-wave-red');
+            card.classList.add(`card-wave-${waveColor}`);
+
+            confetti({ particleCount: 60, spread: 60, origin: { y: 0.4 } });
+        }
+
+        function previewImage(input, targetId) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function(e) { document.getElementById(targetId).src = e.target.result; }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        function saveProfile() {
+            const btn = document.querySelector('#content-edit button');
+            const originalText = btn.innerText;
+            btn.innerText = "Berhasil Disimpan!";
+            btn.classList.add('bg-green-500');
+            setTimeout(() => {
+                btn.innerText = originalText;
+                btn.classList.remove('bg-green-500');
+                switchTab('overview');
+            }, 1000);
+        }
+    </script>
+</body>
+</html>
