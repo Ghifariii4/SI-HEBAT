@@ -1,19 +1,21 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jurnal Gemar Belajar - TunasHebat</title>
-    
+
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    
+
     <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
     <!-- Icons -->
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
-    
+
     <!-- Confetti -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
@@ -22,7 +24,7 @@
             theme: {
                 extend: {
                     fontFamily: { sans: ['"Plus Jakarta Sans"', 'sans-serif'] },
-                    colors: { 
+                    colors: {
                         brand: { 50: '#f0f9ff', 100: '#e0f2fe', 500: '#0ea5e9', 600: '#0284c7' },
                         paper: { 50: '#f8fafc', 100: '#f1f5f9' }
                     },
@@ -40,7 +42,9 @@
         }
     </script>
 </head>
-<body class="bg-gradient-to-b from-sky-200 via-white to-sky-50 min-h-screen relative overflow-x-hidden font-sans text-slate-700">
+
+<body
+    class="bg-gradient-to-b from-sky-200 via-white to-sky-50 min-h-screen relative overflow-x-hidden font-sans text-slate-700">
 
     <!-- DEKORASI LATAR BELAKANG (Buku & Alat Tulis) -->
     <!-- pointer-events-none PENTING agar tidak menghalangi klik -->
@@ -59,7 +63,8 @@
 
     <!-- NAVBAR -->
     <nav class="p-6 flex items-center gap-4 relative z-30">
-        <button onclick="window.location.href='dashboard.html'" class="w-10 h-10 bg-white/50 backdrop-blur-md rounded-xl flex items-center justify-center text-brand-600 hover:bg-white transition border border-white/60 shadow-sm cursor-pointer">
+        <button onclick="window.location.href='dashboard.html'"
+            class="w-10 h-10 bg-white/50 backdrop-blur-md rounded-xl flex items-center justify-center text-brand-600 hover:bg-white transition border border-white/60 shadow-sm cursor-pointer">
             <i class="ph ph-arrow-left text-xl font-bold"></i>
         </button>
         <div>
@@ -71,26 +76,32 @@
     <!-- MAIN CONTENT -->
     <!-- z-20 memastikan konten berada di atas dekorasi -->
     <main class="px-4 pb-32 relative z-20 w-full max-w-2xl mx-auto mt-4">
-        
+
         <!-- Hero Section -->
         <div class="text-center mb-10">
-            <div class="inline-flex items-center gap-2 bg-white/80 border border-sky-100 px-4 py-1.5 rounded-full text-xs font-bold text-brand-600 mb-4 shadow-sm">
+            <div
+                class="inline-flex items-center gap-2 bg-white/80 border border-sky-100 px-4 py-1.5 rounded-full text-xs font-bold text-brand-600 mb-4 shadow-sm">
                 <i class="ph ph-lightbulb-filament-fill text-yellow-400 text-lg"></i>
                 Apa yang kamu pelajari hari ini?
             </div>
-            <h2 class="text-3xl font-extrabold text-slate-800 leading-tight">Ilmu adalah Harta<br>yang Tak Akan Habis</h2>
+            <h2 class="text-3xl font-extrabold text-slate-800 leading-tight">Ilmu adalah Harta<br>yang Tak Akan Habis
+            </h2>
         </div>
 
         <!-- GRID MENU (4 Pilar) -->
         <div class="grid grid-cols-2 gap-4 md:gap-6">
-            
+
             <!-- 1. Catatan Pelajaran (Pakai DIV dengan w-full h-full) -->
-            <div onclick="openModal('catatan')" role="button" class="w-full h-full bg-white p-6 rounded-3xl border border-slate-100 shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all group relative overflow-hidden cursor-pointer flex flex-col justify-between">
+            <div onclick="openModal('catatan')" role="button"
+                class="w-full h-full bg-white p-6 rounded-3xl border border-slate-100 shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all group relative overflow-hidden cursor-pointer flex flex-col justify-between">
                 <!-- Hiasan Sudut -->
-                <div class="absolute top-0 right-0 w-24 h-24 bg-blue-50 rounded-bl-[4rem] -mr-4 -mt-4 transition-transform group-hover:scale-110 z-0"></div>
-                
+                <div
+                    class="absolute top-0 right-0 w-24 h-24 bg-blue-50 rounded-bl-[4rem] -mr-4 -mt-4 transition-transform group-hover:scale-110 z-0">
+                </div>
+
                 <div class="relative z-10">
-                    <div class="w-12 h-12 bg-blue-100 text-blue-600 rounded-2xl flex items-center justify-center text-2xl mb-4 shadow-sm">
+                    <div
+                        class="w-12 h-12 bg-blue-100 text-blue-600 rounded-2xl flex items-center justify-center text-2xl mb-4 shadow-sm">
                         <i class="ph ph-notebook"></i>
                     </div>
                     <h3 class="font-bold text-slate-800 text-lg">Catatan</h3>
@@ -99,10 +110,14 @@
             </div>
 
             <!-- 2. Baca Buku -->
-            <div onclick="openModal('buku')" role="button" class="w-full h-full bg-white p-6 rounded-3xl border border-slate-100 shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all group relative overflow-hidden cursor-pointer flex flex-col justify-between">
-                <div class="absolute top-0 right-0 w-24 h-24 bg-yellow-50 rounded-bl-[4rem] -mr-4 -mt-4 transition-transform group-hover:scale-110 z-0"></div>
+            <div onclick="openModal('buku')" role="button"
+                class="w-full h-full bg-white p-6 rounded-3xl border border-slate-100 shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all group relative overflow-hidden cursor-pointer flex flex-col justify-between">
+                <div
+                    class="absolute top-0 right-0 w-24 h-24 bg-yellow-50 rounded-bl-[4rem] -mr-4 -mt-4 transition-transform group-hover:scale-110 z-0">
+                </div>
                 <div class="relative z-10">
-                    <div class="w-12 h-12 bg-yellow-100 text-yellow-600 rounded-2xl flex items-center justify-center text-2xl mb-4 shadow-sm">
+                    <div
+                        class="w-12 h-12 bg-yellow-100 text-yellow-600 rounded-2xl flex items-center justify-center text-2xl mb-4 shadow-sm">
                         <i class="ph ph-book-bookmark"></i>
                     </div>
                     <h3 class="font-bold text-slate-800 text-lg">Baca Buku</h3>
@@ -111,10 +126,14 @@
             </div>
 
             <!-- 3. Karya -->
-            <div onclick="openModal('karya')" role="button" class="w-full h-full bg-white p-6 rounded-3xl border border-slate-100 shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all group relative overflow-hidden cursor-pointer flex flex-col justify-between">
-                <div class="absolute top-0 right-0 w-24 h-24 bg-purple-50 rounded-bl-[4rem] -mr-4 -mt-4 transition-transform group-hover:scale-110 z-0"></div>
+            <div onclick="openModal('karya')" role="button"
+                class="w-full h-full bg-white p-6 rounded-3xl border border-slate-100 shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all group relative overflow-hidden cursor-pointer flex flex-col justify-between">
+                <div
+                    class="absolute top-0 right-0 w-24 h-24 bg-purple-50 rounded-bl-[4rem] -mr-4 -mt-4 transition-transform group-hover:scale-110 z-0">
+                </div>
                 <div class="relative z-10">
-                    <div class="w-12 h-12 bg-purple-100 text-purple-600 rounded-2xl flex items-center justify-center text-2xl mb-4 shadow-sm">
+                    <div
+                        class="w-12 h-12 bg-purple-100 text-purple-600 rounded-2xl flex items-center justify-center text-2xl mb-4 shadow-sm">
                         <i class="ph ph-rocket-launch"></i>
                     </div>
                     <h3 class="font-bold text-slate-800 text-lg">Karya</h3>
@@ -123,10 +142,14 @@
             </div>
 
             <!-- 4. Lainnya (Eksplorasi) -->
-            <div onclick="openModal('lainnya')" role="button" class="w-full h-full bg-white p-6 rounded-3xl border border-slate-100 shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all group relative overflow-hidden cursor-pointer flex flex-col justify-between">
-                <div class="absolute top-0 right-0 w-24 h-24 bg-emerald-50 rounded-bl-[4rem] -mr-4 -mt-4 transition-transform group-hover:scale-110 z-0"></div>
+            <div onclick="openModal('lainnya')" role="button"
+                class="w-full h-full bg-white p-6 rounded-3xl border border-slate-100 shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all group relative overflow-hidden cursor-pointer flex flex-col justify-between">
+                <div
+                    class="absolute top-0 right-0 w-24 h-24 bg-emerald-50 rounded-bl-[4rem] -mr-4 -mt-4 transition-transform group-hover:scale-110 z-0">
+                </div>
                 <div class="relative z-10">
-                    <div class="w-12 h-12 bg-emerald-100 text-emerald-600 rounded-2xl flex items-center justify-center text-2xl mb-4 shadow-sm">
+                    <div
+                        class="w-12 h-12 bg-emerald-100 text-emerald-600 rounded-2xl flex items-center justify-center text-2xl mb-4 shadow-sm">
                         <i class="ph ph-globe-hemisphere-west"></i>
                     </div>
                     <h3 class="font-bold text-slate-800 text-lg">Eksplorasi</h3>
@@ -138,18 +161,21 @@
     </main>
 
     <!-- DYNAMIC MODAL -->
-    <div id="modal-learn" class="fixed inset-0 z-50 flex items-end sm:items-center justify-center pointer-events-none opacity-0 transition-opacity duration-300">
+    <div id="modal-learn"
+        class="fixed inset-0 z-50 flex items-end sm:items-center justify-center pointer-events-none opacity-0 transition-opacity duration-300">
         <!-- Backdrop -->
         <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity" onclick="closeModal()"></div>
-        
+
         <!-- Modal Content -->
-        <div id="modal-card" class="bg-white w-full max-w-lg rounded-t-[2.5rem] sm:rounded-[2.5rem] p-8 relative transform translate-y-full sm:translate-y-10 transition-transform duration-300 pointer-events-auto shadow-2xl">
-            
+        <div id="modal-card"
+            class="bg-white w-full max-w-lg rounded-t-[2.5rem] sm:rounded-[2.5rem] p-8 relative transform translate-y-full sm:translate-y-10 transition-transform duration-300 pointer-events-auto shadow-2xl">
+
             <div class="w-16 h-1.5 bg-slate-200 rounded-full mx-auto mb-8"></div>
 
             <!-- Header Modal -->
             <div class="flex items-center gap-4 mb-6">
-                <div id="modal-icon-bg" class="w-14 h-14 rounded-2xl flex items-center justify-center text-2xl shadow-sm border border-slate-100">
+                <div id="modal-icon-bg"
+                    class="w-14 h-14 rounded-2xl flex items-center justify-center text-2xl shadow-sm border border-slate-100">
                     <i id="modal-icon" class="ph ph-pencil"></i>
                 </div>
                 <div>
@@ -163,7 +189,8 @@
                 <!-- Inputs will be injected here by JS -->
             </div>
 
-            <button onclick="saveEntry()" class="w-full mt-8 py-4 bg-brand-500 hover:bg-brand-600 text-white font-bold rounded-2xl shadow-lg shadow-brand-500/30 transition transform active:scale-95 flex items-center justify-center gap-2">
+            <button onclick="saveEntry()"
+                class="w-full mt-8 py-4 bg-brand-500 hover:bg-brand-600 text-white font-bold rounded-2xl shadow-lg shadow-brand-500/30 transition transform active:scale-95 flex items-center justify-center gap-2">
                 <i class="ph ph-floppy-disk text-xl"></i>
                 Simpan ke Jurnal
             </button>
@@ -250,15 +277,15 @@
         };
 
         // --- MODAL LOGIC ---
-        
+
         function openModal(type) {
             const config = menuConfig[type];
-            
+
             // 1. Update Header UI
             document.getElementById('modal-title').innerText = config.title;
             const iconBg = document.getElementById('modal-icon-bg');
             const icon = document.getElementById('modal-icon');
-            
+
             // Reset classes
             iconBg.className = `w-14 h-14 rounded-2xl flex items-center justify-center text-2xl shadow-sm border border-slate-100 ${config.colorClass}`;
             icon.className = `ph ${config.icon}`;
@@ -288,7 +315,7 @@
         function saveEntry() {
             // Check if first input is filled (simple validation)
             const firstInput = document.querySelector('#form-container input');
-            if(firstInput && firstInput.value.trim() === "") {
+            if (firstInput && firstInput.value.trim() === "") {
                 alert("Mohon isi judul/topik terlebih dahulu ya!");
                 firstInput.focus();
                 return;
@@ -309,4 +336,5 @@
         }
     </script>
 </body>
+
 </html>
