@@ -13,14 +13,33 @@ class User extends Authenticatable
     use HasFactory, Notifiable;
 
     /**
+     * The primary key for the model.
+     *
+     * @var string
+     */
+    protected $keyType = 'string';
+
+    /**
+     * Indicates if the IDs are auto-incrementing.
+     *
+     * @var bool
+     */
+    public $incrementing = false;
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var list<string>
      */
     protected $fillable = [
-        'name',
+        'role_id',
+        'nis',
+        'nip',
+        'full_name',
         'email',
-        'password',
+        'password_hash',
+        'religion',
+        'class_id',
     ];
 
     /**
@@ -29,9 +48,19 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $hidden = [
-        'password',
+        'password_hash',
         'remember_token',
     ];
+
+    /**
+     * Get the name of the password attribute.
+     *
+     * @return string
+     */
+    public function getAuthPassword()
+    {
+        return $this->password_hash;
+    }
 
     /**
      * Get the attributes that should be cast.
@@ -42,7 +71,24 @@ class User extends Authenticatable
     {
         return [
             'email_verified_at' => 'datetime',
-            'password' => 'hashed',
+            'created_at' => 'datetime',
+            'updated_at' => 'datetime',
         ];
+    }
+
+    /**
+     * Get the role associated with the user.
+     */
+    public function role()
+    {
+        return $this->belongsTo(Role::class);
+    }
+
+    /**
+     * Check if user has a specific role by name.
+     */
+    public function hasRole(string $roleName): bool
+    {
+        return $this->role->name === $roleName;
     }
 }

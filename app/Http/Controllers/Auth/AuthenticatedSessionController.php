@@ -33,6 +33,17 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
+        $user = Auth::user();
+        
+        // Redirect based on role
+        if ($user->hasRole('siswa')) {
+            return redirect()->intended(route('siswa.dashboard', absolute: false));
+        } elseif ($user->hasRole('guru')) {
+            return redirect()->intended(route('guru.dashboard', absolute: false));
+        } elseif ($user->hasRole('orang_tua')) {
+            return redirect()->intended(route('orangtua.dashboard', absolute: false));
+        }
+
         return redirect()->intended(route('dashboard', absolute: false));
     }
 
