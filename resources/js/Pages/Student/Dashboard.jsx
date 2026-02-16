@@ -8,8 +8,11 @@ import {
 import { useState } from 'react';
 import StudentLayout from '@/Layouts/StudentLayout';
 
-export default function Dashboard({ auth, stats = {}, leaderboard = [], tasks = [] }) {
+export default function Dashboard({ auth = { user: {} }, stats = {}, leaderboard = [], tasks = [] }) {
     const [chartPeriod, setChartPeriod] = useState('week');
+
+    // Pastikan user ada
+    const user = auth?.user || {};
 
     // Default stats
     const defaultStats = {
@@ -121,7 +124,7 @@ export default function Dashboard({ auth, stats = {}, leaderboard = [], tasks = 
     const completedHabits = habits.filter(h => h.completed).length;
 
     return (
-        <StudentLayout user={auth.user}>
+        <StudentLayout user={user}>
             <Head title="Dashboard - Si Hebat" />
 
             <div className="min-h-screen bg-gradient-to-br from-green-50 via-emerald-50 to-teal-50">
@@ -134,27 +137,27 @@ export default function Dashboard({ auth, stats = {}, leaderboard = [], tasks = 
                     <div className="max-w-7xl mx-auto px-4 md:px-6 py-4">
                         <div className="flex items-center justify-between gap-4 flex-wrap">
                             {/* User Info */}
-                            <div className="flex items-center gap-4">
+                            <Link href={route('student.profile')} className="flex items-center gap-4 group cursor-pointer">
                                 <div className="relative">
-                                    <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-green-400 to-emerald-500 p-0.5">
+                                    <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-green-400 to-emerald-500 p-0.5 group-hover:scale-105 transition-transform">
                                         <img
-                                            src={auth.user.avatar || `https://ui-avatars.com/api/?name=${auth.user.full_name}&background=10b981&color=fff`}
+                                            src={user?.avatar || `https://ui-avatars.com/api/?name=${user?.full_name}&background=10b981&color=fff`}
                                             className="w-full h-full rounded-2xl object-cover"
-                                            alt={auth.user.full_name}
+                                            alt={user?.full_name}
                                         />
                                     </div>
                                     <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-green-500 rounded-full border-2 border-white flex items-center justify-center">
                                         <span className="text-[10px] font-black text-white">{defaultStats.level}</span>
                                     </div>
                                 </div>
-                                <div>
-                                    <h2 className="font-black text-gray-900 text-lg">Halo, {auth.user.full_name?.split(' ')[0]}! 👋</h2>
+                                <div className="group-hover:translate-x-1 transition-transform">
+                                    <h2 className="font-black text-gray-900 text-lg">Halo, {user?.full_name?.split(' ')[0]}! 👋</h2>
                                     <div className="flex items-center gap-2 mt-1">
                                         <span className="text-xs font-bold text-green-600 bg-green-50 px-2 py-0.5 rounded-full">Level {defaultStats.level}</span>
                                         <span className="text-xs text-gray-500">{defaultStats.rank}</span>
                                     </div>
                                 </div>
-                            </div>
+                            </Link>
 
                             {/* Quick Stats */}
                             <div className="flex items-center gap-3">
@@ -296,8 +299,8 @@ export default function Dashboard({ auth, stats = {}, leaderboard = [], tasks = 
                                         <button
                                             onClick={() => setChartPeriod('week')}
                                             className={`px-3 py-1.5 text-xs font-bold rounded-lg transition ${chartPeriod === 'week'
-                                                    ? 'bg-white shadow-sm text-green-600'
-                                                    : 'text-gray-500 hover:text-gray-700'
+                                                ? 'bg-white shadow-sm text-green-600'
+                                                : 'text-gray-500 hover:text-gray-700'
                                                 }`}
                                         >
                                             Minggu
@@ -305,8 +308,8 @@ export default function Dashboard({ auth, stats = {}, leaderboard = [], tasks = 
                                         <button
                                             onClick={() => setChartPeriod('month')}
                                             className={`px-3 py-1.5 text-xs font-bold rounded-lg transition ${chartPeriod === 'month'
-                                                    ? 'bg-white shadow-sm text-green-600'
-                                                    : 'text-gray-500 hover:text-gray-700'
+                                                ? 'bg-white shadow-sm text-green-600'
+                                                : 'text-gray-500 hover:text-gray-700'
                                                 }`}
                                         >
                                             Bulan
@@ -516,9 +519,9 @@ export default function Dashboard({ auth, stats = {}, leaderboard = [], tasks = 
                                                 animate={{ scale: 1 }}
                                                 transition={{ delay: idx * 0.1 }}
                                                 className={`aspect-square rounded-lg flex items-center justify-center text-xs font-bold ${day.status === 'complete' ? 'bg-white/30 border-2 border-white' :
-                                                        day.status === 'today' ? 'bg-white text-orange-500 border-2 border-white' :
-                                                            day.status === 'partial' ? 'bg-white/10 border border-white/30' :
-                                                                'bg-white/5 border border-white/20'
+                                                    day.status === 'today' ? 'bg-white text-orange-500 border-2 border-white' :
+                                                        day.status === 'partial' ? 'bg-white/10 border border-white/30' :
+                                                            'bg-white/5 border border-white/20'
                                                     }`}
                                             >
                                                 {day.status === 'complete' ? '✓' :
@@ -592,7 +595,7 @@ export default function Dashboard({ auth, stats = {}, leaderboard = [], tasks = 
                                     {/* User Position */}
                                     <div className="flex items-center gap-3 p-3 bg-green-50 rounded-xl border border-green-200">
                                         <div className="font-bold text-green-600 text-sm w-6">5</div>
-                                        <img src={auth.user.avatar || `https://ui-avatars.com/api/?name=${auth.user.full_name}&background=10b981&color=fff`} className="w-10 h-10 rounded-xl" alt="You" />
+                                        <img src={user?.avatar || `https://ui-avatars.com/api/?name=${user?.full_name}&background=10b981&color=fff`} className="w-10 h-10 rounded-xl" alt="You" />
                                         <div className="flex-1">
                                             <p className="text-sm font-bold text-gray-800">Kamu</p>
                                             <p className="text-xs text-gray-500">+{defaultStats.todayXP} XP</p>

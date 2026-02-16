@@ -59,6 +59,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
                 return Inertia::render('Student/Habit/Bangun');
             })->name('bangun');
 
+            Route::get('/beribadah', function () {
+                return Inertia::render('Student/Habit/Beribadah');
+            })->name('beribadah');
+
             Route::get('/olahraga', function () {
                 return Inertia::render('Student/Habit/Olahraga');
             })->name('olahraga');
