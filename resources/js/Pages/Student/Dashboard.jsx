@@ -15,6 +15,7 @@ import Fire_2 from '../../../../public/Streak/Fire_2.json';
 import Fire_3 from '../../../../public/Streak/Fire_3.json';
 import Fire_4 from '../../../../public/Streak/Fire_4.json';
 import Fire_5 from '../../../../public/Streak/Fire_5.json';
+import MascotAnimation from '../../../../public/Mascot/main_character.json';
 
 export default function Dashboard({ auth = { user: {} }, stats = {}, leaderboard = [], tasks = [] }) {
     const [chartPeriod, setChartPeriod] = useState('week');
@@ -662,6 +663,32 @@ export default function Dashboard({ auth = { user: {} }, stats = {}, leaderboard
                         </div>
                     </motion.div>
                 </div>
+            </div>
+            {/* Mascot Sticky */}
+            <div className="fixed bottom-20 md:bottom-2 left-2 md:left-[16.2rem] z-[40]">
+                <motion.div
+                    initial={{ x: -100, opacity: 0 }}
+                    animate={{ x: 0, opacity: 1 }}
+                    transition={{ type: 'spring', damping: 20, stiffness: 100, delay: 1 }}
+                    className="relative group cursor-pointer"
+                >
+                    {/* Speech Bubble */}
+                    <div className="absolute -top-16 left-12 w-48 bg-white p-3 rounded-2xl shadow-xl border border-gray-100 opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none transform -translate-y-2 group-hover:translate-y-0">
+                        <p className="text-xs font-bold text-gray-700 leading-tight">
+                            Semangat belajarnya hari ini, {user?.full_name?.split(' ')[0]}! Ayo selesaikan tantanganmu!
+                        </p>
+                        {/* Triangle for Bubble */}
+                        <div className="absolute -bottom-2 left-6 w-4 h-4 bg-white border-b border-r border-gray-100 rotate-45"></div>
+                    </div>
+
+                    {/* Mascot Lottie */}
+                    <div className="w-32 h-32 transform group-hover:scale-110 transition-transform">
+                        <Lottie
+                            animationData={MascotAnimation}
+                            loop={true}
+                        />
+                    </div>
+                </motion.div>
             </div>
         </StudentLayout>
     );

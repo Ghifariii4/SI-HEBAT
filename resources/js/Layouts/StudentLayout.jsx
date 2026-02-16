@@ -19,7 +19,7 @@ export default function AuthenticatedLayout({ user, children }) {
     return (
         <div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-blue-50 flex">
             {/* Sidebar Desktop */}
-            <aside className="hidden md:flex w-64 bg-white border-r border-gray-100 flex-col justify-between p-6 z-20 shadow-sm">
+            <aside className="hidden md:flex w-64 bg-white border-r border-gray-100 flex-col justify-between p-6 z-20 shadow-sm sticky top-0 h-screen">
                 <div>
                     {/* Logo */}
                     <Link href={route('student.dashboard')} className="flex items-center gap-2 mb-10 text-green-600 group">
@@ -41,8 +41,8 @@ export default function AuthenticatedLayout({ user, children }) {
                                     key={item.name}
                                     href={route(item.href)}
                                     className={`flex items-center gap-3 px-4 py-3 rounded-xl transition font-bold ${isActive
-                                            ? 'bg-green-50 text-green-600'
-                                            : 'text-gray-500 hover:bg-gray-50 hover:text-gray-700'
+                                        ? 'bg-green-50 text-green-600'
+                                        : 'text-gray-500 hover:bg-gray-50 hover:text-gray-700'
                                         }`}
                                 >
                                     <item.icon size={20} />
@@ -76,7 +76,7 @@ export default function AuthenticatedLayout({ user, children }) {
                         initial={{ x: -300 }}
                         animate={{ x: 0 }}
                         exit={{ x: -300 }}
-                        className="md:hidden fixed left-0 top-0 bottom-0 w-64 bg-white border-r border-gray-100 flex-col justify-between p-6 z-50 shadow-xl"
+                        className="md:hidden fixed left-0 top-0 bottom-0 w-64 bg-white border-r border-gray-100 flex flex-col justify-between p-6 z-50 shadow-xl"
                     >
                         <div>
                             {/* Close Button */}
@@ -102,8 +102,8 @@ export default function AuthenticatedLayout({ user, children }) {
                                             key={item.name}
                                             href={route(item.href)}
                                             className={`flex items-center gap-3 px-4 py-3 rounded-xl transition font-bold ${isActive
-                                                    ? 'bg-green-50 text-green-600'
-                                                    : 'text-gray-500 hover:bg-gray-50 hover:text-gray-700'
+                                                ? 'bg-green-50 text-green-600'
+                                                : 'text-gray-500 hover:bg-gray-50 hover:text-gray-700'
                                                 }`}
                                             onClick={() => setSidebarOpen(false)}
                                         >
