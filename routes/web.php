@@ -63,6 +63,15 @@ Route::middleware(['auth', 'verified'])->group(function () {
                 return Inertia::render('Student/Habit/Beribadah');
             })->name('beribadah');
 
+            Route::prefix('ibadah')->name('ibadah.')->group(function () {
+                Route::get('/islam', function () { return Inertia::render('Student/Habit/Ibadah/Islam'); })->name('islam');
+                Route::get('/kristen', function () { return Inertia::render('Student/Habit/Ibadah/Kristen'); })->name('kristen');
+                Route::get('/katolik', function () { return Inertia::render('Student/Habit/Ibadah/Katolik'); })->name('katolik');
+                Route::get('/hindu', function () { return Inertia::render('Student/Habit/Ibadah/Hindu'); })->name('hindu');
+                Route::get('/buddha', function () { return Inertia::render('Student/Habit/Ibadah/Buddha'); })->name('buddha');
+                Route::get('/konghucu', function () { return Inertia::render('Student/Habit/Ibadah/Konghucu'); })->name('konghucu');
+            });
+
             Route::get('/olahraga', function () {
                 return Inertia::render('Student/Habit/Olahraga');
             })->name('olahraga');
