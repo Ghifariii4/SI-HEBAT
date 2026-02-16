@@ -62,8 +62,8 @@ export default function Beribadah({ auth = { user: {} } }) {
                         {religions.map((rel, idx) => (
                             <motion.div key={idx} variants={item}>
                                 <Link
-                                    href={rel.name === 'Islam' ? route(rel.route) : '#'}
-                                    className={`group relative overflow-hidden bg-white p-6 rounded-[2.5rem] border-2 border-gray-100 hover:border-transparent transition-all duration-300 shadow-sm hover:shadow-2xl flex flex-col justify-between h-56 ${rel.name !== 'Islam' ? 'opacity-60 grayscale cursor-not-allowed' : 'cursor-pointer'}`}
+                                    href={route(rel.route)}
+                                    className="group relative overflow-hidden bg-white p-6 rounded-[2.5rem] border-2 border-gray-100 hover:border-transparent transition-all duration-300 shadow-sm hover:shadow-2xl flex flex-col justify-between h-56 cursor-pointer"
                                 >
                                     {/* Hover Fill Effect */}
                                     <div className={`absolute inset-0 bg-gradient-to-br ${rel.color} opacity-0 group-hover:opacity-100 transition-opacity duration-500`}></div>
@@ -81,10 +81,10 @@ export default function Beribadah({ auth = { user: {} } }) {
                                     </div>
 
                                     <div className="relative z-10 flex items-center justify-between mt-auto">
-                                        <span className={`text-xs font-black uppercase tracking-widest ${rel.name === 'Islam' ? 'group-hover:text-white text-green-600' : 'text-gray-400'}`}>
-                                            {rel.name === 'Islam' ? 'Pilih Sekarang' : 'Segera Hadir'}
+                                        <span className="text-[10px] font-black uppercase tracking-widest group-hover:text-white text-green-600 bg-green-50 group-hover:bg-white/20 px-3 py-1 rounded-full transition-colors">
+                                            Pilih Sekarang
                                         </span>
-                                        <div className={`w-8 h-8 rounded-full flex items-center justify-center group-hover:translate-x-1 transition-all ${rel.name === 'Islam' ? 'bg-green-50 text-green-600 group-hover:bg-white group-hover:text-green-600' : 'bg-gray-100 text-gray-300'}`}>
+                                        <div className="w-8 h-8 rounded-full flex items-center justify-center group-hover:translate-x-1 transition-all bg-green-50 text-green-600 group-hover:bg-white group-hover:text-green-600">
                                             <ChevronRight size={18} strokeWidth={3} />
                                         </div>
                                     </div>
