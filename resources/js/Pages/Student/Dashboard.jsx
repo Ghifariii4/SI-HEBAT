@@ -5,8 +5,16 @@ import {
     TrendingUp, Flame, Crown, Coins, Target, Award,
     Calendar, Star, Zap, ChevronRight, Bell
 } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import StudentLayout from '@/Layouts/StudentLayout';
+import Lottie from 'lottie-react';
+
+// Import Animations
+import Fire_1 from '../../../../public/Streak/Fire_1.json';
+import Fire_2 from '../../../../public/Streak/Fire_2.json';
+import Fire_3 from '../../../../public/Streak/Fire_3.json';
+import Fire_4 from '../../../../public/Streak/Fire_4.json';
+import Fire_5 from '../../../../public/Streak/Fire_5.json';
 
 export default function Dashboard({ auth = { user: {} }, stats = {}, leaderboard = [], tasks = [] }) {
     const [chartPeriod, setChartPeriod] = useState('week');
@@ -29,6 +37,16 @@ export default function Dashboard({ auth = { user: {} }, stats = {}, leaderboard
         rankProgress: 65,
         ...stats
     };
+
+    const streakAnimation = useMemo(() => {
+        const s = defaultStats.streak;
+        if (s >= 101) return Fire_5;
+        if (s >= 31) return Fire_4;
+        if (s >= 8) return Fire_3;
+        if (s >= 4) return Fire_2;
+        if (s >= 1) return Fire_1;
+        return null;
+    }, [defaultStats.streak]);
 
     const habits = [
         {
@@ -172,7 +190,13 @@ export default function Dashboard({ auth = { user: {} }, stats = {}, leaderboard
                                 </div>
 
                                 <div className="flex items-center gap-2 bg-gradient-to-r from-orange-50 to-red-50 border border-orange-200 px-4 py-2 rounded-xl">
-                                    <Flame className="text-orange-500" size={20} />
+                                    <div className="w-6 h-6 flex items-center justify-center">
+                                        {streakAnimation ? (
+                                            <Lottie animationData={streakAnimation} loop={true} className="w-10 h-10" />
+                                        ) : (
+                                            <Flame className="text-gray-400" size={20} />
+                                        )}
+                                    </div>
                                     <span className="font-black text-gray-700">{defaultStats.streak} hari</span>
                                 </div>
                             </div>
@@ -499,15 +523,24 @@ export default function Dashboard({ auth = { user: {} }, stats = {}, leaderboard
                         <div className="space-y-6">
 
                             {/* Streak Card */}
-                            <motion.div variants={item} className="bg-gradient-to-br from-orange-500 to-red-500 rounded-3xl p-6 text-white shadow-lg">
-                                <div className="flex items-center justify-between mb-4">
+                            <motion.div variants={item} className="bg-gradient-to-br from-orange-500 to-red-500 rounded-3xl p-6 text-white shadow-lg overflow-hidden relative">
+                                <div className="absolute -right-4 -top-4 w-32 h-32 opacity-20 transform rotate-12">
+                                    {streakAnimation && <Lottie animationData={streakAnimation} loop={true} />}
+                                </div>
+                                <div className="flex items-center justify-between mb-4 relative z-10">
                                     <h3 className="font-black text-lg flex items-center gap-2">
-                                        <Flame size={20} />
+                                        {streakAnimation ? (
+                                            <div className="w-8 h-8 flex items-center justify-center">
+                                                <Lottie animationData={streakAnimation} loop={true} className="w-12 h-12" />
+                                            </div>
+                                        ) : (
+                                            <Flame size={20} />
+                                        )}
                                         Streak
                                     </h3>
                                     <div className="text-3xl font-black">{defaultStats.streak}</div>
                                 </div>
-                                <p className="text-sm opacity-90 mb-4">Hari berturut-turut kamu konsisten!</p>
+                                <p className="text-sm opacity-90 mb-4 relative z-10">Hari berturut-turut kamu konsisten!</p>
 
                                 {/* Streak Calendar */}
                                 <div className="grid grid-cols-7 gap-2">
