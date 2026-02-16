@@ -1,8 +1,9 @@
 import React, { useEffect } from 'react';
-import { router } from '@inertiajs/react';
-import { Head } from '@inertiajs/react';
+import { router, Head, usePage } from '@inertiajs/react';
 
 const Landing = () => {
+  const { auth } = usePage().props;
+
   const smoothScroll = (id) => {
     const element = document.getElementById(id);
     if (element) {
@@ -106,8 +107,8 @@ const Landing = () => {
         <nav className="fixed top-0 left-0 right-0 z-50 safe-nav">
           <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between h-20">
             {/* Logo */}
-            <div 
-              className="flex items-center gap-3 cursor-pointer hover:opacity-80 transition" 
+            <div
+              className="flex items-center gap-3 cursor-pointer hover:opacity-80 transition"
               onClick={() => smoothScroll('hero')}
             >
               <img src="/images/smkn8.jpeg" alt="SMKN 8 Jakarta" className="h-12 w-auto object-contain" />
@@ -121,14 +122,25 @@ const Landing = () => {
             <div className="hidden md:flex items-center gap-8">
               <button onClick={() => smoothScroll('hero')} className="font-semibold text-zinc-700 hover:text-green-600 transition">Beranda</button>
               <button onClick={() => smoothScroll('habits')} className="font-semibold text-zinc-700 hover:text-green-600 transition">Kebiasaan</button>
-              <button onClick={() => smoothScroll('cta')} className="font-semibold text-zinc-700 hover:text-green-600 transition">Mulai</button>
+
+              {/* Conditional Auth Button */}
+              {auth?.user ? (
+                <button
+                  onClick={() => router.get(route('dashboard'))}
+                  className="px-6 py-2.5 bg-green-600 text-white font-bold rounded-xl hover:bg-green-700 transition shadow-md shadow-green-100 flex items-center gap-2"
+                >
+                  Dashboard <span>→</span>
+                </button>
+              ) : (
+                <button onClick={() => smoothScroll('cta')} className="font-semibold text-zinc-700 hover:text-green-600 transition">Mulai</button>
+              )}
             </div>
           </div>
         </nav>
 
         {/* HERO SECTION */}
-        <section 
-          id="hero" 
+        <section
+          id="hero"
           className="relative min-h-[calc(100vh-80px)] flex items-center justify-center px-4 overflow-hidden"
           style={{
             backgroundImage: "url('/images/smkn8senja.png')",
@@ -139,7 +151,7 @@ const Landing = () => {
         >
           {/* Dark Green Gradient Overlay (60-70%) */}
           <div className="absolute inset-0 bg-gradient-to-t from-emerald-900/80 via-emerald-800/50 to-transparent -z-10"></div>
-          
+
           {/* Subtle blur effect */}
           <div className="absolute inset-0 -z-10 backdrop-blur-[1px]"></div>
 
@@ -158,15 +170,15 @@ const Landing = () => {
 
               {/* CTA Buttons */}
               <div className="flex flex-col sm:flex-row gap-4 pt-4">
-                <button 
-                  onClick={() => router.get('/login')} 
+                <button
+                  onClick={() => router.get('/login')}
                   className="px-8 py-4 bg-green-500 hover:bg-green-600 text-white font-bold rounded-2xl text-lg shadow-lg hover:shadow-xl transition-all duration-300 text-center block"
                 >
                   Mulai Jadi Hebat Sekarang
                 </button>
 
-                <button 
-                  onClick={() => router.get('/login')} 
+                <button
+                  onClick={() => router.get('/login')}
                   className="px-8 py-4 bg-white text-emerald-700 font-bold rounded-2xl text-lg hover:bg-emerald-50 transition-all duration-300 shadow-lg hover:shadow-xl text-center block"
                 >
                   Lihat 7 Kebiasaan
@@ -280,8 +292,8 @@ const Landing = () => {
               Bergabunglah dengan ribuan siswa SMKN 8 Jakarta dan mulai transformasi karaktermu hari ini. Masa depan cerah menunggu!
             </p>
 
-            <button 
-              onClick={() => router.get('/login')} 
+            <button
+              onClick={() => router.get('/login')}
               className="px-10 py-4 bg-white text-green-600 font-bold rounded-2xl text-lg hover:bg-zinc-100 transition-all duration-300 shadow-lg hover:shadow-xl"
             >
               Mulai Menjadi Si Hebat Sekarang
