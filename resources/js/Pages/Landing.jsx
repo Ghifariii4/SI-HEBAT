@@ -330,7 +330,7 @@ const Landing = () => {
 
               <div className="grid grid-cols-2 gap-6 mb-12">
                 <div className="p-4 bg-zinc-50 rounded-2xl border border-zinc-100 group hover:border-green-300 transition-colors">
-                  <div className="text-3xl font-black text-zinc-900 group-hover:text-green-600 transition-colors mb-1 uppercase">10k+</div>
+                  <div className="text-3xl font-black text-zinc-900 group-hover:text-green-600 transition-colors mb-1 uppercase">1k+</div>
                   <div className="text-sm font-bold text-zinc-400 uppercase tracking-tighter">Siswa Hebat</div>
                 </div>
                 <div className="p-4 bg-zinc-50 rounded-2xl border border-zinc-100 group hover:border-green-300 transition-colors">
