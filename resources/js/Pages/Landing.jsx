@@ -1,5 +1,8 @@
 import React, { useEffect } from 'react';
 import { router, Head, usePage } from '@inertiajs/react';
+import { motion } from 'framer-motion';
+import Lottie from 'lottie-react';
+import HeroMascot from '../../../public/Mascot/Hero.json';
 
 const Landing = () => {
   const { auth } = usePage().props;
@@ -20,10 +23,14 @@ const Landing = () => {
     <>
       <Head title="Si Hebat - 7 Kebiasaan Anak Indonesia Hebat" />
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Outfit:wght@400;500;600;700;800;900&display=swap');
         
         * {
           font-family: 'Inter', sans-serif;
+        }
+
+        .font-outfit {
+          font-family: 'Outfit', sans-serif;
         }
 
         body {
@@ -281,6 +288,71 @@ const Landing = () => {
           </div>
         </section>
 
+        {/* HERO GENERATION SECTION */}
+        <section className="py-24 px-4 bg-white relative overflow-hidden">
+          <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center gap-16 relative z-10">
+            {/* Lottie Mascot */}
+            <motion.div
+              initial={{ opacity: 0, x: -50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8 }}
+              className="flex-1 w-full max-w-lg"
+            >
+              <div className="relative">
+                <div className="absolute inset-0 bg-green-200/30 blur-[100px] rounded-full -z-10 animate-pulse"></div>
+                <Lottie
+                  animationData={HeroMascot}
+                  loop={true}
+                  className="w-full h-auto transform scale-110 drop-shadow-2xl"
+                />
+              </div>
+            </motion.div>
+
+            {/* Text Content */}
+            <motion.div
+              initial={{ opacity: 0, x: 50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              className="flex-1 text-center md:text-left"
+            >
+              <span className="inline-block py-2 px-6 bg-green-100 text-green-600 rounded-full font-black text-sm mb-6 tracking-widest uppercase animate-bounce">
+                Be a Legend
+              </span>
+              <h2 className="text-5xl md:text-7xl font-outfit font-black mb-8 leading-tight text-zinc-900">
+                Who's the next <br />
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-500 to-emerald-600">Generation Hebat?</span>
+              </h2>
+              <p className="text-xl text-zinc-600 mb-10 leading-relaxed font-medium max-w-xl">
+                Setiap petualangan besar dimulai dari sebuah langkah kecil. Jadilah inspirasi, kembangkan karaktermu, dan raih prestasi gemilang bersama ribuan pahlawan lainnya!
+              </p>
+
+              <div className="grid grid-cols-2 gap-6 mb-12">
+                <div className="p-4 bg-zinc-50 rounded-2xl border border-zinc-100 group hover:border-green-300 transition-colors">
+                  <div className="text-3xl font-black text-zinc-900 group-hover:text-green-600 transition-colors mb-1 uppercase">10k+</div>
+                  <div className="text-sm font-bold text-zinc-400 uppercase tracking-tighter">Siswa Hebat</div>
+                </div>
+                <div className="p-4 bg-zinc-50 rounded-2xl border border-zinc-100 group hover:border-green-300 transition-colors">
+                  <div className="text-3xl font-black text-zinc-900 group-hover:text-green-600 transition-colors mb-1 uppercase">7</div>
+                  <div className="text-sm font-bold text-zinc-400 uppercase tracking-tighter">Core Habits</div>
+                </div>
+              </div>
+
+              <button
+                onClick={() => router.get('/login')}
+                className="px-10 py-5 bg-zinc-900 hover:bg-zinc-800 text-white font-black rounded-[2rem] text-xl shadow-2xl hover:shadow-zinc-200 transition-all duration-300 transform hover:-translate-y-1 active:translate-y-0"
+              >
+                Join the Hero Squad
+              </button>
+            </motion.div>
+          </div>
+
+          {/* Background Decor */}
+          <div className="absolute top-0 right-0 w-96 h-96 bg-emerald-50 rounded-full -mr-48 -mt-48 opacity-50 -z-10"></div>
+          <div className="absolute bottom-0 left-0 w-64 h-64 bg-green-50 rounded-full -ml-32 -mb-32 opacity-50 -z-10"></div>
+        </section>
+
         {/* FINAL CTA SECTION */}
         <section id="cta" className="py-20 px-4">
           <div className="max-w-4xl mx-auto bg-gradient-to-r from-green-500 to-emerald-500 rounded-2xl p-12 md:p-16 text-white text-center shadow-lg">
@@ -390,6 +462,10 @@ const Landing = () => {
                   <p className="font-bold text-green-400 mb-1">Alfarisi Azmir</p>
                   <p className="text-sm text-zinc-400"></p>
                 </div>
+                <div className="p-4 bg-zinc-800 rounded-2xl hover:bg-zinc-700 transition">
+                  <p className="font-bold text-green-400 mb-1">Janeeta Anzaesa</p>
+                  <p className="text-sm text-zinc-400"></p>
+                </div>
               </div>
             </div>
 
@@ -397,7 +473,7 @@ const Landing = () => {
             <div className="text-center text-zinc-500 text-sm">
               <p className="mb-2">© 2025 Tim 7 Kebiasaan Anak Indonesia Hebat</p>
               <p className="text-xs text-zinc-600">
-                Dibangun dengan ❤️ untuk membentuk generasi Indonesia yang hebat
+                Dibangun dengan AI untuk membentuk programmer yang vibe coding.
               </p>
             </div>
           </div>
