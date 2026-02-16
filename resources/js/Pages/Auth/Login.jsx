@@ -195,7 +195,7 @@ export default function Login({ status, canResetPassword }) {
                         onChange={e => setData('nis', e.target.value)}
                         className={`w-full bg-gray-50 border-2 pl-12 pr-4 py-4 rounded-2xl text-gray-900 font-bold placeholder-gray-400 focus:outline-none focus:ring-4 focus:ring-green-500/10 transition-all ${errors.nis ? 'border-red-500 bg-red-50' : 'border-transparent focus:border-green-500'
                           }`}
-                        placeholder="0012345678"
+                        placeholder="12345"
                       />
                     </div>
                     {errors.nis && <p className="text-xs text-red-500 font-bold ml-1 mt-1">{errors.nis}</p>}
@@ -319,12 +319,28 @@ export default function Login({ status, canResetPassword }) {
           {/* Footer Section */}
           <div className="mt-12 text-center lg:text-left space-y-6">
             {role === 'orang_tua' && (
-              <p className="text-sm font-bold text-gray-400">
-                Belum memiliki akun orang tua?{' '}
-                <Link href={route('register')} className="text-green-600 hover:text-green-700 underline underline-offset-4 decoration-2">
-                  Daftar Segera
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="bg-green-50/50 border border-green-100 p-6 rounded-2xl space-y-3"
+              >
+                <div className="flex items-center gap-3 text-green-700">
+                  <div className="p-2 bg-green-600 rounded-lg text-white">
+                    <Users size={16} />
+                  </div>
+                  <span className="text-sm font-black uppercase tracking-tight">Pendaftaran Orang Tua</span>
+                </div>
+                <p className="text-xs font-bold text-gray-500 leading-relaxed">
+                  Belum memiliki akun? Silakan mendaftar untuk memantau perkembangan dan absensi harian anak Anda secara real-time.
+                </p>
+                <Link
+                  href={route('register')}
+                  className="inline-flex items-center gap-2 text-sm font-black text-green-600 hover:text-green-700 transition-colors group/link"
+                >
+                  Daftar Akun Orang Tua
+                  <ArrowRight size={14} className="group-hover/link:translate-x-1 transition-transform" />
                 </Link>
-              </p>
+              </motion.div>
             )}
 
             <div className="pt-8 border-t border-gray-100 flex items-center justify-between">
