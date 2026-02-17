@@ -7,7 +7,7 @@ import {
 } from 'lucide-react';
 import StudentLayout from '@/Layouts/StudentLayout';
 import Lottie from 'lottie-react';
-import MosqueAnimation from '../../../../public/Habit/Ibadah_Islam_Masjid.json';
+import MosqueAnimation from '../../../../../../../public/Habit/Ibadah_Islam_Masjid.json';
 
 export default function Islam({ auth }) {
     const user = auth?.user || {};
