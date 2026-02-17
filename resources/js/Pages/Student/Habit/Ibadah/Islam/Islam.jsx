@@ -34,18 +34,10 @@ export default function Islam({ auth }) {
             <Head title="Ibadah Islam - Si Hebat" />
 
             <div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-emerald-50 p-6 relative overflow-hidden">
-                {/* Full Background Decoration Mascot */}
-                <div className="absolute inset-0 flex items-center justify-center opacity-30 pointer-events-none z-0">
+                {/* Titanic Background Decoration Mascot */}
+                <div className="absolute inset-0 flex items-end justify-center opacity-100 pointer-events-none z-0 overflow-hidden">
                     <motion.div
-                        className="w-full max-w-4xl"
-                        animate={{
-                            y: [0, -20, 0],
-                        }}
-                        transition={{
-                            duration: 8,
-                            repeat: Infinity,
-                            ease: "easeInOut"
-                        }}
+                        className="w-full max-w-none scale-[30] md:scale-[25] lg:scale-[40] translate-y-[50%]"
                     >
                         <Lottie animationData={MosqueAnimation} loop={true} />
                     </motion.div>
