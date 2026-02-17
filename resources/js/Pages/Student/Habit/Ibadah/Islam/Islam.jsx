@@ -33,13 +33,28 @@ export default function Islam({ auth }) {
         <StudentLayout user={user}>
             <Head title="Ibadah Islam - Si Hebat" />
 
-            <div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-emerald-50 p-6 relative overflow-hidden">
-                {/* Titanic Background Decoration Mascot */}
-                <div className="absolute inset-0 flex items-end justify-center opacity-100 pointer-events-none z-0 overflow-hidden">
+            <div className="min-h-screen pb-32 bg-gradient-to-br from-green-50 via-white to-emerald-50 p-6 relative overflow-hidden">
+                {/* Gigantic Background Decoration Mascot */}
+                <div className="absolute bottom-20 md:bottom-0 left-0 w-full flex justify-center pointer-events-none z-0">
                     <motion.div
-                        className="w-full max-w-none scale-[30] md:scale-[25] lg:scale-[40] translate-y-[50%]"
+                        className="
+                            w-full
+                            scale-[6]
+                            md:scale-[7]
+                            lg:scale-[12]
+                            -translate-y-32
+                            md:translate-y-0
+                        "
+                        animate={{
+                            y: [0, -10, 0],
+                        }}
+                        transition={{
+                            duration: 12,
+                            repeat: Infinity,
+                            ease: "easeInOut"
+                        }}
                     >
-                        <Lottie animationData={MosqueAnimation} loop={true} />
+                        <Lottie animationData={MosqueAnimation} loop />
                     </motion.div>
                 </div>
 
