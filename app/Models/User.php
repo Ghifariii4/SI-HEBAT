@@ -91,4 +91,34 @@ class User extends Authenticatable
     {
         return $this->role->name === $roleName;
     }
+
+    /**
+     * Get the stats associated with the user.
+     */
+    public function stats()
+    {
+        return $this->hasOne(UserStat::class);
+    }
+
+    public function addXp(int $amount)
+    {
+        if ($amount <= 0) return;
+        XpLedger::create([
+            'user_id' => $this->id,
+            'source_type' => 'manual',
+            'amount' => $amount,
+        ]);
+        app(\App\Services\GamificationService::class)->updateUserStats($this);
+    }
+
+    public function addKoin(int $amount)
+    {
+        if ($amount <= 0) return;
+        CoinLedger::create([
+            'user_id' => $this->id,
+            'source_type' => 'manual',
+            'amount' => $amount,
+        ]);
+        app(\App\Services\GamificationService::class)->updateUserStats($this);
+    }
 }

@@ -55,9 +55,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
         // Habits
         Route::prefix('habit')->name('habit.')->group(function () {
-            Route::get('/bangun', function () {
-                return Inertia::render('Student/Habit/Bangun');
-            })->name('bangun');
+            Route::get('/bangun', [\App\Http\Controllers\Student\HabitWakeupController::class, 'index'])->name('bangun');
+
+            Route::post('/bangun_pagi', [\App\Http\Controllers\Student\HabitWakeupController::class, 'store'])->name('wakeup.store');
 
             Route::get('/beribadah', function () {
                 return Inertia::render('Student/Habit/Beribadah');

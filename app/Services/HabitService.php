@@ -94,6 +94,16 @@ class HabitService
                     $xp = $habitRules['points']['late']['xp'];
                     $coin = $habitRules['points']['late']['coin'];
                 }
+
+                // Extra actions bonus
+                $extraCount = !empty($data['extra_actions']) && is_array($data['extra_actions']) ? count($data['extra_actions']) : 0;
+                if (!empty($data['note'])) {
+                    $extraCount++;
+                }
+
+                if ($extraCount > 0) {
+                    $xp += $extraCount * ($habitRules['extras']['action_bonus'] ?? 10);
+                }
                 break;
 
             case 'olahraga':
