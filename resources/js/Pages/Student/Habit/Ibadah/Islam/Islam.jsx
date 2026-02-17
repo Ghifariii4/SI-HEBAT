@@ -34,15 +34,15 @@ export default function Islam({ auth }) {
             <Head title="Ibadah Islam - Si Hebat" />
 
             <div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-emerald-50 p-6 relative overflow-hidden">
-                {/* Background Decoration Mascot */}
-                <div className="absolute -bottom-10 -right-10 w-80 h-80 opacity-40 pointer-events-none z-0">
+                {/* Full Background Decoration Mascot */}
+                <div className="absolute inset-0 flex items-center justify-center opacity-30 pointer-events-none z-0">
                     <motion.div
+                        className="w-full max-w-4xl"
                         animate={{
-                            y: [0, -15, 0],
-                            rotate: [0, 2, 0]
+                            y: [0, -20, 0],
                         }}
                         transition={{
-                            duration: 5,
+                            duration: 8,
                             repeat: Infinity,
                             ease: "easeInOut"
                         }}
