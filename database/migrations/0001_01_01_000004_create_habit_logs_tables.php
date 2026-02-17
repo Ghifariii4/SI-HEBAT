@@ -19,7 +19,8 @@ return new class extends Migration
             $table->date('log_date');
             $table->integer('base_xp')->default(0);
             $table->integer('bonus_xp')->default(0);
-            $table->integer('coin_earned')->default(0);
+            $table->integer('base_coin')->default(0);
+            $table->integer('bonus_coin')->default(0);
             $table->integer('star_earned')->default(0);
             $table->string('status', 20)->default('pending');
             $table->timestamp('created_at')->useCurrent();

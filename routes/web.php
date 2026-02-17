@@ -71,7 +71,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
             })->name('beribadah');
 
             Route::prefix('ibadah')->name('ibadah.')->group(function () {
-                Route::get('/islam', function () { return Inertia::render('Student/Habit/Ibadah/Islam'); })->name('islam');
+                Route::get('/islam', function () { return Inertia::render('Student/Habit/Ibadah/Islam/Islam'); })->name('islam');
+                Route::get('/islam/sholat', function () { return Inertia::render('Student/Habit/Ibadah/Islam/Sholat'); })->name('islam.sholat');
+                Route::get('/islam/lainnya', function () { return Inertia::render('Student/Habit/Ibadah/Islam/Lainnya'); })->name('islam.lainnya');
                 Route::get('/kristen', function () { return Inertia::render('Student/Habit/Ibadah/Kristen'); })->name('kristen');
                 Route::get('/katolik', function () { return Inertia::render('Student/Habit/Ibadah/Katolik'); })->name('katolik');
                 Route::get('/hindu', function () { return Inertia::render('Student/Habit/Ibadah/Hindu'); })->name('hindu');

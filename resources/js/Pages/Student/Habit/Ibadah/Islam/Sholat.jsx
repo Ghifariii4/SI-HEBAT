@@ -9,7 +9,7 @@ import {
 import StudentLayout from '@/Layouts/StudentLayout';
 import confetti from 'canvas-confetti';
 
-export default function Islam({ auth }) {
+export default function Sholat({ auth }) {
     const user = auth?.user || {};
     const [currentTime, setCurrentTime] = useState(new Date());
     const [selectedPrayer, setSelectedPrayer] = useState(null);
@@ -143,7 +143,7 @@ export default function Islam({ auth }) {
                 <nav className="p-6 flex items-center justify-between relative z-10">
                     <div className="flex items-center gap-4">
                         <Link
-                            href={route('student.dashboard')}
+                            href={route('student.habit.ibadah.islam')}
                             className="w-10 h-10 bg-white/20 backdrop-blur-md rounded-xl flex items-center justify-center text-white hover:bg-white/30 transition border border-white/30"
                         >
                             <ArrowLeft size={20} />
@@ -199,20 +199,20 @@ export default function Islam({ auth }) {
                                     whileTap={{ scale: 0.98 }}
                                     onClick={() => handleOpenModal(prayer)}
                                     className={`relative group cursor-pointer rounded-3xl p-5 border-2 transition-all duration-300 ${status.completed
-                                            ? 'bg-white border-green-500 shadow-[0_0_20px_rgba(34,197,94,0.2)]'
-                                            : isActive
-                                                ? 'bg-white border-emerald-400 shadow-[0_0_30px_rgba(52,211,153,0.3)] animate-pulse shadow-emerald-400/20'
-                                                : 'bg-white/80 backdrop-blur-md border-transparent hover:border-white/50 shadow-lg'
+                                        ? 'bg-white border-green-500 shadow-[0_0_20px_rgba(34,197,94,0.2)]'
+                                        : isActive
+                                            ? 'bg-white border-emerald-400 shadow-[0_0_30px_rgba(52,211,153,0.3)] animate-pulse shadow-emerald-400/20'
+                                            : 'bg-white/80 backdrop-blur-md border-transparent hover:border-white/50 shadow-lg'
                                         }`}
                                 >
                                     <div className="flex items-center justify-between">
                                         <div className="flex items-center gap-5">
                                             {/* Icon */}
                                             <div className={`w-14 h-14 rounded-2xl flex items-center justify-center transition-all duration-500 shadow-inner ${status.completed
-                                                    ? 'bg-green-100 text-green-600 rotate-[360deg]'
-                                                    : isActive
-                                                        ? 'bg-emerald-500 text-white shadow-emerald-200'
-                                                        : 'bg-gray-100 text-gray-400 group-hover:bg-emerald-50 group-hover:text-emerald-500'
+                                                ? 'bg-green-100 text-green-600 rotate-[360deg]'
+                                                : isActive
+                                                    ? 'bg-emerald-500 text-white shadow-emerald-200'
+                                                    : 'bg-gray-100 text-gray-400 group-hover:bg-emerald-50 group-hover:text-emerald-500'
                                                 }`}>
                                                 <prayer.icon size={28} />
                                             </div>
@@ -238,10 +238,10 @@ export default function Islam({ auth }) {
 
                                         {/* Status Indicator */}
                                         <div className={`w-10 h-10 rounded-full flex items-center justify-center border-2 transition-all duration-500 ${status.completed
-                                                ? 'bg-green-500 border-green-500 text-white scale-110 shadow-lg shadow-green-200'
-                                                : isActive
-                                                    ? 'border-emerald-400 text-emerald-500 bg-emerald-50'
-                                                    : 'border-gray-200 text-gray-300'
+                                            ? 'bg-green-500 border-green-500 text-white scale-110 shadow-lg shadow-green-200'
+                                            : isActive
+                                                ? 'border-emerald-400 text-emerald-500 bg-emerald-50'
+                                                : 'border-gray-200 text-gray-300'
                                             }`}>
                                             {status.completed ? <Check size={20} className="stroke-[3]" /> : <Plus size={20} />}
                                         </div>
