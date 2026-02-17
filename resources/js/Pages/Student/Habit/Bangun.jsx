@@ -1,7 +1,7 @@
 import StudentLayout from '@/Layouts/StudentLayout';
 import { Head } from '@inertiajs/react';
 
-export default function HabitPage({ auth = { user: {} }, title = "Kebiasaan" }) {
+export default function HabitPage({ auth = { user: {} }, title = "Bangun Pagi" }) {
     const user = auth?.user || {};
     return (
         <StudentLayout user={user}>

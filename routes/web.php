@@ -32,7 +32,7 @@ Route::get('/dashboard', function () {
 Route::middleware(['auth', 'verified'])->group(function () {
 
     // ===== STUDENT ROUTES =====
-    Route::prefix('siswa')->name('student.')->group(function () {
+    Route::prefix('siswa')->name('student.')->middleware('role:siswa')->group(function () {
         // Dashboard
         Route::get('/dashboard', function () {
             return Inertia::render('Student/Dashboard');
@@ -91,23 +91,30 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::get('/tidur', function () {
                 return Inertia::render('Student/Habit/Tidur');
             })->name('tidur');
+            Route::post('/{habitCode}', [\App\Http\Controllers\HabitController::class, 'store'])->name('store');
         });
     });
 
     // ===== TEACHER ROUTES =====
-    Route::get('/guru/dashboard', function () {
-        return Inertia::render('Teacher/Dashboard');
-    })->name('guru.dashboard');
+    Route::middleware('role:guru')->group(function () {
+        Route::get('/guru/dashboard', function () {
+            return Inertia::render('Teacher/Dashboard');
+        })->name('guru.dashboard');
+    });
 
     // ===== PARENT ROUTES =====
-    Route::get('/orangtua/dashboard', function () {
-        return Inertia::render('Parent/Dashboard');
-    })->name('orangtua.dashboard');
+    Route::middleware('role:orang_tua')->group(function () {
+        Route::get('/orangtua/dashboard', function () {
+            return Inertia::render('Parent/Dashboard');
+        })->name('orangtua.dashboard');
+    });
 
     // ===== ADMIN ROUTES =====
-    Route::get('/admin/dashboard', function () {
-        return Inertia::render('Admin/Dashboard');
-    })->name('admin.dashboard');
+    Route::middleware('role:admin')->group(function () {
+        Route::get('/admin/dashboard', function () {
+            return Inertia::render('Admin/Dashboard');
+        })->name('admin.dashboard');
+    });
 });
 
 Route::middleware('auth')->group(function () {

@@ -473,7 +473,7 @@ const Landing = () => {
             <div className="text-center text-zinc-500 text-sm">
               <p className="mb-2">© 2025 Tim 7 Kebiasaan Anak Indonesia Hebat</p>
               <p className="text-xs text-zinc-600">
-                Dibangun dengan AI untuk membentuk programmer yang vibe coding.
+                Dibangun dengan AI untuk membentuk programmer yang vibe coding (HIDUP VIBECODING!!).
               </p>
             </div>
           </div>

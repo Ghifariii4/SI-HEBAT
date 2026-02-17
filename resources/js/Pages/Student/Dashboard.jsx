@@ -611,7 +611,7 @@ export default function Dashboard({ auth = { user: {} }, stats = {}, leaderboard
                                             <Crown className="text-yellow-500 absolute -top-2 -right-1" size={14} />
                                         </div>
                                         <div className="flex-1">
-                                            <p className="text-sm font-bold text-gray-800">Siti Aminah</p>
+                                            <p className="text-sm font-bold text-gray-800">Dedi Dambudi</p>
                                             <p className="text-xs text-gray-500">+450 XP</p>
                                         </div>
                                     </div>
