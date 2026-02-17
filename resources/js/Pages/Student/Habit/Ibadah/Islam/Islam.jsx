@@ -6,6 +6,8 @@ import {
     BookOpen, Sparkles, ChevronRight
 } from 'lucide-react';
 import StudentLayout from '@/Layouts/StudentLayout';
+import Lottie from 'lottie-react';
+import MosqueAnimation from '../../../../public/Habit/Ibadah_Islam_Masjid.json';
 
 export default function Islam({ auth }) {
     const user = auth?.user || {};
@@ -31,8 +33,25 @@ export default function Islam({ auth }) {
         <StudentLayout user={user}>
             <Head title="Ibadah Islam - Si Hebat" />
 
-            <div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-emerald-50 p-6">
-                <div className="max-w-2xl mx-auto">
+            <div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-emerald-50 p-6 relative overflow-hidden">
+                {/* Background Decoration Mascot */}
+                <div className="absolute -bottom-10 -right-10 w-80 h-80 opacity-40 pointer-events-none z-0">
+                    <motion.div
+                        animate={{
+                            y: [0, -15, 0],
+                            rotate: [0, 2, 0]
+                        }}
+                        transition={{
+                            duration: 5,
+                            repeat: Infinity,
+                            ease: "easeInOut"
+                        }}
+                    >
+                        <Lottie animationData={MosqueAnimation} loop={true} />
+                    </motion.div>
+                </div>
+
+                <div className="max-w-2xl mx-auto relative z-10">
                     {/* Header */}
                     <div className="flex items-center gap-4 mb-10">
                         <Link
