@@ -60,6 +60,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::post('/bangun_pagi', [\App\Http\Controllers\Student\HabitWakeupController::class, 'store'])->name('wakeup.store');
 
             Route::get('/beribadah', function () {
+                $religion = strtolower(auth()->user()->religion);
+                $validReligions = ['islam', 'kristen', 'katolik', 'hindu', 'buddha', 'konghucu'];
+
+                if (in_array($religion, $validReligions)) {
+                    return redirect()->route('student.habit.ibadah.' . $religion);
+                }
+
                 return Inertia::render('Student/Habit/Beribadah');
             })->name('beribadah');
 
