@@ -39,9 +39,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
         })->name('dashboard');
 
         // Profile
-        Route::get('/profile', function () {
-            return Inertia::render('Student/Profile');
-        })->name('profile');
+        Route::get('/profile', [\App\Http\Controllers\Student\ProfileController::class, 'show'])->name('profile');
+        Route::patch('/profile/password', [\App\Http\Controllers\Student\ProfileController::class, 'updatePassword'])->name('profile.updatePassword');
 
         // Leaderboard
         Route::get('/leaderboard', function () {

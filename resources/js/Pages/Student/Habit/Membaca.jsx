@@ -1,7 +1,7 @@
 import StudentLayout from '@/Layouts/StudentLayout';
 import { Head } from '@inertiajs/react';
 
-export default function ${file}({ auth = { user: {} } }) {
+export default function Prayer({ auth = { user: {} } }) {
     const user = auth?.user || {};
     return (
         <StudentLayout user={user}>
