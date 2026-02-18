@@ -19,3 +19,13 @@ Ini adalah aturan untuk sistem checklist kebiasaan (habit tracking) yang akan di
 - Jika approved maka user akan mendapatkan +bonus xp atau koin yang di tentukan
 - Jika rejected maka user tidak akan mendapatkan +bonus xp atau koin yang di tentukan
 - Saat user menginput kebiasaan jika ada foto, foto tersebut akan discan dan diambi exif metadata, yaitu : created, modified, & location
+
+# Daftar kebiasaan yang ada foto 
+- Ibadah : Islam (Foto Masjid, Foto Baca Al-Qur'an)
+- Ibadah : Kristen (Foto Gereja)
+- Ibadah : Katolik (Foto Gereja)
+- Ibadah : Lainnya (Foto Saat Sedang Melakukan Ibadah)
+- Olahraga (Foto bukti bahwa memang sedang berolahraga)
+- Belajar (Foto bukti bahwa memang sedang belajar)
+- Makan : terkhusus jika mengisi makanan yang dimakaan -> tidak wajib
+- Bermasyarakat : sangat wajib jika ada kegiatan
