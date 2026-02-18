@@ -1,4 +1,4 @@
-import { Link } from '@inertiajs/react';
+import { Link, usePage } from '@inertiajs/react';
 import { motion } from 'framer-motion';
 import {
     Home, User, Trophy, ShoppingBag, LogOut,
@@ -7,13 +7,14 @@ import {
 import { useState } from 'react';
 
 export default function AuthenticatedLayout({ user, children }) {
+    const { url } = usePage();
     const [sidebarOpen, setSidebarOpen] = useState(false);
 
     const navigation = [
-        { name: 'Beranda', href: 'student.dashboard', icon: Home, current: true },
-        { name: 'Profil Saya', href: 'student.profile', icon: User },
-        { name: 'Peringkat', href: 'student.leaderboard', icon: Trophy },
-        { name: 'Toko Skin', href: 'student.shop', icon: ShoppingBag },
+        { name: 'Beranda', href: '/siswa/dashboard', routeName: 'student.dashboard', icon: Home, current: true },
+        { name: 'Profil Saya', href: '/siswa/profile', routeName: 'student.profile', icon: User },
+        { name: 'Peringkat', href: '/siswa/leaderboard', routeName: 'student.leaderboard', icon: Trophy },
+        { name: 'Toko Skin', href: '/siswa/shop', routeName: 'student.shop', icon: ShoppingBag },
     ];
 
     return (
@@ -22,7 +23,7 @@ export default function AuthenticatedLayout({ user, children }) {
             <aside className="hidden md:flex w-64 bg-white border-r border-gray-100 flex-col justify-between p-6 z-20 shadow-sm sticky top-0 h-screen">
                 <div>
                     {/* Logo */}
-                    <Link href={route('student.dashboard')} className="flex items-center gap-2 mb-10 text-green-600 group">
+                    <Link href="/siswa/dashboard" className="flex items-center gap-2 mb-10 text-green-600 group">
                         <motion.div
                             whileHover={{ rotate: 180 }}
                             transition={{ duration: 0.3 }}
@@ -35,11 +36,11 @@ export default function AuthenticatedLayout({ user, children }) {
                     {/* Navigation */}
                     <nav className="space-y-2">
                         {navigation.map((item) => {
-                            const isActive = route().current(item.href);
+                            const isActive = url === item.href || url.startsWith(item.href);
                             return (
                                 <Link
                                     key={item.name}
-                                    href={route(item.href)}
+                                    href={item.href}
                                     className={`flex items-center gap-3 px-4 py-3 rounded-xl transition font-bold ${isActive
                                         ? 'bg-green-50 text-green-600'
                                         : 'text-gray-500 hover:bg-gray-50 hover:text-gray-700'
@@ -55,7 +56,7 @@ export default function AuthenticatedLayout({ user, children }) {
 
                 {/* Logout */}
                 <Link
-                    href={route('logout')}
+                    href="/logout"
                     method="post"
                     as="button"
                     className="flex items-center gap-2 text-gray-400 hover:text-red-500 transition font-medium text-sm"
@@ -88,7 +89,7 @@ export default function AuthenticatedLayout({ user, children }) {
                             </button>
 
                             {/* Logo */}
-                            <Link href={route('student.dashboard')} className="flex items-center gap-2 mb-10 text-green-600">
+                            <Link href="/siswa/dashboard" className="flex items-center gap-2 mb-10 text-green-600">
                                 <img src="/images/logohebat.svg" alt="SI HEBAT" className="w-8 h-8" />
                                 <span className="font-black text-xl tracking-tight">SI HEBAT</span>
                             </Link>
@@ -96,11 +97,11 @@ export default function AuthenticatedLayout({ user, children }) {
                             {/* Navigation */}
                             <nav className="space-y-2">
                                 {navigation.map((item) => {
-                                    const isActive = route().current(item.href);
+                                    const isActive = url === item.href || url.startsWith(item.href);
                                     return (
                                         <Link
                                             key={item.name}
-                                            href={route(item.href)}
+                                            href={item.href}
                                             className={`flex items-center gap-3 px-4 py-3 rounded-xl transition font-bold ${isActive
                                                 ? 'bg-green-50 text-green-600'
                                                 : 'text-gray-500 hover:bg-gray-50 hover:text-gray-700'
@@ -117,7 +118,7 @@ export default function AuthenticatedLayout({ user, children }) {
 
                         {/* Logout */}
                         <Link
-                            href={route('logout')}
+                            href="/logout"
                             method="post"
                             as="button"
                             className="flex items-center gap-2 text-gray-400 hover:text-red-500 transition font-medium text-sm"
@@ -139,7 +140,7 @@ export default function AuthenticatedLayout({ user, children }) {
                     >
                         <Menu size={24} />
                     </button>
-                    <Link href={route('student.dashboard')} className="flex items-center gap-2 text-green-600">
+                    <Link href="/siswa/dashboard" className="flex items-center gap-2 text-green-600">
                         <img src="/images/logohebat.svg" alt="SI HEBAT" className="w-6 h-6" />
                         <span className="font-black text-lg">SI HEBAT</span>
                     </Link>
@@ -154,11 +155,11 @@ export default function AuthenticatedLayout({ user, children }) {
                 {/* Mobile Bottom Navigation */}
                 <nav className="md:hidden fixed bottom-0 w-full bg-white border-t border-gray-100 flex justify-around py-3 pb-safe z-40 text-gray-400">
                     {navigation.map((item) => {
-                        const isActive = route().current(item.href);
+                        const isActive = url === item.href || url.startsWith(item.href);
                         return (
                             <Link
                                 key={item.name}
-                                href={route(item.href)}
+                                href={item.href}
                                 className={`flex flex-col items-center gap-1 transition ${isActive ? 'text-green-600' : 'hover:text-green-500'
                                     }`}
                             >

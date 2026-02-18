@@ -54,7 +54,7 @@ export default function Dashboard({ auth = { user: {} }, stats = {}, leaderboard
             name: 'Bangun Pagi',
             icon: Sun,
             color: 'from-orange-400 to-yellow-400',
-            route: 'student.habit.bangun',
+            href: '/siswa/habit/bangun',
             description: 'Mulai hari dengan segar',
             completed: true,
             xp: 50
@@ -63,7 +63,7 @@ export default function Dashboard({ auth = { user: {} }, stats = {}, leaderboard
             name: 'Beribadah',
             icon: Heart,
             color: 'from-blue-400 to-cyan-400',
-            route: 'student.habit.beribadah',
+            href: '/siswa/habit/beribadah',
             description: 'Dekat dengan Tuhan',
             completed: true,
             xp: 50
@@ -72,7 +72,7 @@ export default function Dashboard({ auth = { user: {} }, stats = {}, leaderboard
             name: 'Olahraga',
             icon: Dumbbell,
             color: 'from-red-400 to-pink-400',
-            route: 'student.habit.olahraga',
+            href: '/siswa/habit/olahraga',
             description: 'Jaga kesehatan fisik',
             completed: false,
             xp: 0
@@ -81,7 +81,7 @@ export default function Dashboard({ auth = { user: {} }, stats = {}, leaderboard
             name: 'Makan Sehat',
             icon: Apple,
             color: 'from-green-400 to-emerald-400',
-            route: 'student.habit.makan',
+            href: '/siswa/habit/makan',
             description: 'Nutrisi seimbang',
             completed: true,
             xp: 25
@@ -90,7 +90,7 @@ export default function Dashboard({ auth = { user: {} }, stats = {}, leaderboard
             name: 'Gemar Belajar',
             icon: BookOpen,
             color: 'from-purple-400 to-violet-400',
-            route: 'student.habit.belajar',
+            href: '/siswa/habit/belajar',
             description: 'Tingkatkan pengetahuan',
             completed: false,
             xp: 0
@@ -99,7 +99,7 @@ export default function Dashboard({ auth = { user: {} }, stats = {}, leaderboard
             name: 'Sosial',
             icon: Users,
             color: 'from-indigo-400 to-blue-400',
-            route: 'student.habit.sosial',
+            href: '/siswa/habit/sosial',
             description: 'Peduli sesama',
             completed: false,
             xp: 0
@@ -108,7 +108,7 @@ export default function Dashboard({ auth = { user: {} }, stats = {}, leaderboard
             name: 'Tidur Cukup',
             icon: Moon,
             color: 'from-slate-600 to-zinc-600',
-            route: 'student.habit.tidur',
+            href: '/siswa/habit/tidur',
             description: 'Istirahat optimal',
             completed: false,
             xp: 0
@@ -292,9 +292,9 @@ export default function Dashboard({ auth = { user: {} }, stats = {}, leaderboard
                                 {/* Habit Quick Links */}
                                 <div className="grid grid-cols-7 gap-2">
                                     {habits.map((habit, idx) => (
-                                        <Link
+                                        <a
                                             key={idx}
-                                            href={route(habit.route)}
+                                            href={habit.href}
                                             className="group relative"
                                         >
                                             <div className={`aspect-square rounded-2xl bg-gradient-to-br ${habit.color} p-3 flex items-center justify-center transition-all hover:scale-110 hover:shadow-lg ${habit.completed ? 'opacity-100' : 'opacity-40'}`}>
@@ -305,7 +305,7 @@ export default function Dashboard({ auth = { user: {} }, stats = {}, leaderboard
                                                     <span className="text-white text-xs">✓</span>
                                                 </div>
                                             )}
-                                        </Link>
+                                        </a>
                                     ))}
                                 </div>
                             </motion.div>
@@ -493,8 +493,8 @@ export default function Dashboard({ auth = { user: {} }, stats = {}, leaderboard
                                             whileHover={{ scale: 1.02 }}
                                             whileTap={{ scale: 0.98 }}
                                         >
-                                            <Link
-                                                href={route(habit.route)}
+                                            <a
+                                                href={habit.href}
                                                 className="block bg-white rounded-2xl p-5 border border-gray-100 hover:border-green-200 hover:shadow-lg transition-all group"
                                             >
                                                 <div className="flex items-center gap-4">
@@ -513,7 +513,7 @@ export default function Dashboard({ auth = { user: {} }, stats = {}, leaderboard
                                                     </div>
                                                     <ChevronRight className="text-gray-300 group-hover:text-green-500 transition-colors" size={20} />
                                                 </div>
-                                            </Link>
+                                            </a>
                                         </motion.div>
                                     ))}
                                 </div>
