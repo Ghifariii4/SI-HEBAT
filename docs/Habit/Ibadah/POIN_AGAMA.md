@@ -1,4 +1,4 @@
-# 📿 Sistem Checklist Ibadah & Poin (Semua Agama)
+# Sistem Checklist Ibadah & Poin (Semua Agama)
 
 Target balancing:
 - Rata-rata harian: 120–180 XP
@@ -7,28 +7,32 @@ Target balancing:
 
 ---
 
-# 🕌 ISLAM
+# ISLAM
 
 ## Ibadah Wajib
 - Sholat 1 waktu → 20 XP  
   Bonus per waktu:
   - Qobliyah → +8 XP  
   - Ba’diyah → +8 XP  
-  - Berjamaah → +10 XP  
+  - Berjamaah → +10 XP
   - Tepat waktu → +5 XP  
+  - +10 xp jika dengan foto (ACC Guru) & Harus dicentang "jamaah"
 
 (5 waktu tanpa bonus = 100 XP)
 
 ## Ibadah Tambahan
 - Baca Qur’an (min 1 halaman) → 20 XP   
-- Dzikir pagi/petang → 15 XP  
-- Sedekah / kebaikan nyata → 25 XP 
+- Sholat Dhuha → 20 XP
+- Sholat Tahajud → 30 XP
+- Sholat Witir → 15 XP
+- Puasa Daud → 100 XP
+- Puasa Senin Kamis → 100 XP
 
-Estimasi maksimal harian: ±260 XP  
+Estimasi maksimal harian: ±270 XP  
 
 ---
 
-# ✝️ KRISTEN (PROTESTAN)
+# KRISTEN (PROTESTAN)
 
 ## Ibadah Harian
 - Doa pagi → 25 XP 
@@ -42,14 +46,14 @@ Subtotal dasar: 110 XP
 ## Bonus
 - Doa syafaat khusus → +15 XP  
 - Menghafal 1 ayat → +15 XP  
-- Ibadah gereja → +40 XP  
+- Ibadah gereja → +40 XP  (dengan foto +10 XP)
 - Pelayanan / kebaikan nyata → +25 XP  
 
 Estimasi maksimal harian: ±250 XP  
 
 ---
 
-# ✝️ KATOLIK
+# KATOLIK
 
 ## Ibadah Harian
 - Doa pagi & malam → 25 XP  
@@ -69,7 +73,7 @@ Estimasi maksimal harian: ±250 XP
 
 ---
 
-# 🕉️ HINDU
+# HINDU
 
 ## Ibadah Harian
 - Tri Sandhya (1 waktu) → 20 XP  
@@ -89,7 +93,7 @@ Estimasi maksimal harian: ±240–260 XP
 
 ---
 
-# 🛕 BUDDHA
+# BUDDHA
 
 ## Ibadah Harian
 - Puja bakti pagi → 25 XP  
@@ -108,7 +112,7 @@ Estimasi maksimal harian: ±240–260 XP
 
 ---
 
-# 🧘 KONGHUCU
+# KONGHUCU
 
 ## Ibadah Harian
 - Sembahyang kepada Tian → 30 XP  
@@ -127,9 +131,12 @@ Estimasi maksimal harian: ±230–250 XP
 
 ---
 
-# 🎮 Catatan Balancing
+# Catatan Balancing
 
 - Semua agama punya potensi XP maksimal yang relatif setara.
 - Tidak ada agama yang bisa farming XP secara berlebihan.
 - Bonus difokuskan pada kualitas (refleksi, kebaikan nyata, ibadah bersama).
 - XP harian dirancang sinkron dengan sistem leveling 1–100.
+- Wajib ada aktivitas jika ada foto
+- Setiap agama ada upload foto (+10XP) (ACC Guru)
+

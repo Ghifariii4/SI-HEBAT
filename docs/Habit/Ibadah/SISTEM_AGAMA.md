@@ -1,4 +1,4 @@
-# ⏱ SISTEM VALIDASI WAKTU & RULE CHECKLIST IBADAH
+# SISTEM VALIDASI WAKTU & RULE CHECKLIST IBADAH
 
 Dokumen ini mengatur:
 - Batas waktu input ibadah
@@ -12,9 +12,9 @@ Waktu dibuat dalam rentang ideal (bukan mengikuti jadwal harian dinamis).
 
 ---
 
-# 🕌 ISLAM
+# ISLAM
 
-## 1️⃣ Sholat Wajib (5 Waktu)
+## 1. Sholat Wajib (5 Waktu)
 
 Setiap waktu hanya bisa dicentang 1x per hari.
 Tidak bisa dicentang jika sudah masuk waktu sholat berikutnya.
@@ -41,7 +41,7 @@ RULE:
 
 ---
 
-## 2️⃣ Sholat Sunnah
+## 2. Sholat Sunnah
 
 ### Dhuha
 06.15 – 10.00
@@ -58,7 +58,7 @@ Hanya bisa dicentang jika Isya sudah dicentang
 
 ---
 
-## 3️⃣ Puasa
+## 3. Puasa
 
 ### Puasa Senin-Kamis
 Hanya bisa dicentang:
@@ -81,14 +81,14 @@ Tidak bisa digabung dengan Senin-Kamis
 
 ---
 
-## 4️⃣ Baca Al-Qur'an
+## 4. Baca Al-Qur'an
 00.00 – 23.59
 Max 1x input utama
 Bonus halaman dihitung dalam satu sesi
 
 ---
 
-## 5️⃣ Foto Masjid
+## 5. Foto Masjid
 
 - Hanya bisa upload jika checklist Sholat dicentang
 - Max 1 foto per hari
@@ -96,7 +96,7 @@ Bonus halaman dihitung dalam satu sesi
 - Wajib centang "Jamaah"
 - +10 XP jika ACC Guru
 
-## 6️⃣ Untuk perempuan yang haid (Islam):
+## 6. Untuk perempuan yang haid (Islam):
 
 Aktifkan toggle: “Sedang Haid”
 
@@ -126,23 +126,23 @@ Untuk agama lain umumnya tidak ada kewajiban ritual yang gugur karena haid, jadi
 
 # ✝️ KRISTEN (PROTESTAN)
 
-## 1️⃣ Doa Pagi
+## 1. Doa Pagi
 04.00 – 09.00
 Max 1x
 
-## 2️⃣ Doa Malam
+## 2. Doa Malam
 18.00 – 23.59
 Max 1x
 
-## 3️⃣ Membaca Alkitab
+## 3. Membaca Alkitab
 00.00 – 23.59
 Max 1x
 
-## 4️⃣ Renungan
+## 4. Renungan
 00.00 – 23.59
 Max 1x
 
-## 5️⃣ Ibadah Gereja
+## 5. Ibadah Gereja
 Hanya:
 Hari Minggu
 06.00 – 12.00
@@ -156,19 +156,19 @@ Jika upload foto gereja:
 
 # ✝️ KATOLIK
 
-## 1️⃣ Doa Pagi
+## 1. Doa Pagi
 04.00 – 09.00
 
-## 2️⃣ Doa Malam
+## 2. Doa Malam
 18.00 – 23.59
 
-## 3️⃣ Membaca Kitab Suci
+## 3. Membaca Kitab Suci
 00.00 – 23.59
 
-## 4️⃣ Rosario / Devosi
+## 4. Rosario / Devosi
 17.00 – 22.00
 
-## 5️⃣ Misa
+## 5. Misa
 Hari Minggu:
 06.00 – 12.00
 
@@ -204,7 +204,7 @@ Max 1x per hari
 
 ---
 
-# 🛕 BUDDHA
+# BUDDHA
 
 ## Puja Bakti Pagi
 05.00 – 08.00
@@ -224,7 +224,7 @@ Max 1x per hari
 
 ---
 
-# 🧘 KONGHUCU
+# KONGHUCU
 
 ## Sembahyang Tian
 06.00 – 09.00
@@ -242,7 +242,7 @@ Max 1x per hari
 
 ---
 
-# 🔒 GLOBAL RULES
+# GLOBAL RULES
 
 1. Max XP harian tetap mengikuti sistem balancing utama
 2. Max 1 foto per hari per user
@@ -254,7 +254,7 @@ Max 1x per hari
 
 ---
 
-# 🎮 TUJUAN SISTEM
+# TUJUAN SISTEM
 
 - Mencegah farming XP
 - Melatih disiplin waktu

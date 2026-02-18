@@ -1,11 +1,11 @@
 # WORKFLOW SISTEM
-## TUNAS HEBAT – Jurnal 7 Kebiasaan Anak Indonesia Hebat
+## SI-HEBAT – Jurnal 7 Kebiasaan Anak Indonesia Hebat
 
 ---
 
 # 1. OVERVIEW SISTEM
 
-Tunas Hebat adalah platform jurnal harian berbasis web yang menggabungkan:
+SI-HEBAT adalah platform jurnal harian berbasis web yang menggabungkan:
 - Pemantauan karakter siswa
 - Gamifikasi (XP, Koin, Rank, Level)
 - Sistem pengawasan kolaboratif (Siswa, Guru, Orang Tua)

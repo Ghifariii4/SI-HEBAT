@@ -144,7 +144,7 @@ export default function Register() {
                   value={data.nis_anak}
                   onChange={e => setData('nis_anak', e.target.value)}
                   className={`w-full bg-gray-50 border-2 pl-12 pr-4 py-3.5 rounded-2xl text-gray-900 font-bold placeholder-gray-400 focus:outline-none focus:ring-4 focus:ring-green-500/10 transition-all border-transparent focus:border-green-500 opacity-90`}
-                  placeholder="Contoh: 0012345678"
+                  placeholder="Contoh: 15023"
                 />
               </div>
               <p className="text-[10px] text-gray-400 font-medium ml-1">NIS akan digunakan untuk menghubungkan akun Anda dengan data anak.</p>
@@ -208,7 +208,7 @@ export default function Register() {
               className="w-full bg-green-600 hover:bg-green-700 text-white font-black py-4.5 rounded-2xl shadow-xl shadow-green-200 transition-all disabled:opacity-70 flex items-center justify-center gap-3 group"
             >
               {processing ? (
-                <Loader2 className="animate-spin" size={40} />
+                <Loader2 className="animate-spin" size={20} />
               ) : (
                 <>
                   <span>BUAT AKUN SEKARANG</span>
