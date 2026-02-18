@@ -94,76 +94,77 @@ export default function Leaderboard({ auth = { user: {} } }) {
 
                     {/* Top 3 Podium */}
                     <motion.div variants={itemVariants} className="mb-12">
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                        <div className="grid grid-cols-3 gap-2 md:gap-6 mb-8">
                             {/* 2nd Place - Left */}
                             <motion.div
                                 whileHover={{ y: -8 }}
-                                className="md:col-span-1 flex flex-col items-center"
+                                className="col-span-1 flex flex-col items-center"
                             >
                                 <motion.div
-                                    className="relative mb-4 w-32 h-32 md:w-28 md:h-28"
+                                    className="relative mb-2 md:mb-4 w-16 h-16 md:w-28 md:h-28"
                                     animate={{ y: [0, -10, 0] }}
                                     transition={{ duration: 3, repeat: Infinity, delay: 0.5 }}
                                 >
-                                    <div className="absolute -top-2 -right-2 text-4xl">🥈</div>
-                                    <div className="w-full h-full rounded-full border-4 border-gray-400 overflow-hidden shadow-xl">
+                                    <div className="absolute -top-1 -right-1 md:-top-2 md:-right-2 text-xl md:text-4xl">🥈</div>
+                                    <div className="w-full h-full rounded-full border-2 md:border-4 border-gray-400 overflow-hidden shadow-xl">
                                         <img src={topThree[0].avatar} alt={topThree[0].name} className="w-full h-full object-cover" />
                                     </div>
                                 </motion.div>
-                                <h3 className="text-xl font-black text-gray-900 text-center">{topThree[0].name}</h3>
-                                <p className="text-sm text-gray-600">2nd Place</p>
-                                <div className="mt-4 bg-blue-50 px-4 py-2 rounded-lg border border-blue-200">
-                                    <p className="text-2xl font-black text-blue-600">{topThree[0].xp}</p>
-                                    <p className="text-xs text-blue-600 uppercase tracking-wider">XP</p>
+                                <h3 className="text-xs md:text-xl font-black text-gray-900 text-center">{topThree[0].name}</h3>
+                                <p className="text-[10px] md:text-sm text-gray-600">2nd Place</p>
+                                <div className="mt-2 md:mt-4 bg-blue-50 px-2 py-1 md:px-4 md:py-2 rounded-lg border border-blue-200">
+                                    <p className="text-sm md:text-2xl font-black text-blue-600">{topThree[0].xp}</p>
+                                    <p className="text-[8px] md:text-xs text-blue-600 uppercase tracking-wider">XP</p>
                                 </div>
                             </motion.div>
 
                             {/* 1st Place - Center (Larger) */}
                             <motion.div
                                 whileHover={{ y: -12 }}
-                                className="md:col-span-1 flex flex-col items-center"
+                                className="col-span-1 flex flex-col items-center"
                             >
                                 <motion.div
-                                    className="relative mb-6 w-40 h-40"
+                                    className="relative mb-2 md:mb-6 w-20 h-20 md:w-40 md:h-40"
                                     animate={{ y: [0, -15, 0] }}
                                     transition={{ duration: 2.5, repeat: Infinity }}
                                 >
-                                    <div className="absolute -top-4 left-1/2 -translate-x-1/2 text-6xl z-10">👑</div>
-                                    <div className="w-full h-full rounded-full border-4 border-yellow-400 overflow-hidden shadow-2xl shadow-yellow-500/50">
+                                    <div className="absolute -top-2 md:-top-4 left-1/2 -translate-x-1/2 text-3xl md:text-6xl z-10">👑</div>
+                                    <div className="w-full h-full rounded-full border-2 md:border-4 border-yellow-400 overflow-hidden shadow-2xl shadow-yellow-500/50">
                                         <img src={topThree[1].avatar} alt={topThree[1].name} className="w-full h-full object-cover" />
                                     </div>
-                                    <div className="absolute -bottom-2 -left-2 w-12 h-12 bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-full flex items-center justify-center border-4 border-white shadow-lg">
-                                        <span className="text-xl font-black">🏆</span>
+                                    <div className="absolute -bottom-1 -left-1 md:-bottom-2 md:-left-2 w-6 h-6 md:w-12 md:h-12 bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-full flex items-center justify-center border-2 md:border-4 border-white shadow-lg">
+                                        <span className="text-xs md:text-xl font-black">🏆</span>
                                     </div>
                                 </motion.div>
-                                <h3 className="text-2xl font-black text-gray-900 text-center">{topThree[1].name}</h3>
-                                <p className="text-sm text-yellow-600 font-bold">1st Place</p>
-                                <div className="mt-4 bg-gradient-to-r from-yellow-100 to-orange-100 px-6 py-3 rounded-xl border border-yellow-300 shadow-lg shadow-yellow-400/20">
-                                    <p className="text-3xl font-black text-yellow-600">{topThree[1].xp}</p>
-                                    <p className="text-xs text-yellow-700 uppercase tracking-wider">XP Points</p>
+                                <h3 className="text-sm md:text-2xl font-black text-gray-900 text-center">{topThree[1].name}</h3>
+                                <p className="text-[10px] md:text-sm text-yellow-600 font-bold">1st Place</p>
+                                <div className="mt-2 md:mt-4 bg-gradient-to-r from-yellow-100 to-orange-100 px-2 py-1 md:px-6 md:py-3 rounded-xl border border-yellow-300 shadow-lg shadow-yellow-400/20">
+                                    <p className="text-lg md:text-3xl font-black text-yellow-600">{topThree[1].xp}</p>
+                                    <p className="text-[8px] md:text-xs text-yellow-700 uppercase tracking-wider hidden md:block">XP Points</p>
+                                    <p className="text-[8px] md:text-xs text-yellow-700 uppercase tracking-wider md:hidden">XP</p>
                                 </div>
                             </motion.div>
 
                             {/* 3rd Place - Right */}
                             <motion.div
                                 whileHover={{ y: -8 }}
-                                className="md:col-span-1 flex flex-col items-center"
+                                className="col-span-1 flex flex-col items-center"
                             >
                                 <motion.div
-                                    className="relative mb-4 w-32 h-32 md:w-28 md:h-28"
+                                    className="relative mb-2 md:mb-4 w-16 h-16 md:w-28 md:h-28"
                                     animate={{ y: [0, -10, 0] }}
                                     transition={{ duration: 3, repeat: Infinity, delay: 1 }}
                                 >
-                                    <div className="absolute -top-2 -left-2 text-4xl">🥉</div>
-                                    <div className="w-full h-full rounded-full border-4 border-orange-600 overflow-hidden shadow-xl">
+                                    <div className="absolute -top-1 -left-1 md:-top-2 md:-left-2 text-xl md:text-4xl">🥉</div>
+                                    <div className="w-full h-full rounded-full border-2 md:border-4 border-orange-600 overflow-hidden shadow-xl">
                                         <img src={topThree[2].avatar} alt={topThree[2].name} className="w-full h-full object-cover" />
                                     </div>
                                 </motion.div>
-                                <h3 className="text-xl font-black text-gray-900 text-center">{topThree[2].name}</h3>
-                                <p className="text-sm text-gray-600">3rd Place</p>
-                                <div className="mt-4 bg-green-50 px-4 py-2 rounded-lg border border-green-200">
-                                    <p className="text-2xl font-black text-green-600">{topThree[2].xp}</p>
-                                    <p className="text-xs text-green-600 uppercase tracking-wider">XP</p>
+                                <h3 className="text-xs md:text-xl font-black text-gray-900 text-center">{topThree[2].name}</h3>
+                                <p className="text-[10px] md:text-sm text-gray-600">3rd Place</p>
+                                <div className="mt-2 md:mt-4 bg-green-50 px-2 py-1 md:px-4 md:py-2 rounded-lg border border-green-200">
+                                    <p className="text-sm md:text-2xl font-black text-green-600">{topThree[2].xp}</p>
+                                    <p className="text-[8px] md:text-xs text-green-600 uppercase tracking-wider">XP</p>
                                 </div>
                             </motion.div>
                         </div>
@@ -172,7 +173,7 @@ export default function Leaderboard({ auth = { user: {} } }) {
                     {/* Full Ranking Table */}
                     <motion.div variants={itemVariants} className="bg-white/60 backdrop-blur-xl rounded-3xl border border-gray-200 overflow-hidden shadow-xl">
                         {/* Table Header */}
-                        <div className="grid grid-cols-12 gap-4 px-6 py-4 bg-gradient-to-r from-indigo-50 to-blue-50 border-b border-gray-200">
+                        <div className="hidden md:grid grid-cols-12 gap-4 px-6 py-4 bg-gradient-to-r from-indigo-50 to-blue-50 border-b border-gray-200">
                             <div className="col-span-1 flex items-center">
                                 <p className="text-xs font-black text-indigo-700 uppercase tracking-wider">Rank</p>
                             </div>
@@ -197,57 +198,106 @@ export default function Leaderboard({ auth = { user: {} } }) {
                                     key={idx}
                                     variants={itemVariants}
                                     whileHover={{ backgroundColor: 'rgba(99, 102, 241, 0.05)' }}
-                                    className="grid grid-cols-12 gap-4 px-6 py-4 transition-colors"
+                                    className="transition-colors"
                                 >
-                                    {/* Rank */}
-                                    <div className="col-span-1 flex items-center">
-                                        <motion.div
-                                            className={`w-10 h-10 rounded-full flex items-center justify-center font-black text-sm ${player.rank === 1
-                                                ? 'bg-gradient-to-br from-yellow-400 to-yellow-600 text-white shadow-lg shadow-yellow-400/50'
-                                                : player.rank === 2
-                                                    ? 'bg-gradient-to-br from-gray-300 to-gray-400 text-gray-900 shadow-lg'
-                                                    : player.rank === 3
-                                                        ? 'bg-gradient-to-br from-orange-400 to-orange-600 text-white shadow-lg'
-                                                        : 'bg-indigo-100 text-indigo-700'
-                                                }`}
-                                        >
-                                            {player.rank}
-                                        </motion.div>
-                                    </div>
+                                    {/* Desktop Layout */}
+                                    <div className="hidden md:grid grid-cols-12 gap-4 px-6 py-4">
+                                        {/* Rank */}
+                                        <div className="col-span-1 flex items-center">
+                                            <motion.div
+                                                className={`w-10 h-10 rounded-full flex items-center justify-center font-black text-sm ${player.rank === 1
+                                                    ? 'bg-gradient-to-br from-yellow-400 to-yellow-600 text-white shadow-lg shadow-yellow-400/50'
+                                                    : player.rank === 2
+                                                        ? 'bg-gradient-to-br from-gray-300 to-gray-400 text-gray-900 shadow-lg'
+                                                        : player.rank === 3
+                                                            ? 'bg-gradient-to-br from-orange-400 to-orange-600 text-white shadow-lg'
+                                                            : 'bg-indigo-100 text-indigo-700'
+                                                    }`}
+                                            >
+                                                {player.rank}
+                                            </motion.div>
+                                        </div>
 
-                                    {/* Player Info */}
-                                    <div className="col-span-4 flex items-center gap-3">
-                                        <img
-                                            src={player.avatar}
-                                            alt={player.name}
-                                            className="w-10 h-10 rounded-full border-2 border-indigo-300"
-                                        />
-                                        <div>
-                                            <p className="font-black text-gray-900 text-sm">{player.name}</p>
-                                            <p className="text-xs text-gray-500">@{player.name.toLowerCase()}</p>
+                                        {/* Player Info */}
+                                        <div className="col-span-4 flex items-center gap-3">
+                                            <img
+                                                src={player.avatar}
+                                                alt={player.name}
+                                                className="w-10 h-10 rounded-full border-2 border-indigo-300"
+                                            />
+                                            <div>
+                                                <p className="font-black text-gray-900 text-sm">{player.name}</p>
+                                                <p className="text-xs text-gray-500">@{player.name.toLowerCase()}</p>
+                                            </div>
+                                        </div>
+
+                                        {/* Level */}
+                                        <div className="col-span-2 flex items-center justify-end">
+                                            <div className="px-3 py-1 bg-purple-100 rounded-lg border border-purple-300">
+                                                <p className="text-purple-700 font-bold text-sm">Lvl {player.level}</p>
+                                            </div>
+                                        </div>
+
+                                        {/* XP */}
+                                        <div className="col-span-3 flex items-center justify-end">
+                                            <div className="text-right">
+                                                <p className="text-gray-900 font-black text-lg">{player.xp.toLocaleString()}</p>
+                                                <p className="text-xs text-gray-500">XP</p>
+                                            </div>
+                                        </div>
+
+                                        {/* Reward */}
+                                        <div className="col-span-2 flex items-center justify-end">
+                                            <div className="flex items-center gap-1 bg-cyan-100 px-3 py-1.5 rounded-lg border border-cyan-300">
+                                                <span>💎</span>
+                                                <span className="font-bold text-cyan-700 text-sm">{player.reward}</span>
+                                            </div>
                                         </div>
                                     </div>
 
-                                    {/* Level */}
-                                    <div className="col-span-2 flex items-center justify-end">
-                                        <div className="px-3 py-1 bg-purple-100 rounded-lg border border-purple-300">
-                                            <p className="text-purple-700 font-bold text-sm">Lvl {player.level}</p>
-                                        </div>
-                                    </div>
+                                    {/* Mobile Layout */}
+                                    <div className="md:hidden px-4 py-3">
+                                        <div className="flex items-center gap-3">
+                                            {/* Rank Badge */}
+                                            <motion.div
+                                                className={`w-8 h-8 rounded-full flex items-center justify-center font-black text-xs shrink-0 ${player.rank === 1
+                                                    ? 'bg-gradient-to-br from-yellow-400 to-yellow-600 text-white shadow-lg shadow-yellow-400/50'
+                                                    : player.rank === 2
+                                                        ? 'bg-gradient-to-br from-gray-300 to-gray-400 text-gray-900 shadow-lg'
+                                                        : player.rank === 3
+                                                            ? 'bg-gradient-to-br from-orange-400 to-orange-600 text-white shadow-lg'
+                                                            : 'bg-indigo-100 text-indigo-700'
+                                                    }`}
+                                            >
+                                                {player.rank}
+                                            </motion.div>
 
-                                    {/* XP */}
-                                    <div className="col-span-3 flex items-center justify-end">
-                                        <div className="text-right">
-                                            <p className="text-gray-900 font-black text-lg">{player.xp.toLocaleString()}</p>
-                                            <p className="text-xs text-gray-500">XP</p>
-                                        </div>
-                                    </div>
+                                            {/* Avatar */}
+                                            <img
+                                                src={player.avatar}
+                                                alt={player.name}
+                                                className="w-10 h-10 rounded-full border-2 border-indigo-300 shrink-0"
+                                            />
 
-                                    {/* Reward */}
-                                    <div className="col-span-2 flex items-center justify-end">
-                                        <div className="flex items-center gap-1 bg-cyan-100 px-3 py-1.5 rounded-lg border border-cyan-300">
-                                            <span>💎</span>
-                                            <span className="font-bold text-cyan-700 text-sm">{player.reward}</span>
+                                            {/* Player Info & Stats */}
+                                            <div className="flex-1 min-w-0">
+                                                <div className="flex items-center justify-between gap-2 mb-1">
+                                                    <p className="font-black text-gray-900 text-sm truncate">{player.name}</p>
+                                                    <div className="px-2 py-0.5 bg-purple-100 rounded border border-purple-300 shrink-0">
+                                                        <p className="text-purple-700 font-bold text-xs">Lvl {player.level}</p>
+                                                    </div>
+                                                </div>
+                                                <div className="flex items-center justify-between gap-3">
+                                                    <div className="flex items-center gap-1">
+                                                        <p className="text-gray-900 font-black text-sm">{player.xp.toLocaleString()}</p>
+                                                        <p className="text-xs text-gray-500">XP</p>
+                                                    </div>
+                                                    <div className="flex items-center gap-1 bg-cyan-100 px-2 py-0.5 rounded border border-cyan-300">
+                                                        <span className="text-sm">💎</span>
+                                                        <span className="font-bold text-cyan-700 text-xs">{player.reward}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </motion.div>

@@ -462,10 +462,6 @@ const Landing = () => {
                   <p className="font-bold text-green-400 mb-1">Alfarisi Azmir</p>
                   <p className="text-sm text-zinc-400"></p>
                 </div>
-                <div className="p-4 bg-zinc-800 rounded-2xl hover:bg-zinc-700 transition">
-                  <p className="font-bold text-green-400 mb-1">Janeeta Anzaesa</p>
-                  <p className="text-sm text-zinc-400"></p>
-                </div>
               </div>
             </div>
 
