@@ -183,12 +183,23 @@ export default function Bangun({ serverTime }) {
                 >
                     <div className="text-center mb-6">
                         <div className="flex justify-center mb-4">
-                            <div className="w-32 h-32">
+                            <motion.div
+                                className="w-32 h-32"
+                                animate={isLate ? {
+                                    scale: [1, 1.15, 1],
+                                    rotate: [-5, 5, -5, 5, 0]
+                                } : {}}
+                                transition={isLate ? {
+                                    duration: 0.4,
+                                    repeat: Infinity,
+                                    ease: "easeInOut"
+                                } : {}}
+                            >
                                 <Lottie
                                     animationData={isLate ? BangunLate : BangunOnTime}
                                     loop={true}
                                 />
-                            </div>
+                            </motion.div>
                         </div>
                         <div className={`inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-widest mb-3
                             ${isLate ? 'bg-red-100 text-red-700' : 'bg-blue-100 text-blue-700'}`}>
