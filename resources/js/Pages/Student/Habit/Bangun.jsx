@@ -7,6 +7,11 @@ import {
 } from '@phosphor-icons/react';
 import Swal from 'sweetalert2';
 import confetti from 'canvas-confetti';
+import Lottie from 'lottie-react';
+
+// Import Animations
+import BangunOnTime from '../../../../../public/Habit/Bangun_1.json';
+import BangunLate from '../../../../../public/Habit/Bangun_2.json';
 
 export default function Bangun({ serverTime }) {
     const [currentTime, setCurrentTime] = useState(new Date(serverTime));
@@ -177,6 +182,14 @@ export default function Bangun({ serverTime }) {
                     className={`bg-white/90 backdrop-blur-2xl p-8 rounded-[3rem] shadow-2xl w-full border-4 transition-all duration-500 ${isLate ? 'border-red-500' : 'border-white'}`}
                 >
                     <div className="text-center mb-6">
+                        <div className="flex justify-center mb-4">
+                            <div className="w-32 h-32">
+                                <Lottie
+                                    animationData={isLate ? BangunLate : BangunOnTime}
+                                    loop={true}
+                                />
+                            </div>
+                        </div>
                         <div className={`inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-widest mb-3
                             ${isLate ? 'bg-red-100 text-red-700' : 'bg-blue-100 text-blue-700'}`}>
                             {isLate ? <BellRinging weight="fill" className="animate-bounce" /> : <Sun weight="fill" />}
