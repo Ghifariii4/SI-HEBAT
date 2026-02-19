@@ -1,42 +1,97 @@
 import React, { useState } from 'react';
-import { Head, Link } from '@inertiajs/react';
+import { Head, Link, useForm } from '@inertiajs/react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
     ArrowLeft, BookOpen, Heart,
     Sparkles, ChevronRight, X,
     Save, Moon, Sun, Book,
-    Award
+    Award, Camera, Info, AlertCircle
 } from 'lucide-react';
 import StudentLayout from '@/Layouts/StudentLayout';
 import confetti from 'canvas-confetti';
+import Swal from 'sweetalert2';
 
 export default function Lainnya({ auth }) {
     const user = auth?.user || {};
-    const [activeModal, setActiveModal] = useState(null); // 'quran' | 'puasa' | null
+    const [activeModal, setActiveModal] = useState(null); // 'quran' | 'puasa' | 'haid' | null
+    const [isHaidEnabled, setIsHaidEnabled] = useState(false);
 
-    // Quran State
-    const [quranData, setQuranData] = useState({
-        surahStart: '',
-        surahEnd: '',
-        ayatStart: '',
-        ayatEnd: ''
+    // Quran Logic
+    const quranForm = useForm({
+        surah_start: '',
+        surah_end: '',
+        ayat_start: '',
+        ayat_end: ''
     });
-
-    // Puasa State
-    const [selectedPuasa, setSelectedPuasa] = useState(null); // 'senin-kamis' | 'daud'
 
     const handleSaveQuran = (e) => {
         e.preventDefault();
-        // Logika simpan quran disini
-        celebrate();
-        setActiveModal(null);
+        quranForm.post(route('student.habit.ibadah.islam.quran.store'), {
+            onSuccess: (page) => {
+                celebrate();
+                setActiveModal(null);
+                quranForm.reset();
+                Swal.fire('Berhasil!', page.props.flash.message, 'success');
+            },
+            onError: (err) => Swal.fire('Gagal!', Object.values(err)[0], 'error')
+        });
     };
 
+    // Puasa Logic
+    const puasaForm = useForm({ type: '' });
     const handleSavePuasa = (type) => {
-        setSelectedPuasa(type);
-        // Logika simpan puasa disini
-        celebrate();
-        setActiveModal(null);
+        puasaForm.setData('type', type);
+        puasaForm.post(route('student.habit.ibadah.islam.puasa.store'), {
+            onSuccess: (page) => {
+                celebrate();
+                setActiveModal(null);
+                Swal.fire('Berhasil!', page.props.flash.message, 'success');
+            },
+            onError: (err) => Swal.fire('Gagal!', Object.values(err)[0], 'error')
+        });
+    };
+
+    // Haid Logic
+    const haidForm = useForm({
+        activity: '',
+        photo: null
+    });
+
+    const handleSaveHaid = (activity) => {
+        // We'll use a hidden file input for photo if needed, but for now simple selection
+        haidForm.setData('activity', activity);
+        // Normally requires photo, so we open a sub-modal or prompt
+        Swal.fire({
+            title: 'Upload Bukti',
+            text: 'Silakan ambil foto kegiatanmu',
+            icon: 'info',
+            showCancelButton: true,
+            confirmButtonText: 'Pilih Foto'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                const input = document.createElement('input');
+                input.type = 'file';
+                input.accept = 'image/*';
+                input.onchange = (e) => {
+                    const file = e.target.files[0];
+                    haidForm.setData({
+                        activity: activity,
+                        photo: file
+                    });
+
+                    // Post immediately after photo choice
+                    haidForm.post(route('student.habit.ibadah.islam.alternative.store'), {
+                        onSuccess: (page) => {
+                            celebrate();
+                            setActiveModal(null);
+                            Swal.fire('Berhasil!', page.props.flash.message, 'success');
+                        },
+                        forceFormData: true
+                    });
+                };
+                input.click();
+            }
+        });
     };
 
     const celebrate = () => {
@@ -107,8 +162,8 @@ export default function Lainnya({ auth }) {
                         <motion.div
                             whileHover={{ scale: 1.02, y: -5 }}
                             whileTap={{ scale: 0.98 }}
-                            onClick={() => setActiveModal('puasa')}
-                            className="bg-white rounded-[2.5rem] p-8 shadow-2xl cursor-pointer group relative overflow-hidden"
+                            onClick={() => !isHaidEnabled && setActiveModal('puasa')}
+                            className={`bg-white rounded-[2.5rem] p-8 shadow-2xl transition-all relative overflow-hidden ${isHaidEnabled ? 'opacity-50 grayscale cursor-not-allowed' : 'cursor-pointer group'}`}
                         >
                             <div className="absolute top-0 right-0 p-8 text-emerald-50 group-hover:scale-110 transition-transform duration-500">
                                 <Moon size={120} strokeWidth={1} />
@@ -120,10 +175,56 @@ export default function Lainnya({ auth }) {
                                 <h2 className="text-2xl font-black text-gray-900 mb-2">Puasa Sunnah</h2>
                                 <p className="text-gray-500 font-bold max-w-xs">Latih kesabaran dan ketaatan melalui puasa sunnah.</p>
                                 <div className="mt-6 flex items-center gap-2 text-orange-600 font-black uppercase tracking-widest text-sm">
-                                    Pilih Puasa <ChevronRight size={18} />
+                                    {isHaidEnabled ? 'Terkunci (Sedang Haid)' : 'Pilih Puasa'} <ChevronRight size={18} />
                                 </div>
                             </div>
                         </motion.div>
+
+                        {/* Special Haid Section for Females */}
+                        <div className="mt-4 p-8 bg-pink-50 rounded-[2.5rem] border-2 border-pink-100 relative overflow-hidden">
+                            <div className="relative z-10 flex flex-col sm:flex-row items-center justify-between gap-6">
+                                <div>
+                                    <div className="flex items-center gap-2 text-pink-600 mb-1">
+                                        <AlertCircle size={18} />
+                                        <span className="text-xs font-black uppercase tracking-widest">Khusus Perempuan</span>
+                                    </div>
+                                    <h3 className="text-xl font-black text-gray-900">Sedang Berhalangan (Haid)?</h3>
+                                    <p className="text-sm text-gray-500 font-bold max-w-sm">Aktifkan sytem ini agar streak tetap terjaga dan ganti dengan ibadah alternatif.</p>
+                                </div>
+                                <button
+                                    onClick={() => setIsHaidEnabled(!isHaidEnabled)}
+                                    className={`px-8 py-4 rounded-3xl font-black transition-all shadow-lg ${isHaidEnabled
+                                        ? 'bg-pink-500 text-white shadow-pink-200'
+                                        : 'bg-white text-gray-500 hover:text-pink-500 border-2 border-pink-100 shadow-sm'}`}
+                                >
+                                    {isHaidEnabled ? 'ON - SEDANG BERHALANGAN' : 'OFF - TIDAK BERHALANGAN'}
+                                </button>
+                            </div>
+
+                            {isHaidEnabled && (
+                                <motion.div
+                                    initial={{ height: 0, opacity: 0 }}
+                                    animate={{ height: 'auto', opacity: 1 }}
+                                    className="mt-8 pt-8 border-t border-pink-200 grid grid-cols-2 sm:grid-cols-4 gap-3 relative z-10"
+                                >
+                                    {[
+                                        { id: 'dzikir', name: 'Dzikir', xp: 15 },
+                                        { id: 'doa', name: 'Doa', xp: 20 },
+                                        { id: 'kajian', name: 'Kajian/Tafsir', xp: 20 },
+                                        { id: 'sedekah', name: 'Sedekah', xp: 25 },
+                                    ].map((alt) => (
+                                        <button
+                                            key={alt.id}
+                                            onClick={() => handleSaveHaid(alt.id)}
+                                            className="bg-white p-4 rounded-2xl border-2 border-pink-100 hover:border-pink-500 transition-all group text-center"
+                                        >
+                                            <div className="text-xs font-black text-pink-500 mb-1 group-hover:scale-110 transition-transform">+{alt.xp} XP</div>
+                                            <div className="text-sm font-bold text-gray-700">{alt.name}</div>
+                                        </button>
+                                    ))}
+                                </motion.div>
+                            )}
+                        </div>
                     </div>
                 </div>
 
@@ -176,8 +277,8 @@ export default function Lainnya({ auth }) {
                                             type="text"
                                             placeholder="Nama Surah"
                                             className="w-full bg-gray-50 border-2 border-gray-100 rounded-2xl p-4 text-sm font-bold focus:border-emerald-500 focus:ring-0 transition-all"
-                                            value={quranData.surahStart}
-                                            onChange={e => setQuranData({ ...quranData, surahStart: e.target.value })}
+                                            value={quranForm.data.surah_start}
+                                            onChange={e => quranForm.setData('surah_start', e.target.value)}
                                         />
                                     </div>
                                     <div className="space-y-2">
@@ -187,8 +288,8 @@ export default function Lainnya({ auth }) {
                                             type="text"
                                             placeholder="Nama Surah"
                                             className="w-full bg-gray-50 border-2 border-gray-100 rounded-2xl p-4 text-sm font-bold focus:border-emerald-500 focus:ring-0 transition-all"
-                                            value={quranData.surahEnd}
-                                            onChange={e => setQuranData({ ...quranData, surahEnd: e.target.value })}
+                                            value={quranForm.data.surah_end}
+                                            onChange={e => quranForm.setData('surah_end', e.target.value)}
                                         />
                                     </div>
                                 </div>
@@ -201,8 +302,8 @@ export default function Lainnya({ auth }) {
                                             type="number"
                                             placeholder="0"
                                             className="w-full bg-gray-50 border-2 border-gray-100 rounded-2xl p-4 text-sm font-bold focus:border-emerald-500 focus:ring-0 transition-all"
-                                            value={quranData.ayatStart}
-                                            onChange={e => setQuranData({ ...quranData, ayatStart: e.target.value })}
+                                            value={quranForm.data.ayat_start}
+                                            onChange={e => quranForm.setData('ayat_start', e.target.value)}
                                         />
                                     </div>
                                     <div className="space-y-2">
@@ -212,17 +313,18 @@ export default function Lainnya({ auth }) {
                                             type="number"
                                             placeholder="0"
                                             className="w-full bg-gray-50 border-2 border-gray-100 rounded-2xl p-4 text-sm font-bold focus:border-emerald-500 focus:ring-0 transition-all"
-                                            value={quranData.ayatEnd}
-                                            onChange={e => setQuranData({ ...quranData, ayatEnd: e.target.value })}
+                                            value={quranForm.data.ayat_end}
+                                            onChange={e => quranForm.setData('ayat_end', e.target.value)}
                                         />
                                     </div>
                                 </div>
 
                                 <button
                                     type="submit"
-                                    className="w-full py-4 bg-gradient-to-r from-emerald-500 to-green-600 text-white font-black rounded-2xl shadow-xl shadow-emerald-200 hover:scale-[1.02] transition-all active:scale-[0.98] flex items-center justify-center gap-2"
+                                    disabled={quranForm.processing}
+                                    className="w-full py-4 bg-gradient-to-r from-emerald-500 to-green-600 text-white font-black rounded-2xl shadow-xl shadow-emerald-200 hover:scale-[1.02] transition-all active:scale-[0.98] flex items-center justify-center gap-2 disabled:opacity-50"
                                 >
-                                    <Save size={20} /> Simpan Tilawah
+                                    <Save size={20} /> {quranForm.processing ? 'Menyimpan...' : 'Simpan Tilawah'}
                                 </button>
                             </form>
                         </motion.div>

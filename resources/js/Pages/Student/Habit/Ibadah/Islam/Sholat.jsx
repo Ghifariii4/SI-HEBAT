@@ -1,13 +1,14 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { Head, Link, router } from '@inertiajs/react';
+import { Head, Link, useForm } from '@inertiajs/react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
     ArrowLeft, Moon, Sun, Cloud, Heart, Star,
     Check, Plus, Clock, Info, Save, MessageCircle,
-    Zap, Award, TrendingUp, Sparkles
+    Zap, Award, TrendingUp, Sparkles, Camera
 } from 'lucide-react';
 import StudentLayout from '@/Layouts/StudentLayout';
 import confetti from 'canvas-confetti';
+import Swal from 'sweetalert2';
 
 export default function Sholat({ auth }) {
     const user = auth?.user || {};
@@ -25,12 +26,21 @@ export default function Sholat({ auth }) {
     });
 
     const prayers = [
-        { id: 'subuh', name: 'Subuh', time: '04:30 - 05:20', icon: Cloud, sunnah: ['Qobliyah'], xp: 50 },
-        { id: 'dzuhur', name: 'Dzuhur', time: '11:50 - 14:00', icon: Sun, sunnah: ['Qobliyah', "Ba'diyah"], xp: 50 },
-        { id: 'ashar', name: 'Ashar', time: '15:10 - 17:30', icon: Sun, sunnah: ['Qobliyah'], xp: 50 },
-        { id: 'maghrib', name: 'Maghrib', time: '18:00 - 18:45', icon: Moon, sunnah: ['Qobliyah', "Ba'diyah"], xp: 50 },
-        { id: 'isya', name: 'Isya', time: '19:10 - 03:00', icon: Moon, sunnah: ['Qobliyah', "Ba'diyah"], xp: 50 },
+        { id: 'subuh', name: 'Subuh', time: '05:00 - 06:00', icon: Cloud, sunnah: ['Qobliyah'], xp: 20 },
+        { id: 'dzuhur', name: 'Dzuhur', time: '12:00 - 15:00', icon: Sun, sunnah: ['Qobliyah', "Ba'diyah"], xp: 20 },
+        { id: 'ashar', name: 'Ashar', time: '15:10 - 16:30', icon: Sun, sunnah: ['Qobliyah'], xp: 20 },
+        { id: 'maghrib', name: 'Maghrib', time: '18:00 - 19:00', icon: Moon, sunnah: ['Qobliyah', "Ba'diyah"], xp: 20 },
+        { id: 'isya', name: 'Isya', time: '19:00 - 21:30', icon: Moon, sunnah: ['Qobliyah', "Ba'diyah"], xp: 20 },
     ];
+
+    const { data, setData, post, processing, reset } = useForm({
+        prayer: '',
+        is_qobliyah: false,
+        is_ba_diyah: false,
+        is_jamaah: false,
+        is_tepat_waktu: false,
+        photo: null,
+    });
 
     useEffect(() => {
         const timer = setInterval(() => setCurrentTime(new Date()), 1000);
@@ -64,27 +74,55 @@ export default function Sholat({ auth }) {
     }, [currentTime]);
 
     const handleOpenModal = (prayer) => {
+        if (prayerStatus[prayer.id].completed) return;
+
         setSelectedPrayer(prayer);
+        setData({
+            prayer: prayer.id,
+            is_qobliyah: false,
+            is_ba_diyah: false,
+            is_jamaah: false,
+            is_tepat_waktu: activePrayerId === prayer.id,
+            photo: null,
+        });
         setIsModalOpen(true);
     };
 
     const handleSave = () => {
-        setPrayerStatus(prev => ({
-            ...prev,
-            [selectedPrayer.id]: {
-                ...prev[selectedPrayer.id],
-                completed: true
+        post(route('student.habit.ibadah.islam.sholat.store'), {
+            onSuccess: (page) => {
+                setPrayerStatus(prev => ({
+                    ...prev,
+                    [selectedPrayer.id]: {
+                        ...prev[selectedPrayer.id],
+                        completed: true
+                    }
+                }));
+
+                confetti({
+                    particleCount: 150,
+                    spread: 70,
+                    origin: { y: 0.6 },
+                    colors: ['#10b981', '#fbbf24', '#ffffff']
+                });
+
+                const flash = page.props.flash || {};
+                Swal.fire({
+                    title: 'Berhasil!',
+                    text: flash.message || 'Sholat berhasil dicatat.',
+                    icon: 'success',
+                    timer: 2000,
+                    showConfirmButton: false
+                });
+
+                setIsModalOpen(false);
+                reset();
+            },
+            onError: (errors) => {
+                const firstError = Object.values(errors)[0];
+                Swal.fire('Gagal!', firstError || 'Terjadi kesalahan.', 'error');
             }
-        }));
-
-        confetti({
-            particleCount: 150,
-            spread: 70,
-            origin: { y: 0.6 },
-            colors: ['#10b981', '#fbbf24', '#ffffff']
         });
-
-        setIsModalOpen(false);
     };
 
     const containerVariants = {
@@ -297,44 +335,89 @@ export default function Sholat({ auth }) {
 
                             <div className="p-8">
                                 <div className="space-y-6">
-                                    {/* Main Checkbox */}
+                                    {/* Main Checkbox - Tepat Waktu */}
                                     <div
-                                        onClick={() => handleSave()}
-                                        className="bg-emerald-50 border-2 border-emerald-200 rounded-3xl p-6 flex items-center justify-between cursor-pointer hover:bg-emerald-100 hover:border-emerald-300 transition-all group scale-100 hover:scale-[1.02] active:scale-[0.98]"
+                                        onClick={() => setData('is_tepat_waktu', !data.is_tepat_waktu)}
+                                        className={`border-2 rounded-3xl p-6 flex items-center justify-between cursor-pointer transition-all group scale-100 hover:scale-[1.02] active:scale-[0.98] ${data.is_tepat_waktu ? 'bg-emerald-50 border-emerald-200' : 'bg-gray-50 border-gray-100'}`}
                                     >
                                         <div className="flex items-center gap-4">
-                                            <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-emerald-600 shadow-sm border border-emerald-100 group-hover:scale-110 transition-transform">
-                                                <Zap size={24} fill="currentColor" />
+                                            <div className={`w-12 h-12 rounded-2xl flex items-center justify-center shadow-sm border transition-all ${data.is_tepat_waktu ? 'bg-white text-emerald-600 border-emerald-100 scale-110' : 'bg-white text-gray-300 border-gray-100'}`}>
+                                                <Zap size={24} fill={data.is_tepat_waktu ? "currentColor" : "none"} />
                                             </div>
                                             <div>
-                                                <h4 className="font-black text-gray-800">Sholat Tepat Waktu</h4>
-                                                <p className="text-xs text-gray-500 font-bold">Dapatkan +{selectedPrayer.xp} XP</p>
+                                                <h4 className={`font-black ${data.is_tepat_waktu ? 'text-emerald-900' : 'text-gray-400'}`}>Sholat Tepat Waktu</h4>
+                                                <p className="text-[10px] text-emerald-600 font-bold uppercase tracking-wider">+5 XP Bonus</p>
                                             </div>
                                         </div>
-                                        <div className="w-10 h-10 bg-emerald-500 rounded-full flex items-center justify-center text-white shadow-lg shadow-emerald-200">
-                                            <Check size={20} strokeWidth={3} />
+                                        <div className={`w-8 h-8 rounded-full flex items-center justify-center transition-all ${data.is_tepat_waktu ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-200' : 'bg-gray-200 text-white'}`}>
+                                            <Check size={16} strokeWidth={4} />
                                         </div>
                                     </div>
 
                                     {/* Additional Options */}
                                     <div className="grid grid-cols-1 gap-3">
                                         <label className="text-xs font-black text-gray-400 uppercase tracking-widest pl-2">Opsi Tambahan</label>
-                                        {selectedPrayer.sunnah.map((s, idx) => (
-                                            <div key={idx} className="flex items-center gap-3 p-4 bg-gray-50 border-2 border-gray-100 rounded-2xl cursor-not-allowed opacity-60">
-                                                <div className="w-5 h-5 border-2 border-gray-300 rounded-lg"></div>
-                                                <span className="text-sm font-bold text-gray-600">Sholat Sunnah {s}</span>
-                                                <span className="ml-auto text-xs font-black text-emerald-500">+10 XP</span>
+
+                                        {/* Berjamaah */}
+                                        <div
+                                            onClick={() => setData('is_jamaah', !data.is_jamaah)}
+                                            className={`flex items-center gap-3 p-4 border-2 rounded-2xl cursor-pointer transition-all ${data.is_jamaah ? 'bg-blue-50 border-blue-200' : 'bg-gray-50 border-gray-100'}`}
+                                        >
+                                            <div className={`w-6 h-6 border-2 rounded-lg flex items-center justify-center transition-all ${data.is_jamaah ? 'bg-blue-500 border-blue-500 text-white' : 'border-gray-300'}`}>
+                                                {data.is_jamaah && <Check size={14} strokeWidth={4} />}
                                             </div>
-                                        ))}
-                                        <div className="flex items-center gap-4 p-4 bg-gray-50 border-2 border-gray-100 rounded-3xl opacity-60">
-                                            <MessageCircle size={20} className="text-gray-400" />
-                                            <input
-                                                disabled
-                                                type="text"
-                                                placeholder="Tambah catatan (Contoh: Berjamaah)"
-                                                className="bg-transparent border-none focus:ring-0 text-sm font-bold w-full cursor-not-allowed"
-                                            />
+                                            <span className={`text-sm font-bold ${data.is_jamaah ? 'text-blue-900' : 'text-gray-600'}`}>Sholat Berjamaah</span>
+                                            <span className="ml-auto text-[10px] font-black text-blue-500">+10 XP</span>
                                         </div>
+
+                                        {/* Sunnah Qobliyah/Ba'diyah */}
+                                        {selectedPrayer.sunnah.includes('Qobliyah') && (
+                                            <div
+                                                onClick={() => setData('is_qobliyah', !data.is_qobliyah)}
+                                                className={`flex items-center gap-3 p-4 border-2 rounded-2xl cursor-pointer transition-all ${data.is_qobliyah ? 'bg-purple-50 border-purple-200' : 'bg-gray-50 border-gray-100'}`}
+                                            >
+                                                <div className={`w-6 h-6 border-2 rounded-lg flex items-center justify-center transition-all ${data.is_qobliyah ? 'bg-purple-500 border-purple-500 text-white' : 'border-gray-300'}`}>
+                                                    {data.is_qobliyah && <Check size={14} strokeWidth={4} />}
+                                                </div>
+                                                <span className={`text-sm font-bold ${data.is_qobliyah ? 'text-purple-900' : 'text-gray-600'}`}>Sunnah Qobliyah</span>
+                                                <span className="ml-auto text-[10px] font-black text-purple-500">+8 XP</span>
+                                            </div>
+                                        )}
+
+                                        {selectedPrayer.sunnah.includes("Ba'diyah") && (
+                                            <div
+                                                onClick={() => setData('is_ba_diyah', !data.is_ba_diyah)}
+                                                className={`flex items-center gap-3 p-4 border-2 rounded-2xl cursor-pointer transition-all ${data.is_ba_diyah ? 'bg-indigo-50 border-indigo-200' : 'bg-gray-50 border-gray-100'}`}
+                                            >
+                                                <div className={`w-6 h-6 border-2 rounded-lg flex items-center justify-center transition-all ${data.is_ba_diyah ? 'bg-indigo-500 border-indigo-500 text-white' : 'border-gray-300'}`}>
+                                                    {data.is_ba_diyah && <Check size={14} strokeWidth={4} />}
+                                                </div>
+                                                <span className={`text-sm font-bold ${data.is_ba_diyah ? 'text-indigo-900' : 'text-gray-600'}`}>Sunnah Ba'diyah</span>
+                                                <span className="ml-auto text-[10px] font-black text-indigo-500">+8 XP</span>
+                                            </div>
+                                        )}
+
+                                        {/* Photo Upload (Display only if Jamaah) */}
+                                        {data.is_jamaah && (
+                                            <div className="mt-2 text-center p-4 border-2 border-dashed border-blue-200 rounded-2xl bg-blue-50/30">
+                                                <label className="cursor-pointer">
+                                                    <input
+                                                        type="file"
+                                                        className="hidden"
+                                                        onChange={e => setData('photo', e.target.files[0])}
+                                                        accept="image/*"
+                                                    />
+                                                    <div className="flex flex-col items-center gap-2">
+                                                        <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center text-blue-500 shadow-sm border border-blue-100">
+                                                            <Camera size={20} />
+                                                        </div>
+                                                        <span className="text-xs font-black text-blue-600 uppercase tracking-widest">
+                                                            {data.photo ? data.photo.name : 'Foto Berjamaah (+10 XP)'}
+                                                        </span>
+                                                    </div>
+                                                </label>
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
 
@@ -347,10 +430,11 @@ export default function Sholat({ auth }) {
                                         Nanti Saja
                                     </button>
                                     <button
+                                        disabled={processing}
                                         onClick={handleSave}
-                                        className="flex-[2] py-4 px-6 bg-gradient-to-r from-emerald-500 to-green-600 text-white font-black rounded-2xl shadow-xl shadow-emerald-200 hover:scale-[1.02] transition-all active:scale-[0.98] flex items-center justify-center gap-2"
+                                        className="flex-[2] py-4 px-6 bg-gradient-to-r from-emerald-500 to-green-600 text-white font-black rounded-2xl shadow-xl shadow-emerald-200 hover:scale-[1.02] transition-all active:scale-[0.98] flex items-center justify-center gap-2 disabled:opacity-50"
                                     >
-                                        <Save size={20} /> Simpan Jurnal
+                                        <Save size={20} /> {processing ? 'Menyimpan...' : 'Simpan Jurnal'}
                                     </button>
                                 </div>
                             </div>

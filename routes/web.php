@@ -71,8 +71,19 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
             Route::prefix('ibadah')->name('ibadah.')->group(function () {
                 Route::get('/islam', function () { return Inertia::render('Student/Habit/Ibadah/Islam/Islam'); })->name('islam');
-                Route::get('/islam/sholat', function () { return Inertia::render('Student/Habit/Ibadah/Islam/Sholat'); })->name('islam.sholat');
-                Route::get('/islam/lainnya', function () { return Inertia::render('Student/Habit/Ibadah/Islam/Lainnya'); })->name('islam.lainnya');
+                
+                // Islam Sub-habits
+                Route::prefix('islam')->name('islam.')->group(function() {
+                    Route::get('/sholat', function () { return Inertia::render('Student/Habit/Ibadah/Islam/Sholat'); })->name('sholat');
+                    Route::post('/sholat', [\App\Http\Controllers\Student\Habit\Ibadah\IslamController::class, 'storeSholat'])->name('sholat.store');
+                    
+                    Route::get('/lainnya', function () { return Inertia::render('Student/Habit/Ibadah/Islam/Lainnya'); })->name('lainnya');
+                    Route::post('/sunnah', [\App\Http\Controllers\Student\Habit\Ibadah\IslamController::class, 'storeSunnah'])->name('sunnah.store');
+                    Route::post('/quran', [\App\Http\Controllers\Student\Habit\Ibadah\IslamController::class, 'storeQuran'])->name('quran.store');
+                    Route::post('/puasa', [\App\Http\Controllers\Student\Habit\Ibadah\IslamController::class, 'storePuasa'])->name('puasa.store');
+                    Route::post('/alternative', [\App\Http\Controllers\Student\Habit\Ibadah\IslamController::class, 'storeAlternative'])->name('alternative.store');
+                });
+
                 Route::get('/kristen', function () { return Inertia::render('Student/Habit/Ibadah/Kristen'); })->name('kristen');
                 Route::get('/katolik', function () { return Inertia::render('Student/Habit/Ibadah/Katolik'); })->name('katolik');
                 Route::get('/hindu', function () { return Inertia::render('Student/Habit/Ibadah/Hindu'); })->name('hindu');
