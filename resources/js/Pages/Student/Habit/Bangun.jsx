@@ -9,11 +9,12 @@ import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 import confetti from 'canvas-confetti';
 import Lottie from 'lottie-react';
+import CountUp from 'react-countup';
 
 // Import Animations
 import BangunOnTime from '../../../../../public/Habit/Bangun_1.json';
 import BangunLate from '../../../../../public/Habit/Bangun_2.json';
-import MedalSuccess from '../../../../../public/Success-Animation/MedalSuccess.json';
+import MedalSuccess from '../../../../../../../public/Success-Animation/MedalSuccess.json';
 
 const MySwal = withReactContent(Swal);
 
@@ -113,11 +114,7 @@ export default function Bangun({ serverTime }) {
                 const checkInTime = flash.check_in_time || finalTime;
 
                 // Fire Confetti!
-                const scalar = 2;
-                const triangle = confetti.shapeFromPath({ path: 'M0 10 L5 0 L10 10z' });
-
                 confetti({
-                    shapes: [triangle],
                     particleCount: 150,
                     spread: 70,
                     origin: { y: 0.6 },
@@ -126,44 +123,63 @@ export default function Bangun({ serverTime }) {
 
                 MySwal.fire({
                     html: (
-                        <div className="flex flex-col items-center p-2 text-slate-800">
-                            <div className="w-52 h-52 -mt-10 -mb-4">
-                                <Lottie animationData={MedalSuccess} loop={false} />
-                            </div>
+                        <div className="flex flex-col items-center p-4 text-slate-800 font-outfit">
+                            <div className="text-[10px] font-black tracking-[0.3em] text-slate-400 uppercase mb-2">SI HEBAT REWARD</div>
+                            <h3 className="text-3xl font-black tracking-tight text-slate-900 leading-tight mb-1 uppercase">
+                                {isLate ? 'CHECK-IN BERHASIL' : 'MISI BERHASIL!'}
+                            </h3>
+                            <p className="text-slate-400 font-bold text-sm mb-8 text-center px-4">
+                                {isLate ? 'Walau agak terlambat, tetap semangat!' : 'Luar biasa! Kamu bangun tepat waktu hari ini.'}
+                            </p>
 
-                            <div className="text-center space-y-2 mb-8">
-                                <h3 className="text-3xl font-black tracking-tight text-slate-900 leading-tight">
-                                    {isLate ? 'CHECK-IN SELESAI!' : 'MISI BERHASIL!'}
-                                </h3>
-                                <p className="text-slate-500 font-bold px-4">
-                                    Selamat! Kamu tercatat bangun pagi jam <span className="text-blue-600"> {checkInTime}</span>.
-                                </p>
-                            </div>
-
-                            <div className="flex gap-4 w-full justify-center">
-                                <div className="bg-gradient-to-br from-yellow-50 to-orange-50 p-5 rounded-[2.5rem] border-2 border-yellow-200/50 flex flex-col items-center min-w-[110px] shadow-sm transform hover:scale-105 transition-transform">
-                                    <div className="w-12 h-12 bg-yellow-400 rounded-2xl flex items-center justify-center shadow-lg shadow-yellow-200 mb-2">
-                                        <Lightning weight="fill" className="text-white" size={24} />
-                                    </div>
-                                    <p className="text-[10px] font-black text-yellow-600 uppercase tracking-widest mt-1">XP Bonus</p>
-                                    <p className="text-2xl font-black text-slate-800">+{xpEarned}</p>
+                            <div className="relative mb-10 w-64 h-64 flex items-center justify-center">
+                                {/* Circular Dashed Border */}
+                                <div className="absolute inset-0 border-[3px] border-dashed border-slate-200 rounded-full animate-[spin_20s_linear_infinite]"></div>
+                                <div className="w-48 h-48 relative z-10">
+                                    <Lottie animationData={MedalSuccess} loop={false} />
                                 </div>
-                                <div className="bg-gradient-to-br from-blue-50 to-indigo-50 p-5 rounded-[2.5rem] border-2 border-blue-200/50 flex flex-col items-center min-w-[110px] shadow-sm transform hover:scale-105 transition-transform">
-                                    <div className="w-12 h-12 bg-blue-500 rounded-2xl flex items-center justify-center shadow-lg shadow-blue-200 mb-2">
-                                        <Coins weight="fill" className="text-white" size={24} />
-                                    </div>
-                                    <p className="text-[10px] font-black text-blue-600 uppercase tracking-widest mt-1">Koin Hebat</p>
-                                    <p className="text-2xl font-black text-slate-800">+{koinEarned}</p>
+                                <div className="absolute top-4 right-4 w-10 h-10 bg-orange-400 rounded-full flex items-center justify-center text-white font-black text-xs shadow-lg shadow-orange-200 border-4 border-white z-20">
+                                    I
                                 </div>
                             </div>
+
+                            <div className="flex gap-8 w-full justify-center mb-4">
+                                <div className="flex flex-col items-center">
+                                    <div className="flex items-center gap-2 mb-1">
+                                        <div className="w-8 h-8 bg-yellow-400 rounded-lg flex items-center justify-center shadow-lg shadow-yellow-200">
+                                            <Lightning weight="fill" className="text-white" size={18} />
+                                        </div>
+                                        <span className="text-2xl font-black text-slate-800">
+                                            +<CountUp end={xpEarned} duration={2} />
+                                        </span>
+                                    </div>
+                                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">EX POINTS</p>
+                                </div>
+
+                                <div className="flex flex-col items-center">
+                                    <div className="flex items-center gap-2 mb-1">
+                                        <div className="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center shadow-lg shadow-blue-200 transition-all">
+                                            <Coins weight="fill" className="text-white" size={18} />
+                                        </div>
+                                        <span className="text-2xl font-black text-slate-800">
+                                            +<CountUp end={koinEarned} duration={2} />
+                                        </span>
+                                    </div>
+                                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">FIT COINS</p>
+                                </div>
+                            </div>
+
+                            <p className="text-xs font-bold text-slate-300 mt-6 italic">
+                                Tercatat pada jam {checkInTime} WIB
+                            </p>
                         </div>
                     ),
                     showConfirmButton: true,
-                    confirmButtonText: 'MANTAP!',
+                    confirmButtonText: 'KLAIM HADIAH!',
                     buttonsStyling: false,
                     customClass: {
-                        popup: 'rounded-[3.5rem] border-0 shadow-2xl',
-                        confirmButton: 'w-full mt-6 py-5 px-10 rounded-3xl bg-slate-900 hover:bg-black text-white font-black text-lg transition-all active:scale-95 shadow-xl shadow-slate-200'
+                        popup: 'rounded-[3.5rem] border-0 shadow-2xl overflow-hidden',
+                        confirmButton: 'w-[calc(100%-4rem)] mx-8 mb-8 py-5 rounded-3xl bg-slate-900 hover:bg-black text-white font-black text-lg transition-all active:scale-95 shadow-xl shadow-slate-200'
                     },
                     allowOutsideClick: false,
                 }).then(() => {
@@ -172,7 +188,38 @@ export default function Bangun({ serverTime }) {
             },
             onError: (errors) => {
                 const firstError = Object.values(errors)[0];
-                Swal.fire('Gagal!', firstError || 'Terjadi kesalahan saat menyimpan.', 'error');
+                MySwal.fire({
+                    html: (
+                        <div className="flex flex-col items-center p-4 text-slate-800 font-outfit">
+                            <div className="text-[10px] font-black tracking-[0.3em] text-red-400 uppercase mb-2">STATUS KEGAGALAN</div>
+                            <h3 className="text-3xl font-black tracking-tight text-slate-900 leading-tight mb-1 uppercase text-center">
+                                UPS! ADA MASALAH
+                            </h3>
+                            <p className="text-slate-400 font-bold text-sm mb-8 text-center px-4">
+                                {firstError || 'Terjadi kesalahan saat menyimpan.'}
+                            </p>
+
+                            <div className="relative mb-10 w-64 h-64 flex items-center justify-center opacity-50 grayscale">
+                                <div className="absolute inset-0 border-[3px] border-dashed border-red-100 rounded-full"></div>
+                                <div className="w-48 h-48 relative z-10">
+                                    <Lottie animationData={MedalSuccess} loop={false} />
+                                </div>
+                            </div>
+
+                            <div className="bg-red-50 p-4 rounded-2xl border-2 border-red-100 w-full text-center">
+                                <p className="text-xs font-black text-red-600 uppercase tracking-widest">Pesan Sistem</p>
+                                <p className="text-sm font-bold text-red-500 mt-1">{firstError}</p>
+                            </div>
+                        </div>
+                    ),
+                    showConfirmButton: true,
+                    confirmButtonText: 'SAYA MENGERTI',
+                    buttonsStyling: false,
+                    customClass: {
+                        popup: 'rounded-[3.5rem] border-0 shadow-2xl',
+                        confirmButton: 'w-[calc(100%-4rem)] mx-8 mb-8 py-5 rounded-3xl bg-red-500 hover:bg-red-600 text-white font-black text-lg transition-all active:scale-95 shadow-xl shadow-red-100'
+                    }
+                });
             }
         });
     };

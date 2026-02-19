@@ -10,6 +10,15 @@ import {
 import StudentLayout from '@/Layouts/StudentLayout';
 import confetti from 'canvas-confetti';
 import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
+import Lottie from 'lottie-react';
+import CountUp from 'react-countup';
+import { Lightning, Coins } from '@phosphor-icons/react';
+
+// Import Animations
+import MedalSuccess from '../../../../../../../public/Success-Animation/MedalSuccess.json';
+
+const MySwal = withReactContent(Swal);
 
 export default function Lainnya({ auth }) {
     const user = auth?.user || {};
@@ -31,9 +40,10 @@ export default function Lainnya({ auth }) {
                 celebrate();
                 setActiveModal(null);
                 quranForm.reset();
-                Swal.fire('Berhasil!', page.props.flash.message, 'success');
+                const flash = page.props.flash || {};
+                showSuccessPopup(flash.message, flash.xp_earned, flash.koin_earned);
             },
-            onError: (err) => Swal.fire('Gagal!', Object.values(err)[0], 'error')
+            onError: (err) => showErrorPopup(err)
         });
     };
 
@@ -45,9 +55,10 @@ export default function Lainnya({ auth }) {
             onSuccess: (page) => {
                 celebrate();
                 setActiveModal(null);
-                Swal.fire('Berhasil!', page.props.flash.message, 'success');
+                const flash = page.props.flash || {};
+                showSuccessPopup(flash.message, flash.xp_earned, flash.koin_earned);
             },
-            onError: (err) => Swal.fire('Gagal!', Object.values(err)[0], 'error')
+            onError: (err) => showErrorPopup(err)
         });
     };
 
@@ -84,12 +95,110 @@ export default function Lainnya({ auth }) {
                         onSuccess: (page) => {
                             celebrate();
                             setActiveModal(null);
-                            Swal.fire('Berhasil!', page.props.flash.message, 'success');
+                            const flash = page.props.flash || {};
+                            showSuccessPopup(flash.message, flash.xp_earned, flash.koin_earned);
                         },
+                        onError: (err) => showErrorPopup(err),
                         forceFormData: true
                     });
                 };
                 input.click();
+            }
+        });
+    };
+
+    const showSuccessPopup = (message, xpEarned, koinEarned) => {
+        MySwal.fire({
+            html: (
+                <div className="flex flex-col items-center p-4 text-slate-800 font-outfit">
+                    <div className="text-[10px] font-black tracking-[0.3em] text-emerald-400 uppercase mb-2">IBADAH TERJAGA</div>
+                    <h3 className="text-3xl font-black tracking-tight text-slate-900 leading-tight mb-1 uppercase text-center">
+                        AMALAN DICATAT!
+                    </h3>
+                    <p className="text-slate-400 font-bold text-sm mb-8 text-center px-4">
+                        {message || 'Alhamdulillah, amalanmu telah berhasil dicatat.'}
+                    </p>
+
+                    <div className="relative mb-10 w-64 h-64 flex items-center justify-center">
+                        <div className="absolute inset-0 border-[3px] border-dashed border-emerald-100 rounded-full animate-[spin_30s_linear_infinite]"></div>
+                        <div className="w-48 h-48 relative z-10">
+                            <Lottie animationData={MedalSuccess} loop={false} />
+                        </div>
+                        <div className="absolute top-4 right-4 w-10 h-10 bg-emerald-500 rounded-full flex items-center justify-center text-white font-black text-xs shadow-lg shadow-emerald-200 border-4 border-white z-20">
+                            <Sparkles size={14} fill="white" />
+                        </div>
+                    </div>
+
+                    <div className="flex gap-8 w-full justify-center mb-4">
+                        <div className="flex flex-col items-center">
+                            <div className="flex items-center gap-2 mb-1">
+                                <div className="w-8 h-8 bg-yellow-400 rounded-lg flex items-center justify-center shadow-lg shadow-yellow-200">
+                                    <Lightning weight="fill" className="text-white" size={18} />
+                                </div>
+                                <span className="text-2xl font-black text-slate-800">
+                                    +<CountUp end={xpEarned} duration={2} />
+                                </span>
+                            </div>
+                            <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">EX POINTS</p>
+                        </div>
+
+                        <div className="flex flex-col items-center">
+                            <div className="flex items-center gap-2 mb-1">
+                                <div className="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center shadow-lg shadow-blue-200">
+                                    <Coins weight="fill" className="text-white" size={18} />
+                                </div>
+                                <span className="text-2xl font-black text-slate-800">
+                                    +<CountUp end={koinEarned} duration={2} />
+                                </span>
+                            </div>
+                            <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">FIT COINS</p>
+                        </div>
+                    </div>
+                </div>
+            ),
+            showConfirmButton: true,
+            confirmButtonText: 'MANTAP, TERIMA KASIH!',
+            buttonsStyling: false,
+            customClass: {
+                popup: 'rounded-[3.5rem] border-0 shadow-2xl overflow-hidden',
+                confirmButton: 'w-[calc(100%-4rem)] mx-8 mb-8 py-5 rounded-3xl bg-emerald-600 hover:bg-emerald-700 text-white font-black text-lg transition-all active:scale-95 shadow-xl shadow-emerald-100'
+            },
+            allowOutsideClick: false,
+        });
+    };
+
+    const showErrorPopup = (errors) => {
+        const firstError = Object.values(errors)[0];
+        MySwal.fire({
+            html: (
+                <div className="flex flex-col items-center p-4 text-slate-800 font-outfit">
+                    <div className="text-[10px] font-black tracking-[0.3em] text-red-400 uppercase mb-2">GAGAL MENCATAT</div>
+                    <h3 className="text-3xl font-black tracking-tight text-slate-900 leading-tight mb-1 uppercase text-center">
+                        ADA KENDALA!
+                    </h3>
+                    <p className="text-slate-400 font-bold text-sm mb-8 text-center px-4">
+                        {firstError || 'Terjadi kesalahan saat mencoba mencatat amalanmu.'}
+                    </p>
+
+                    <div className="relative mb-10 w-64 h-64 flex items-center justify-center opacity-50 grayscale">
+                        <div className="absolute inset-0 border-[3px] border-dashed border-red-100 rounded-full"></div>
+                        <div className="w-48 h-48 relative z-10">
+                            <Lottie animationData={MedalSuccess} loop={false} />
+                        </div>
+                    </div>
+
+                    <div className="bg-red-50 p-4 rounded-2xl border-2 border-red-100 w-full text-center">
+                        <p className="text-xs font-black text-red-600 uppercase tracking-widest">Pesan Kesalahan</p>
+                        <p className="text-sm font-bold text-red-500 mt-1">{firstError}</p>
+                    </div>
+                </div>
+            ),
+            showConfirmButton: true,
+            confirmButtonText: 'COBA LAGI NANTI',
+            buttonsStyling: false,
+            customClass: {
+                popup: 'rounded-[3.5rem] border-0 shadow-2xl',
+                confirmButton: 'w-[calc(100%-4rem)] mx-8 mb-8 py-5 rounded-3xl bg-red-500 hover:bg-red-600 text-white font-black text-lg transition-all active:scale-95 shadow-xl shadow-red-100'
             }
         });
     };

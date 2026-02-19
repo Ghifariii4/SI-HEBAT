@@ -99,7 +99,7 @@ class IslamController extends Controller
                 'habit_id' => $habit->id,
                 'log_date' => Carbon::today(),
                 'base_xp' => $xp,
-                'coin_earned' => $koin,
+                'coin_earned' => $xp,
                 'status' => 'pending',
             ]);
 
@@ -116,7 +116,7 @@ class IslamController extends Controller
             return back()->with([
                 'success' => true,
                 'xp_earned' => $xp,
-                'koin_earned' => $koin,
+                'koin_earned' => $xp,
                 'message' => "Sholat $prayer berhasil dicatat!",
             ]);
         });
@@ -187,7 +187,12 @@ class IslamController extends Controller
 
             HabitLogDetail::create(['habit_log_id' => $log->id, 'key' => 'prayer_type', 'value' => $logKey]);
 
-            return back()->with(['success' => true, 'xp_earned' => $xp, 'message' => "Sholat $type berhasil dicatat!"]);
+            return back()->with([
+                'success' => true, 
+                'xp_earned' => $xp, 
+                'koin_earned' => $xp,
+                'message' => "Sholat $type berhasil dicatat!"
+            ]);
         });
     }
 
@@ -230,7 +235,12 @@ class IslamController extends Controller
             HabitLogDetail::create(['habit_log_id' => $log->id, 'key' => 'activity_type', 'value' => 'baca_quran']);
             HabitLogDetail::create(['habit_log_id' => $log->id, 'key' => 'progress', 'value' => $request->surah_start . " " . $request->ayat_start . " - " . $request->surah_end . " " . $request->ayat_end]);
 
-            return back()->with(['success' => true, 'xp_earned' => $xp, 'message' => 'Baca Quran berhasil dicatat!']);
+            return back()->with([
+                'success' => true, 
+                'xp_earned' => $xp, 
+                'koin_earned' => $xp,
+                'message' => 'Baca Quran berhasil dicatat!'
+            ]);
         });
     }
 
@@ -296,7 +306,12 @@ class IslamController extends Controller
             HabitLogDetail::create(['habit_log_id' => $log->id, 'key' => 'activity_type', 'value' => 'puasa']);
             HabitLogDetail::create(['habit_log_id' => $log->id, 'key' => 'puasa_type', 'value' => $type]);
 
-            return back()->with(['success' => true, 'xp_earned' => $xp, 'message' => "Puasa $type berhasil dicatat!"]);
+            return back()->with([
+                'success' => true, 
+                'xp_earned' => $xp, 
+                'koin_earned' => $xp,
+                'message' => "Puasa $type berhasil dicatat!"
+            ]);
         });
     }
 
@@ -335,7 +350,12 @@ class IslamController extends Controller
             HabitLogDetail::create(['habit_log_id' => $log->id, 'key' => 'activity_type', 'value' => 'alternative_haid']);
             HabitLogDetail::create(['habit_log_id' => $log->id, 'key' => 'haid_activity', 'value' => $request->activity]);
 
-            return back()->with(['success' => true, 'xp_earned' => $xp, 'message' => 'Ibadah pengganti haid berhasil dicatat!']);
+            return back()->with([
+                'success' => true, 
+                'xp_earned' => $xp, 
+                'koin_earned' => $xp,
+                'message' => 'Ibadah pengganti haid berhasil dicatat!'
+            ]);
         });
     }
 }

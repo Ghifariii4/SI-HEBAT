@@ -112,8 +112,12 @@ class HabitWakeupController extends Controller
             }
 
             if ($bonusXp > 0) {
-                $log->update(['bonus_xp' => $bonusXp]);
+                $log->update([
+                    'bonus_xp' => $bonusXp,
+                    'coin_earned' => $xpEarned + $bonusXp
+                ]);
                 $xpEarned += $bonusXp;
+                $koinEarned = $xpEarned;
             }
 
             // XP and Coins are NOT added yet as the status is 'pending'.
