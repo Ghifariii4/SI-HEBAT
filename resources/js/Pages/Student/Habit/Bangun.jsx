@@ -6,12 +6,16 @@ import {
     ArrowLeft, Lightning, Coins, WarningCircle
 } from '@phosphor-icons/react';
 import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
 import confetti from 'canvas-confetti';
 import Lottie from 'lottie-react';
 
 // Import Animations
 import BangunOnTime from '../../../../../public/Habit/Bangun_1.json';
 import BangunLate from '../../../../../public/Habit/Bangun_2.json';
+import MedalSuccess from '../../../../../public/Success-Animation/MedalSuccess.json';
+
+const MySwal = withReactContent(Swal);
 
 export default function Bangun({ serverTime }) {
     const [currentTime, setCurrentTime] = useState(new Date(serverTime));
@@ -108,36 +112,59 @@ export default function Bangun({ serverTime }) {
                 const koinEarned = flash.koin_earned || 0;
                 const checkInTime = flash.check_in_time || finalTime;
 
-                // Show confetti for successful check-in
-                if (xpEarned > 0) {
-                    confetti({ particleCount: 100, angle: 60, spread: 55, origin: { x: 0 } });
-                    confetti({ particleCount: 100, angle: 120, spread: 55, origin: { x: 1 } });
-                }
+                // Fire Confetti!
+                const scalar = 2;
+                const triangle = confetti.shapeFromPath({ path: 'M0 10 L5 0 L10 10z' });
 
-                Swal.fire({
-                    title: xpEarned >= 20 ? 'MISI BERHASIL!' : 'MISI SELESAI!',
-                    html: `
-                        <div class="flex flex-col items-center gap-4 py-4" style="font-family: 'Inter', sans-serif;">
-                            <div class="flex gap-4">
-                                <div class="bg-yellow-50 p-4 rounded-[2rem] border-2 border-yellow-200 flex flex-col items-center min-w-[90px]">
-                                    <span style="font-size: 32px">⚡</span>
-                                    <p class="text-[10px] font-black text-slate-400 mt-1 uppercase">XP</p>
-                                    <p class="text-xl font-black text-slate-800">+${xpEarned}</p>
+                confetti({
+                    shapes: [triangle],
+                    particleCount: 150,
+                    spread: 70,
+                    origin: { y: 0.6 },
+                    colors: ['#0ea5e9', '#22c55e', '#eab308', '#f43f5e']
+                });
+
+                MySwal.fire({
+                    html: (
+                        <div className="flex flex-col items-center p-2 text-slate-800">
+                            <div className="w-52 h-52 -mt-10 -mb-4">
+                                <Lottie animationData={MedalSuccess} loop={false} />
+                            </div>
+
+                            <div className="text-center space-y-2 mb-8">
+                                <h3 className="text-3xl font-black tracking-tight text-slate-900 leading-tight">
+                                    {isLate ? 'CHECK-IN SELESAI!' : 'MISI BERHASIL!'}
+                                </h3>
+                                <p className="text-slate-500 font-bold px-4">
+                                    Selamat! Kamu tercatat bangun pagi jam <span className="text-blue-600"> {checkInTime}</span>.
+                                </p>
+                            </div>
+
+                            <div className="flex gap-4 w-full justify-center">
+                                <div className="bg-gradient-to-br from-yellow-50 to-orange-50 p-5 rounded-[2.5rem] border-2 border-yellow-200/50 flex flex-col items-center min-w-[110px] shadow-sm transform hover:scale-105 transition-transform">
+                                    <div className="w-12 h-12 bg-yellow-400 rounded-2xl flex items-center justify-center shadow-lg shadow-yellow-200 mb-2">
+                                        <Lightning weight="fill" className="text-white" size={24} />
+                                    </div>
+                                    <p className="text-[10px] font-black text-yellow-600 uppercase tracking-widest mt-1">XP Bonus</p>
+                                    <p className="text-2xl font-black text-slate-800">+{xpEarned}</p>
                                 </div>
-                                <div class="bg-blue-50 p-4 rounded-[2rem] border-2 border-blue-200 flex flex-col items-center min-w-[90px]">
-                                    <span style="font-size: 32px">🪙</span>
-                                    <p class="text-[10px] font-black text-slate-400 mt-1 uppercase">Koin</p>
-                                    <p class="text-xl font-black text-slate-800">+${koinEarned}</p>
+                                <div className="bg-gradient-to-br from-blue-50 to-indigo-50 p-5 rounded-[2.5rem] border-2 border-blue-200/50 flex flex-col items-center min-w-[110px] shadow-sm transform hover:scale-105 transition-transform">
+                                    <div className="w-12 h-12 bg-blue-500 rounded-2xl flex items-center justify-center shadow-lg shadow-blue-200 mb-2">
+                                        <Coins weight="fill" className="text-white" size={24} />
+                                    </div>
+                                    <p className="text-[10px] font-black text-blue-600 uppercase tracking-widest mt-1">Koin Hebat</p>
+                                    <p className="text-2xl font-black text-slate-800">+{koinEarned}</p>
                                 </div>
                             </div>
-                            <p class="text-sm text-slate-500 font-medium px-4 text-center">
-                                Tercatat jam <b>${checkInTime}</b>. Kembali ke beranda?
-                            </p>
                         </div>
-                    `,
-                    icon: xpEarned >= 20 ? 'success' : 'warning',
-                    confirmButtonText: 'OKE',
-                    confirmButtonColor: xpEarned >= 20 ? '#0ea5e9' : '#ef4444',
+                    ),
+                    showConfirmButton: true,
+                    confirmButtonText: 'MANTAP!',
+                    buttonsStyling: false,
+                    customClass: {
+                        popup: 'rounded-[3.5rem] border-0 shadow-2xl',
+                        confirmButton: 'w-full mt-6 py-5 px-10 rounded-3xl bg-slate-900 hover:bg-black text-white font-black text-lg transition-all active:scale-95 shadow-xl shadow-slate-200'
+                    },
                     allowOutsideClick: false,
                 }).then(() => {
                     router.visit(route('student.dashboard'));
