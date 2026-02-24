@@ -24,6 +24,7 @@ class HabitLog extends Model
         'coin_earned',
         'star_earned',
         'status',
+        'image_path',
     ];
 
     protected $casts = [

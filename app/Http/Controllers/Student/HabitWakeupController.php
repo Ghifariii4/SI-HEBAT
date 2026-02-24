@@ -24,6 +24,7 @@ class HabitWakeupController extends Controller
     {
         $request->validate([
             'activities' => 'array',
+            'image' => 'required|image|mimes:jpeg,png,jpg|max:2048',
         ]);
 
         $user = Auth::user();
@@ -85,6 +86,14 @@ class HabitWakeupController extends Controller
                 ]);
             }
 
+            // Handle Image Upload
+            $imagePath = null;
+            if ($request->hasFile('image')) {
+                $file = $request->file('image');
+                $filename = time() . '_' . $user->id . '.' . $file->getClientOriginalExtension();
+                $imagePath = $file->storeAs('habits/wakeup', $filename, 'public');
+            }
+
             // Create habit log
             $log = HabitLog::create([
                 'user_id' => $user->id,
@@ -93,6 +102,7 @@ class HabitWakeupController extends Controller
                 'base_xp' => $xpEarned,
                 'coin_earned' => $koinEarned,
                 'log_date' => Carbon::today(),
+                'image_path' => $imagePath,
             ]);
 
             // Save activities as habit details (MAX 3)

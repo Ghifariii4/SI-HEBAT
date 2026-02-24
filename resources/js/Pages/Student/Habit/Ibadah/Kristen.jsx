@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { Head, Link } from '@inertiajs/react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { Head, Link, useForm, router } from '@inertiajs/react';
+import { motion, AnimatePresence, animate } from 'framer-motion';
 import {
     ArrowLeft, Cross, Heart, Book,
     Check, Plus, Clock, Save,
@@ -9,12 +9,34 @@ import {
 } from 'lucide-react';
 import StudentLayout from '@/Layouts/StudentLayout';
 import confetti from 'canvas-confetti';
+import Swal from 'sweetalert2';
+import Lottie from 'lottie-react';
+import MedalAnimation from '../../../../../../../public/Success-Animation/MedalSuccess.json';
+
+// Simple Counter Component for the Popup
+const Counter = ({ from, to, duration = 2 }) => {
+    const [count, setCount] = useState(from);
+
+    useEffect(() => {
+        const controls = animate(from, to, {
+            duration,
+            onUpdate(value) {
+                setCount(Math.floor(value));
+            },
+        });
+        return () => controls.stop();
+    }, [from, to, duration]);
+
+    return <span>{count}</span>;
+};
 
 export default function Kristen({ auth }) {
     const user = auth?.user || {};
     const [currentTime, setCurrentTime] = useState(new Date());
     const [selectedTask, setSelectedTask] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [showSuccessPopup, setShowSuccessPopup] = useState(false);
+    const [earnedRewards, setEarnedRewards] = useState({ xp: 0, coin: 0 });
 
     // Status state for each worship activity
     const [worshipStatus, setWorshipStatus] = useState({
@@ -24,11 +46,22 @@ export default function Kristen({ auth }) {
         doa_malam: { completed: false, xp: 30 },
     });
 
+    const { data, setData, post, processing } = useForm({
+        religion: 'kristen',
+        tasks: [],
+    });
+
+    // Activity windows: start, end in 'HH:MM', graceMins = minutes before start allowed
+    const activityWindows = {
+        saat_teduh: { start: '05:00', end: '09:00', graceMins: 30 },
+        doa_malam:  { start: '20:00', end: '23:59', graceMins: 30 },
+    };
+
     const activities = [
         {
             id: 'saat_teduh',
             name: 'Saat Teduh',
-            time: '05:00 - 08:00',
+            time: '05:00 - 09:00',
             icon: Sun,
             desc: 'Waktu pribadi dengan Tuhan di pagi hari',
             xp: 50
@@ -52,7 +85,7 @@ export default function Kristen({ auth }) {
         {
             id: 'doa_malam',
             name: 'Doa Malam',
-            time: '20:00 - 23:00',
+            time: '20:00 - 23:59',
             icon: Heart,
             desc: 'Mengucap syukur sebelum beristirahat',
             xp: 30
@@ -69,28 +102,94 @@ export default function Kristen({ auth }) {
         minute: '2-digit'
     });
 
+    // Returns 'active' | 'not_yet' | 'passed'
+    const getActivityAvailability = (taskId) => {
+        const win = activityWindows[taskId];
+        if (!win) return 'active'; // Flexible tasks are always active
+
+        const now = currentTime;
+        const nowMins = now.getHours() * 60 + now.getMinutes();
+
+        const [sH, sM] = win.start.split(':').map(Number);
+        const [eH, eM] = win.end.split(':').map(Number);
+        const startMins = sH * 60 + sM;
+        const endMins   = eH * 60 + eM;
+        const allowedFrom = startMins - win.graceMins;
+
+        if (nowMins >= allowedFrom && nowMins < endMins) return 'active';
+        if (nowMins < allowedFrom) return 'not_yet';
+        return 'passed';
+    };
+
     const handleOpenModal = (activity) => {
+        if (worshipStatus[activity.id].completed) return;
+
+        const availability = getActivityAvailability(activity.id);
+        if (availability === 'not_yet') {
+            Swal.fire({
+                icon: 'info',
+                title: `Belum Waktunya`,
+                text: `Waktu ${activity.name} belum tiba. Mari bersabar menanti waktu hadirat-Nya! ✝️`,
+                confirmButtonColor: '#3b82f6',
+            });
+            return;
+        }
+        if (availability === 'passed') {
+            Swal.fire({
+                icon: 'warning',
+                title: `Waktu Sudah Lewat`,
+                text: `Waktu ${activity.name} sudah berakhir hari ini. Tetap semangat melayani Tuhan! ✨`,
+                confirmButtonColor: '#3b82f6',
+            });
+            return;
+        }
+
         setSelectedTask(activity);
         setIsModalOpen(true);
     };
 
     const handleSave = () => {
-        setWorshipStatus(prev => ({
-            ...prev,
-            [selectedTask.id]: {
-                ...prev[selectedTask.id],
-                completed: true
+        const updatedTasks = [...data.tasks, selectedTask.id];
+        
+        router.post(route('student.habit.store', 'beribadah'), {
+            religion: 'kristen',
+            tasks: updatedTasks,
+        }, {
+            onStart: () => {
+                setIsModalOpen(false);
+                Swal.fire({
+                    title: 'Menyimpan Jurnal...',
+                    allowOutsideClick: false,
+                    didOpen: () => { Swal.showLoading(); }
+                });
+            },
+            onSuccess: (page) => {
+                Swal.close();
+                const flash = page.props.flash || {};
+                const xp = flash.xp_earned || 0;
+                const coin = flash.koin_earned || 0;
+                
+                setEarnedRewards({ xp, coin });
+                setWorshipStatus(prev => ({
+                    ...prev,
+                    [selectedTask.id]: { ...prev[selectedTask.id], completed: true }
+                }));
+                setData('tasks', updatedTasks);
+
+                confetti({
+                    particleCount: 150,
+                    spread: 70,
+                    origin: { y: 0.6 },
+                    colors: ['#3b82f6', '#818cf8', '#ffffff']
+                });
+
+                setShowSuccessPopup(true);
+            },
+            onError: (errors) => {
+                Swal.close();
+                Swal.fire('Gagal', errors.error || 'Terjadi kesalahan', 'error');
             }
-        }));
-
-        confetti({
-            particleCount: 150,
-            spread: 70,
-            origin: { y: 0.6 },
-            colors: ['#3b82f6', '#818cf8', '#ffffff']
         });
-
-        setIsModalOpen(false);
     };
 
     const containerVariants = {
@@ -122,16 +221,6 @@ export default function Kristen({ auth }) {
                         className="absolute top-20 right-10 text-white"
                     >
                         <Cross size={80} fill="white" />
-                    </motion.div>
-                    <motion.div
-                        animate={{
-                            y: [0, 30, 0],
-                            opacity: [0.2, 0.4, 0.2]
-                        }}
-                        transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-                        className="absolute bottom-20 left-10 text-white"
-                    >
-                        <Heart size={48} fill="white" />
                     </motion.div>
                 </div>
 
@@ -172,76 +261,72 @@ export default function Kristen({ auth }) {
                         variants={containerVariants}
                         initial="hidden"
                         animate="visible"
-                        className="space-y-4"
+                        className="grid grid-cols-1 gap-4"
                     >
                         {activities.map((activity) => {
                             const status = worshipStatus[activity.id];
+                            const availability = getActivityAvailability(activity.id);
+                            const isLocked = !status.completed && availability === 'not_yet';
+                            const isPassed = !status.completed && availability === 'passed';
 
                             return (
                                 <motion.div
                                     key={activity.id}
                                     variants={itemVariants}
-                                    whileHover={{ scale: 1.02, x: 5 }}
-                                    whileTap={{ scale: 0.98 }}
+                                    whileHover={!status.completed && !isLocked ? { scale: 1.02, x: 5 } : {}}
+                                    whileTap={!status.completed && !isLocked ? { scale: 0.98 } : {}}
                                     onClick={() => handleOpenModal(activity)}
-                                    className={`relative group cursor-pointer rounded-3xl p-5 border-2 transition-all duration-300 ${status.completed
-                                            ? 'bg-white border-blue-400 shadow-[0_0_20px_rgba(59,130,246,0.2)]'
-                                            : 'bg-white/90 backdrop-blur-md border-transparent hover:border-white/50 shadow-lg'
-                                        }`}
+                                    className={`relative group cursor-pointer rounded-3xl p-5 border-2 transition-all duration-300 ${
+                                        status.completed
+                                            ? 'bg-white border-blue-500 shadow-[0_0_20px_rgba(59,130,246,0.2)]'
+                                            : isLocked
+                                                ? 'bg-white/50 border-gray-100 opacity-60'
+                                                : isPassed
+                                                    ? 'bg-white/40 border-red-100 opacity-50'
+                                                    : 'bg-white shadow-xl border-transparent hover:border-blue-200'
+                                    }`}
                                 >
                                     <div className="flex items-center justify-between">
-                                        <div className="flex items-center gap-5">
-                                            {/* Icon */}
-                                            <div className={`w-14 h-14 rounded-2xl flex items-center justify-center transition-all duration-500 shadow-inner ${status.completed
-                                                    ? 'bg-blue-100 text-blue-600 rotate-[360deg]'
-                                                    : 'bg-blue-500 text-white shadow-blue-200'
-                                                }`}>
+                                        <div className="flex items-center gap-4">
+                                            <div className={`w-14 h-14 rounded-2xl flex items-center justify-center transition-all duration-500 ${
+                                                status.completed 
+                                                    ? 'bg-blue-500 text-white rotate-[360deg]' 
+                                                    : isLocked || isPassed
+                                                        ? 'bg-gray-100 text-gray-300'
+                                                        : 'bg-blue-50 text-blue-600 group-hover:bg-blue-100'
+                                            }`}>
                                                 <activity.icon size={28} />
                                             </div>
-
-                                            {/* Details */}
                                             <div>
-                                                <h3 className={`font-black text-lg ${status.completed ? 'text-blue-700' : 'text-gray-800'}`}>
+                                                <h3 className={`font-bold text-lg ${status.completed ? 'text-blue-700' : isLocked || isPassed ? 'text-gray-400' : 'text-slate-800'}`}>
                                                     {activity.name}
                                                 </h3>
-                                                <div className="flex items-center gap-2 mt-0.5">
-                                                    <span className="text-[10px] font-black bg-gray-100 text-gray-500 px-2 py-0.5 rounded-full flex items-center gap-1">
-                                                        <Clock size={10} /> {activity.time}
-                                                    </span>
-                                                    {status.completed && (
-                                                        <span className="text-[10px] font-black bg-blue-100 text-blue-600 px-2 py-0.5 rounded-full flex items-center gap-1">
-                                                            <Award size={10} /> +{activity.xp} XP
+                                                    {isLocked && (
+                                                        <span className="text-[10px] font-bold bg-amber-50 text-amber-500 px-2 py-0.5 rounded-full">
+                                                            🔒 Belum Waktunya
+                                                        </span>
+                                                    )}
+                                                    {isPassed && (
+                                                        <span className="text-[10px] font-bold bg-red-50 text-red-400 px-2 py-0.5 rounded-full">
+                                                            ⏰ Sudah Lewat
                                                         </span>
                                                     )}
                                                 </div>
                                             </div>
                                         </div>
-
-                                        {/* Status Indicator */}
-                                        <div className={`w-10 h-10 rounded-full flex items-center justify-center border-2 transition-all duration-500 ${status.completed
-                                                ? 'bg-blue-500 border-blue-500 text-white scale-110 shadow-lg shadow-blue-200'
-                                                : 'border-blue-200 text-blue-400 bg-blue-50'
-                                            }`}>
-                                            {status.completed ? <Check size={20} className="stroke-[3]" /> : <Plus size={20} />}
+                                        <div className={`w-10 h-10 rounded-full flex items-center justify-center border-2 transition-all duration-500 ${
+                                            status.completed 
+                                                ? 'bg-blue-500 border-blue-500 text-white' 
+                                                : isLocked || isPassed
+                                                    ? 'border-gray-100 text-gray-200'
+                                                    : 'border-blue-100 text-blue-300 group-hover:border-blue-300 group-hover:text-blue-500'
+                                        }`}>
+                                            {status.completed ? <Check size={20} strokeWidth={3} /> : <Plus size={20} />}
                                         </div>
                                     </div>
                                 </motion.div>
                             );
                         })}
-                    </motion.div>
-
-                    {/* Footer Quote */}
-                    <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ delay: 1 }}
-                        className="mt-12 text-center"
-                    >
-                        <div className="inline-block p-4 bg-white/5 backdrop-blur-sm rounded-2xl border border-white/10">
-                            <p className="text-xs text-blue-100/60 font-medium">
-                                "Sebab di mana dua atau tiga orang berkumpul dalam nama-Ku, di situ Aku ada di tengah-tengah mereka."
-                            </p>
-                        </div>
                     </motion.div>
                 </div>
             </div>
@@ -285,8 +370,8 @@ export default function Kristen({ auth }) {
 
                             <div className="p-8">
                                 <div className="space-y-6">
-                                    <p className="text-gray-600 font-medium text-center px-4">
-                                        Sudahkah kamu menyelesaikan kegiatan **{selectedTask.name}** hari ini?
+                                    <p className="text-gray-600 font-bold text-center px-4">
+                                        Sudahkah kamu menyelesaikan kegiatan <span className="text-blue-600 font-black">{selectedTask.name}</span> hari ini?
                                     </p>
 
                                     {/* Action Options */}
@@ -301,20 +386,12 @@ export default function Kristen({ auth }) {
                                                 </div>
                                                 <div>
                                                     <h4 className="font-black text-gray-800">Ya, Sudah Selesai</h4>
-                                                    <p className="text-xs text-blue-500 font-bold">Dapatkan +{selectedTask.xp} XP</p>
+                                                    <p className="text-xs text-blue-500 font-bold">Dapatkan XP & Koin</p>
                                                 </div>
                                             </div>
                                             <div className="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center text-white shadow-lg shadow-blue-200">
                                                 <Check size={20} strokeWidth={3} />
                                             </div>
-                                        </div>
-
-                                        <div className="p-4 bg-gray-50 border-2 border-gray-100 rounded-[2rem] flex items-center gap-3 opacity-60">
-                                            <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center text-gray-400">
-                                                <Music size={20} />
-                                            </div>
-                                            <span className="text-sm font-bold text-gray-500">Puji-pujian / Lagu Rohani</span>
-                                            <span className="ml-auto text-[10px] font-black bg-white px-2 py-1 rounded-full text-blue-500">+10 XP</span>
                                         </div>
                                     </div>
                                 </div>
@@ -334,6 +411,96 @@ export default function Kristen({ auth }) {
                                         <Save size={20} /> Simpan Jurnal
                                     </button>
                                 </div>
+                            </div>
+                        </motion.div>
+                    </div>
+                )}
+            </AnimatePresence>
+
+            {/* Success Popup */}
+            <AnimatePresence>
+                {showSuccessPopup && (
+                    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            className="absolute inset-0 bg-slate-900/80 backdrop-blur-md"
+                        />
+                        <motion.div
+                            initial={{ scale: 0.5, opacity: 0, y: 50 }}
+                            animate={{ scale: 1, opacity: 1, y: 0 }}
+                            exit={{ scale: 0.5, opacity: 0, y: 50 }}
+                            className="bg-white rounded-[3rem] p-8 w-full max-w-sm relative z-10 text-center shadow-2xl overflow-hidden"
+                        >
+                            <motion.div 
+                                animate={{ rotate: 360 }}
+                                transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
+                                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] opacity-10 pointer-events-none"
+                            >
+                                <div className="w-full h-full bg-[conic-gradient(from_0deg,transparent_0deg,blue_10deg,transparent_20deg)]" />
+                            </motion.div>
+
+                            <div className="relative z-10">
+                                <div className="w-48 h-48 mx-auto -mt-10 mb-2">
+                                    <Lottie animationData={MedalAnimation} loop={false} />
+                                </div>
+
+                                <motion.h2 
+                                    initial={{ y: 10, opacity: 0 }}
+                                    animate={{ y: 0, opacity: 1 }}
+                                    transition={{ delay: 0.5 }}
+                                    className="text-3xl font-black text-slate-800 mb-2"
+                                >
+                                    LUAR BIASA!
+                                </motion.h2>
+
+                                <motion.p 
+                                    initial={{ y: 10, opacity: 0 }}
+                                    animate={{ y: 0, opacity: 1 }}
+                                    transition={{ delay: 0.6 }}
+                                    className="text-slate-500 font-bold text-sm mb-6"
+                                >
+                                    Imanmu semakin kuat hari ini!
+                                </motion.p>
+
+                                <div className="flex gap-4 justify-center mb-8">
+                                    <motion.div 
+                                        initial={{ x: -20, opacity: 0 }}
+                                        animate={{ x: 0, opacity: 1 }}
+                                        transition={{ delay: 0.8 }}
+                                        className="bg-yellow-50 p-4 rounded-[2rem] border-2 border-yellow-200 flex flex-col items-center min-w-[100px]"
+                                    >
+                                        <span className="text-3xl mb-1">⚡</span>
+                                        <p className="text-[10px] font-black text-slate-400 uppercase tracking-tighter">XP Earned</p>
+                                        <p className="text-2xl font-black text-slate-800">
+                                            +<Counter from={0} to={earnedRewards.xp} />
+                                        </p>
+                                    </motion.div>
+
+                                    <motion.div 
+                                        initial={{ x: 20, opacity: 0 }}
+                                        animate={{ x: 0, opacity: 1 }}
+                                        transition={{ delay: 1 }}
+                                        className="bg-blue-50 p-4 rounded-[2rem] border-2 border-blue-200 flex flex-col items-center min-w-[100px]"
+                                    >
+                                        <span className="text-3xl mb-1">🪙</span>
+                                        <p className="text-[10px] font-black text-slate-400 uppercase tracking-tighter">Coins</p>
+                                        <p className="text-2xl font-black text-slate-800">
+                                            +<Counter from={0} to={earnedRewards.coin} />
+                                        </p>
+                                    </motion.div>
+                                </div>
+
+                                <motion.button
+                                    initial={{ y: 20, opacity: 0 }}
+                                    animate={{ y: 0, opacity: 1 }}
+                                    transition={{ delay: 1.2 }}
+                                    onClick={() => router.visit(route('student.dashboard'))}
+                                    className="w-full py-4 bg-blue-500 hover:bg-blue-600 text-white font-black rounded-2xl shadow-xl shadow-blue-200 transition-all active:scale-95"
+                                >
+                                    HALELUYA
+                                </motion.button>
                             </div>
                         </motion.div>
                     </div>
