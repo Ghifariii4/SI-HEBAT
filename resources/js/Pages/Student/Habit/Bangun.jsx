@@ -3,7 +3,7 @@ import { Head, useForm, router, Link } from '@inertiajs/react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
     Plus, Trash, Sun, CheckCircle, BellRinging, Cloud,
-    ArrowLeft, Lightning, Coins, WarningCircle
+    ArrowLeft, Lightning, Coins, WarningCircle, Camera, Image
 } from '@phosphor-icons/react';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
@@ -20,6 +20,7 @@ const MySwal = withReactContent(Swal);
 
 export default function Bangun({ serverTime }) {
     const [currentTime, setCurrentTime] = useState(new Date(serverTime));
+    const [imagePreview, setImagePreview] = useState(null);
 
     useEffect(() => {
         const timer = setInterval(() => {
@@ -66,9 +67,10 @@ export default function Bangun({ serverTime }) {
 
     const env = getEnvironment();
 
-    const { data, setData, post, processing } = useForm({
+    const { data, setData, post, processing, errors } = useForm({
         check_in_time: '',
         activities: [],
+        image: null,
         total_xp: 0,
     });
 
@@ -88,6 +90,18 @@ export default function Bangun({ serverTime }) {
         setData('activities', newActivities);
     };
 
+    const handleImageChange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            setData('image', file);
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setImagePreview(reader.result);
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+
     const submit = (e) => {
         e.preventDefault();
 
@@ -96,6 +110,7 @@ export default function Bangun({ serverTime }) {
         // Send to backend - server will calculate points securely
         router.post(route('student.habit.wakeup.store'), {
             activities: data.activities,
+            image: data.image,
         }, {
             onStart: () => {
                 Swal.fire({
@@ -345,6 +360,43 @@ export default function Bangun({ serverTime }) {
                                 </motion.div>
                             ))}
                         </AnimatePresence>
+
+                        {/* FOTO BUKTI */}
+                        <div className="space-y-4 pt-4">
+                            <label className="text-xs font-black text-slate-500 uppercase tracking-widest">Bukti Bangun Pagi (Foto)</label>
+                            
+                            <div 
+                                onClick={() => document.getElementById('photo-upload').click()}
+                                className={`relative w-full h-48 rounded-3xl border-4 border-dashed transition-all cursor-pointer flex flex-col items-center justify-center overflow-hidden
+                                    ${imagePreview ? 'border-blue-500 bg-blue-50' : 'border-slate-200 bg-slate-50 hover:bg-slate-100 hover:border-slate-300'}`}
+                            >
+                                {imagePreview ? (
+                                    <>
+                                        <img src={imagePreview} alt="Preview" className="w-full h-full object-cover" />
+                                        <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity">
+                                            <p className="text-white font-bold text-xs">GANTI FOTO</p>
+                                        </div>
+                                    </>
+                                ) : (
+                                    <>
+                                        <Camera weight="fill" size={48} className="text-slate-300 mb-2" />
+                                        <p className="text-slate-400 font-bold text-xs">KETUK UNTUK AMBIL FOTO</p>
+                                        <p className="text-[10px] text-slate-300 mt-1 uppercase font-black">Selfie atau bukti suasana pagi</p>
+                                    </>
+                                )}
+                                <input 
+                                    id="photo-upload"
+                                    type="file" 
+                                    accept="image/*" 
+                                    capture="user"
+                                    onChange={handleImageChange}
+                                    className="hidden" 
+                                />
+                            </div>
+                            {errors.image && (
+                                <p className="text-red-500 text-[10px] font-black uppercase text-center">{errors.image}</p>
+                            )}
+                        </div>
 
                         <button
                             disabled={processing}

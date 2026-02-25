@@ -34,6 +34,20 @@ class HandleInertiaRequests extends Middleware
             'auth' => [
                 'user' => $request->user(),
             ],
+            /*
+             * Share Laravel flash data with every Inertia response.
+             * We use a simpler direct access to ensure the data persists 
+             * through the Inertia redirect.
+             */
+            'flash' => [
+                'success'       => session('success'),
+                'error'         => session('error'),
+                'xp_earned'     => session('xp_earned'),
+                'koin_earned'   => session('koin_earned'),
+                'check_in_time' => session('check_in_time'),
+            ],
+            // Add app-wide constants/settings if needed
+            'app_name' => config('app.name'),
         ];
     }
 }
