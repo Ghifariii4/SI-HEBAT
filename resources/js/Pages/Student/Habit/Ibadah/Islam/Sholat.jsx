@@ -1,11 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
-<<<<<<< HEAD
-import { Head, Link, useForm } from '@inertiajs/react';
-import { motion, AnimatePresence } from 'framer-motion';
-=======
 import { Head, Link, useForm, router } from '@inertiajs/react';
-import { motion, AnimatePresence, animate } from 'framer-motion';
->>>>>>> 2dbe137ef5aa6a6a9ad0f0317c58afb064428fcd
+import { motion, AnimatePresence } from 'framer-motion';
 import {
     ArrowLeft, Moon, Sun, Cloud, Heart, Star,
     Check, Plus, Clock, Info, Save, MessageCircle,
@@ -14,84 +9,28 @@ import {
 import StudentLayout from '@/Layouts/StudentLayout';
 import confetti from 'canvas-confetti';
 import Swal from 'sweetalert2';
-<<<<<<< HEAD
 import withReactContent from 'sweetalert2-react-content';
 import Lottie from 'lottie-react';
 import CountUp from 'react-countup';
 import { Lightning, Coins } from '@phosphor-icons/react';
 
 // Import Animations
-import MedalSuccess from '../../../../../../../public/Success-Animation/MedalSuccess.json';
+import MedalSuccess from '@/Animations/MedalSuccess.json';
 
 const MySwal = withReactContent(Swal);
-=======
-import Lottie from 'lottie-react';
-import MedalAnimation from '../../../../../../../public/Success-Animation/MedalSuccess.json';
-
-// Simple Counter Component for the Popup
-const Counter = ({ from, to, duration = 2 }) => {
-    const [count, setCount] = useState(from);
-
-    useEffect(() => {
-        const controls = animate(from, to, {
-            duration,
-            onUpdate(value) {
-                setCount(Math.floor(value));
-            },
-        });
-        return () => controls.stop();
-    }, [from, to, duration]);
-
-    return <span>{count}</span>;
-};
->>>>>>> 2dbe137ef5aa6a6a9ad0f0317c58afb064428fcd
 
 export default function Sholat({ auth }) {
     const user = auth?.user || {};
     const [currentTime, setCurrentTime] = useState(new Date());
     const [selectedPrayer, setSelectedPrayer] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [showSuccessPopup, setShowSuccessPopup] = useState(false);
-    const [earnedRewards, setEarnedRewards] = useState({ xp: 0, coin: 0 });
-
     const [prayerStatus, setPrayerStatus] = useState({
-        subuh: { completed: false, sunnah: [], notes: '' },
-        dzuhur: { completed: false, sunnah: [], notes: '' },
-        ashar: { completed: false, sunnah: [], notes: '' },
-        maghrib: { completed: false, sunnah: [], notes: '' },
-        isya: { completed: false, sunnah: [], notes: '' },
+        subuh: { completed: false },
+        dzuhur: { completed: false },
+        ashar: { completed: false },
+        maghrib: { completed: false },
+        isya: { completed: false },
     });
-
-    const { data, setData, post, processing } = useForm({
-        religion: 'islam',
-        tasks: [],
-        sunnah: [],
-    });
-
-    // Prayer windows: start, end in 'HH:MM', graceMins = minutes before start allowed
-    const prayerWindows = {
-        subuh:   { start: '04:00', end: '05:30', graceMins: 30 },
-        dzuhur:  { start: '11:30', end: '14:30', graceMins: 30 },
-        ashar:   { start: '14:45', end: '18:00', graceMins: 30 },
-        maghrib: { start: '17:45', end: '19:30', graceMins: 30 },
-        isya:    { start: '19:00', end: '03:30', graceMins: 30 }, // crosses midnight
-    };
-
-    const prayers = [
-<<<<<<< HEAD
-        { id: 'subuh', name: 'Subuh', time: '05:00 - 06:00', icon: Cloud, sunnah: ['Qobliyah'], xp: 20 },
-        { id: 'dzuhur', name: 'Dzuhur', time: '12:00 - 15:00', icon: Sun, sunnah: ['Qobliyah', "Ba'diyah"], xp: 20 },
-        { id: 'ashar', name: 'Ashar', time: '15:10 - 16:30', icon: Sun, sunnah: ['Qobliyah'], xp: 20 },
-        { id: 'maghrib', name: 'Maghrib', time: '18:00 - 19:00', icon: Moon, sunnah: ['Qobliyah', "Ba'diyah"], xp: 20 },
-        { id: 'isya', name: 'Isya', time: '19:00 - 21:30', icon: Moon, sunnah: ['Qobliyah', "Ba'diyah"], xp: 20 },
-=======
-        { id: 'subuh',   name: 'Subuh',   time: '04:30 - 05:30', icon: Cloud, sunnah: ['Qobliyah'],                xp: 50 },
-        { id: 'dzuhur',  name: 'Dzuhur',  time: '11:30 - 14:30', icon: Sun,   sunnah: ['Qobliyah', "Ba'diyah"],   xp: 50 },
-        { id: 'ashar',   name: 'Ashar',   time: '14:45 - 18:00', icon: Sun,   sunnah: ['Qobliyah'],                xp: 50 },
-        { id: 'maghrib', name: 'Maghrib', time: '17:45 - 19:30', icon: Moon,  sunnah: ['Qobliyah', "Ba'diyah"],   xp: 50 },
-        { id: 'isya',    name: 'Isya',    time: '19:00 - 03:30', icon: Moon,  sunnah: ['Qobliyah', "Ba'diyah"],   xp: 50 },
->>>>>>> 2dbe137ef5aa6a6a9ad0f0317c58afb064428fcd
-    ];
 
     const { data, setData, post, processing, reset } = useForm({
         prayer: '',
@@ -101,6 +40,24 @@ export default function Sholat({ auth }) {
         is_tepat_waktu: false,
         photo: null,
     });
+
+    // Prayer windows: start, end in 'HH:MM'
+    // Aligned with IslamController.php
+    const prayerWindows = {
+        subuh: { start: '05:00', end: '06:00' },
+        dzuhur: { start: '12:00', end: '15:00' },
+        ashar: { start: '15:10', end: '16:30' },
+        maghrib: { start: '18:00', end: '19:00' },
+        isya: { start: '19:00', end: '21:30' },
+    };
+
+    const prayers = [
+        { id: 'subuh', name: 'Subuh', time: '05:00 - 06:00', icon: Cloud, sunnah: ['Qobliyah'], xp: 20 },
+        { id: 'dzuhur', name: 'Dzuhur', time: '12:00 - 15:00', icon: Sun, sunnah: ['Qobliyah', "Ba'diyah"], xp: 20 },
+        { id: 'ashar', name: 'Ashar', time: '15:10 - 16:30', icon: Sun, sunnah: ['Qobliyah'], xp: 20 },
+        { id: 'maghrib', name: 'Maghrib', time: '18:00 - 19:00', icon: Moon, sunnah: ['Qobliyah', "Ba'diyah"], xp: 20 },
+        { id: 'isya', name: 'Isya', time: '19:00 - 21:30', icon: Moon, sunnah: ['Qobliyah', "Ba'diyah"], xp: 20 },
+    ];
 
     useEffect(() => {
         const timer = setInterval(() => setCurrentTime(new Date()), 1000);
@@ -119,28 +76,14 @@ export default function Sholat({ auth }) {
         if (!win) return 'active';
 
         const now = currentTime;
-        const nowMins = now.getHours() * 60 + now.getMinutes();
+        const nowStr = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
 
-        const [sH, sM] = win.start.split(':').map(Number);
-        const [eH, eM] = win.end.split(':').map(Number);
-        const startMins = sH * 60 + sM;
-        const endMins   = eH * 60 + eM;
-        const allowedFrom = startMins - win.graceMins;
-
-        // Midnight-crossing window (e.g. Isya 19:00 - 03:30)
-        if (endMins < startMins) {
-            if (nowMins >= allowedFrom || nowMins < endMins) return 'active';
-            if (nowMins < allowedFrom) return 'not_yet';
-            return 'passed';
-        }
-
-        if (nowMins >= allowedFrom && nowMins < endMins) return 'active';
-        if (nowMins < allowedFrom) return 'not_yet';
+        if (nowStr >= win.start && nowStr <= win.end) return 'active';
+        if (nowStr < win.start) return 'not_yet';
         return 'passed';
     };
 
     const activePrayerId = useMemo(() => {
-        const currentMins = currentTime.getHours() * 60 + currentTime.getMinutes();
         for (const p of prayers) {
             if (getPrayerAvailability(p.id) === 'active' && !prayerStatus[p.id].completed) {
                 return p.id;
@@ -152,14 +95,12 @@ export default function Sholat({ auth }) {
     const handleOpenModal = (prayer) => {
         if (prayerStatus[prayer.id].completed) return;
 
-<<<<<<< HEAD
-=======
         const availability = getPrayerAvailability(prayer.id);
         if (availability === 'not_yet') {
             Swal.fire({
                 icon: 'info',
                 title: `Belum Waktunya`,
-                text: `Waktu sholat ${prayer.name} belum tiba. Buka aplikasi saat waktunya tiba ya! 🕌`,
+                text: `Waktu sholat ${prayer.name} belum tiba (${prayer.time}). Buka aplikasi saat waktunya tiba ya! 🕌`,
                 confirmButtonColor: '#10b981',
             });
             return;
@@ -168,13 +109,12 @@ export default function Sholat({ auth }) {
             Swal.fire({
                 icon: 'warning',
                 title: `Waktu Sudah Lewat`,
-                text: `Waktu sholat ${prayer.name} sudah berakhir. Semoga bisa lebih tepat waktu besok! 💪`,
+                text: `Waktu sholat ${prayer.name} sudah berakhir (${prayer.time}). Semoga bisa lebih tepat waktu besok! 💪`,
                 confirmButtonColor: '#10b981',
             });
             return;
         }
 
->>>>>>> 2dbe137ef5aa6a6a9ad0f0317c58afb064428fcd
         setSelectedPrayer(prayer);
         setData({
             prayer: prayer.id,
@@ -188,17 +128,7 @@ export default function Sholat({ auth }) {
     };
 
     const handleSave = () => {
-<<<<<<< HEAD
         post(route('student.habit.ibadah.islam.sholat.store'), {
-            onSuccess: (page) => {
-=======
-        const updatedTasks = [...data.tasks, selectedPrayer.id];
-        
-        router.post(route('student.habit.store', 'beribadah'), {
-            religion: 'islam',
-            tasks: updatedTasks,
-            sunnah: data.sunnah, // Option, for now just empty or handled via tri-state
-        }, {
             onStart: () => {
                 setIsModalOpen(false);
                 Swal.fire({
@@ -210,22 +140,13 @@ export default function Sholat({ auth }) {
             onSuccess: (page) => {
                 Swal.close();
                 const flash = page.props.flash || {};
-                const xp = flash.xp_earned || 0;
-                const coin = flash.koin_earned || 0;
-                
-                setEarnedRewards({ xp, coin });
->>>>>>> 2dbe137ef5aa6a6a9ad0f0317c58afb064428fcd
+                const xpEarned = flash.xp_earned || 0;
+                const koinEarned = flash.koin_earned || 0;
+
                 setPrayerStatus(prev => ({
                     ...prev,
-                    [selectedPrayer.id]: {
-                        ...prev[selectedPrayer.id],
-                        completed: true
-                    }
+                    [selectedPrayer.id]: { completed: true }
                 }));
-<<<<<<< HEAD
-=======
-                setData('tasks', updatedTasks);
->>>>>>> 2dbe137ef5aa6a6a9ad0f0317c58afb064428fcd
 
                 confetti({
                     particleCount: 150,
@@ -233,11 +154,6 @@ export default function Sholat({ auth }) {
                     origin: { y: 0.6 },
                     colors: ['#10b981', '#fbbf24', '#ffffff']
                 });
-
-<<<<<<< HEAD
-                const flash = page.props.flash || {};
-                const xpEarned = flash.xp_earned || 0;
-                const koinEarned = flash.koin_earned || 0;
 
                 MySwal.fire({
                     html: (
@@ -297,10 +213,10 @@ export default function Sholat({ auth }) {
                     allowOutsideClick: false,
                 });
 
-                setIsModalOpen(false);
                 reset();
             },
             onError: (errors) => {
+                Swal.close();
                 const firstError = Object.values(errors)[0];
                 MySwal.fire({
                     html: (
@@ -334,13 +250,6 @@ export default function Sholat({ auth }) {
                         confirmButton: 'w-[calc(100%-4rem)] mx-8 mb-8 py-5 rounded-3xl bg-red-500 hover:bg-red-600 text-white font-black text-lg transition-all active:scale-95 shadow-xl shadow-red-100'
                     }
                 });
-=======
-                setShowSuccessPopup(true);
-            },
-            onError: (errors) => {
-                Swal.close();
-                Swal.fire('Gagal', errors.error || 'Terjadi kesalahan', 'error');
->>>>>>> 2dbe137ef5aa6a6a9ad0f0317c58afb064428fcd
             }
         });
     };
@@ -439,32 +348,30 @@ export default function Sholat({ auth }) {
                                     whileHover={!status.completed && !isLocked ? { scale: 1.02, x: 5 } : {}}
                                     whileTap={!status.completed && !isLocked ? { scale: 0.98 } : {}}
                                     onClick={() => handleOpenModal(prayer)}
-                                    className={`relative group cursor-pointer rounded-3xl p-5 border-2 transition-all duration-300 ${
-                                        status.completed
-                                            ? 'bg-white border-green-500 shadow-[0_0_20px_rgba(34,197,94,0.2)]'
-                                            : isActive
-                                                ? 'bg-white border-emerald-400 shadow-[0_0_30px_rgba(52,211,153,0.3)] animate-pulse shadow-emerald-400/20'
-                                                : isLocked
-                                                    ? 'bg-white/50 backdrop-blur-md border-gray-200 opacity-70'
-                                                    : isPassed
-                                                        ? 'bg-white/40 backdrop-blur-md border-red-100 opacity-60'
-                                                        : 'bg-white/80 backdrop-blur-md border-transparent hover:border-white/50 shadow-lg'
-                                    }`}
+                                    className={`relative group cursor-pointer rounded-3xl p-5 border-2 transition-all duration-300 ${status.completed
+                                        ? 'bg-white border-green-500 shadow-[0_0_20px_rgba(34,197,94,0.2)]'
+                                        : isActive
+                                            ? 'bg-white border-emerald-400 shadow-[0_0_30px_rgba(52,211,153,0.3)] animate-pulse shadow-emerald-400/20'
+                                            : isLocked
+                                                ? 'bg-white/50 backdrop-blur-md border-gray-200 opacity-70'
+                                                : isPassed
+                                                    ? 'bg-white/40 backdrop-blur-md border-red-100 opacity-60'
+                                                    : 'bg-white/80 backdrop-blur-md border-transparent hover:border-white/50 shadow-lg'
+                                        }`}
                                 >
                                     <div className="flex items-center justify-between">
                                         <div className="flex items-center gap-5">
                                             {/* Icon */}
-                                            <div className={`w-14 h-14 rounded-2xl flex items-center justify-center transition-all duration-500 shadow-inner ${
-                                                status.completed
-                                                    ? 'bg-green-100 text-green-600 rotate-[360deg]'
-                                                    : isActive
-                                                        ? 'bg-emerald-500 text-white shadow-emerald-200'
-                                                        : isLocked
-                                                            ? 'bg-gray-100 text-gray-300'
-                                                            : isPassed
-                                                                ? 'bg-red-50 text-red-300'
-                                                                : 'bg-gray-100 text-gray-400 group-hover:bg-emerald-50 group-hover:text-emerald-500'
-                                            }`}>
+                                            <div className={`w-14 h-14 rounded-2xl flex items-center justify-center transition-all duration-500 shadow-inner ${status.completed
+                                                ? 'bg-green-100 text-green-600 rotate-[360deg]'
+                                                : isActive
+                                                    ? 'bg-emerald-500 text-white shadow-emerald-200'
+                                                    : isLocked
+                                                        ? 'bg-gray-100 text-gray-300'
+                                                        : isPassed
+                                                            ? 'bg-red-50 text-red-300'
+                                                            : 'bg-gray-100 text-gray-400 group-hover:bg-emerald-50 group-hover:text-emerald-500'
+                                                }`}>
                                                 <prayer.icon size={28} />
                                             </div>
 
@@ -474,14 +381,13 @@ export default function Sholat({ auth }) {
                                                     {prayer.name}
                                                 </h3>
                                                 <div className="flex items-center gap-2 mt-0.5 flex-wrap">
-                                                    <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
-                                                        isActive ? 'bg-emerald-100 text-emerald-600' : 'bg-gray-100 text-gray-500'
-                                                    }`}>
+                                                    <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${isActive ? 'bg-emerald-100 text-emerald-600' : 'bg-gray-100 text-gray-500'
+                                                        }`}>
                                                         {prayer.time}
                                                     </span>
                                                     {status.completed && (
                                                         <span className="text-[10px] font-bold bg-green-100 text-green-600 px-2 py-0.5 rounded-full flex items-center gap-1">
-                                                            <Award size={10} /> +{prayer.xp} XP
+                                                            <Award size={10} /> Selesai
                                                         </span>
                                                     )}
                                                     {isLocked && (
@@ -499,17 +405,16 @@ export default function Sholat({ auth }) {
                                         </div>
 
                                         {/* Status Indicator */}
-                                        <div className={`w-10 h-10 rounded-full flex items-center justify-center border-2 transition-all duration-500 ${
-                                            status.completed
-                                                ? 'bg-green-500 border-green-500 text-white scale-110 shadow-lg shadow-green-200'
-                                                : isActive
-                                                    ? 'border-emerald-400 text-emerald-500 bg-emerald-50'
-                                                    : isLocked
-                                                        ? 'border-gray-200 text-gray-200 bg-gray-50'
-                                                        : isPassed
-                                                            ? 'border-red-100 text-red-200 bg-red-50'
-                                                            : 'border-gray-200 text-gray-300'
-                                        }`}>
+                                        <div className={`w-10 h-10 rounded-full flex items-center justify-center border-2 transition-all duration-500 ${status.completed
+                                            ? 'bg-green-500 border-green-500 text-white scale-110 shadow-lg shadow-green-200'
+                                            : isActive
+                                                ? 'border-emerald-400 text-emerald-500 bg-emerald-50'
+                                                : isLocked
+                                                    ? 'border-gray-200 text-gray-200 bg-gray-50'
+                                                    : isPassed
+                                                        ? 'border-red-100 text-red-200 bg-red-50'
+                                                        : 'border-gray-200 text-gray-300'
+                                            }`}>
                                             {status.completed ? <Check size={20} strokeWidth={3} /> : <Plus size={20} />}
                                         </div>
                                     </div>
@@ -574,13 +479,8 @@ export default function Sholat({ auth }) {
                                                 <Zap size={24} fill={data.is_tepat_waktu ? "currentColor" : "none"} />
                                             </div>
                                             <div>
-<<<<<<< HEAD
                                                 <h4 className={`font-black ${data.is_tepat_waktu ? 'text-emerald-900' : 'text-gray-400'}`}>Sholat Tepat Waktu</h4>
                                                 <p className="text-[10px] text-emerald-600 font-bold uppercase tracking-wider">+5 XP Bonus</p>
-=======
-                                                <h4 className="font-black text-gray-800">Sholat Tepat Waktu</h4>
-                                                <p className="text-xs text-gray-500 font-bold">Dapatkan XP & Koin</p>
->>>>>>> 2dbe137ef5aa6a6a9ad0f0317c58afb064428fcd
                                             </div>
                                         </div>
                                         <div className={`w-8 h-8 rounded-full flex items-center justify-center transition-all ${data.is_tepat_waktu ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-200' : 'bg-gray-200 text-white'}`}>
@@ -600,7 +500,6 @@ export default function Sholat({ auth }) {
                                             <div className={`w-6 h-6 border-2 rounded-lg flex items-center justify-center transition-all ${data.is_jamaah ? 'bg-blue-500 border-blue-500 text-white' : 'border-gray-300'}`}>
                                                 {data.is_jamaah && <Check size={14} strokeWidth={4} />}
                                             </div>
-<<<<<<< HEAD
                                             <span className={`text-sm font-bold ${data.is_jamaah ? 'text-blue-900' : 'text-gray-600'}`}>Sholat Berjamaah</span>
                                             <span className="ml-auto text-[10px] font-black text-blue-500">+10 XP</span>
                                         </div>
@@ -653,9 +552,6 @@ export default function Sholat({ auth }) {
                                                 </label>
                                             </div>
                                         )}
-=======
-                                        ))}
->>>>>>> 2dbe137ef5aa6a6a9ad0f0317c58afb064428fcd
                                     </div>
                                 </div>
 
@@ -675,97 +571,6 @@ export default function Sholat({ auth }) {
                                         <Save size={20} /> {processing ? 'Menyimpan...' : 'Simpan Jurnal'}
                                     </button>
                                 </div>
-                            </div>
-                        </motion.div>
-                    </div>
-                )}
-            </AnimatePresence>
-
-            {/* Success Popup */}
-            <AnimatePresence>
-                {showSuccessPopup && (
-                    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
-                        <motion.div
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            exit={{ opacity: 0 }}
-                            className="absolute inset-0 bg-slate-900/80 backdrop-blur-md"
-                        />
-                        <motion.div
-                            initial={{ scale: 0.5, opacity: 0, y: 50 }}
-                            animate={{ scale: 1, opacity: 1, y: 0 }}
-                            exit={{ scale: 0.5, opacity: 0, y: 50 }}
-                            className="bg-white rounded-[3rem] p-8 w-full max-w-sm relative z-10 text-center shadow-2xl overflow-hidden"
-                        >
-                            {/* Animated Background Rays */}
-                            <motion.div 
-                                animate={{ rotate: 360 }}
-                                transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
-                                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] opacity-5 pointer-events-none"
-                            >
-                                <div className="w-full h-full bg-[conic-gradient(from_0deg,transparent_0deg,emerald_10deg,transparent_20deg)]" />
-                            </motion.div>
-
-                            <div className="relative z-10">
-                                <div className="w-48 h-48 mx-auto -mt-10 mb-2">
-                                    <Lottie animationData={MedalAnimation} loop={false} />
-                                </div>
-
-                                <motion.h2 
-                                    initial={{ y: 10, opacity: 0 }}
-                                    animate={{ y: 0, opacity: 1 }}
-                                    transition={{ delay: 0.5 }}
-                                    className="text-3xl font-black text-slate-800 mb-2"
-                                >
-                                    MISI BERHASIL!
-                                </motion.h2>
-
-                                <motion.p 
-                                    initial={{ y: 10, opacity: 0 }}
-                                    animate={{ y: 0, opacity: 1 }}
-                                    transition={{ delay: 0.6 }}
-                                    className="text-slate-500 font-bold text-sm mb-6"
-                                >
-                                    Alhamdulillah, ibadahmu tercatat!
-                                </motion.p>
-
-                                <div className="flex gap-4 justify-center mb-8">
-                                    <motion.div 
-                                        initial={{ x: -20, opacity: 0 }}
-                                        animate={{ x: 0, opacity: 1 }}
-                                        transition={{ delay: 0.8 }}
-                                        className="bg-yellow-50 p-4 rounded-[2rem] border-2 border-yellow-200 flex flex-col items-center min-w-[100px]"
-                                    >
-                                        <span className="text-3xl mb-1">⚡</span>
-                                        <p className="text-[10px] font-black text-slate-400 uppercase tracking-tighter">XP Earned</p>
-                                        <p className="text-2xl font-black text-slate-800">
-                                            +<Counter from={0} to={earnedRewards.xp} />
-                                        </p>
-                                    </motion.div>
-
-                                    <motion.div 
-                                        initial={{ x: 20, opacity: 0 }}
-                                        animate={{ x: 0, opacity: 1 }}
-                                        transition={{ delay: 1 }}
-                                        className="bg-blue-50 p-4 rounded-[2rem] border-2 border-blue-200 flex flex-col items-center min-w-[100px]"
-                                    >
-                                        <span className="text-3xl mb-1">🪙</span>
-                                        <p className="text-[10px] font-black text-slate-400 uppercase tracking-tighter">Coins</p>
-                                        <p className="text-2xl font-black text-slate-800">
-                                            +<Counter from={0} to={earnedRewards.coin} />
-                                        </p>
-                                    </motion.div>
-                                </div>
-
-                                <motion.button
-                                    initial={{ y: 20, opacity: 0 }}
-                                    animate={{ y: 0, opacity: 1 }}
-                                    transition={{ delay: 1.2 }}
-                                    onClick={() => router.visit(route('student.dashboard'))}
-                                    className="w-full py-4 bg-emerald-500 hover:bg-emerald-600 text-white font-black rounded-2xl shadow-xl shadow-emerald-200 transition-all active:scale-95"
-                                >
-                                    MANA LAGI?
-                                </motion.button>
                             </div>
                         </motion.div>
                     </div>

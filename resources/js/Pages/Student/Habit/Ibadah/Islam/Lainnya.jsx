@@ -1,12 +1,6 @@
-<<<<<<< HEAD
-import React, { useState } from 'react';
-import { Head, Link, useForm } from '@inertiajs/react';
-import { motion, AnimatePresence } from 'framer-motion';
-=======
 import React, { useState, useEffect } from 'react';
 import { Head, Link, useForm, router } from '@inertiajs/react';
 import { motion, AnimatePresence, animate } from 'framer-motion';
->>>>>>> 2dbe137ef5aa6a6a9ad0f0317c58afb064428fcd
 import {
     ArrowLeft, BookOpen, Heart,
     Sparkles, ChevronRight, X,
@@ -16,31 +10,15 @@ import {
 import StudentLayout from '@/Layouts/StudentLayout';
 import confetti from 'canvas-confetti';
 import Swal from 'sweetalert2';
-<<<<<<< HEAD
 import withReactContent from 'sweetalert2-react-content';
 import Lottie from 'lottie-react';
 import CountUp from 'react-countup';
 import { Lightning, Coins } from '@phosphor-icons/react';
 
 // Import Animations
-import MedalSuccess from '../../../../../../../public/Success-Animation/MedalSuccess.json';
+import MedalSuccess from '@/Animations/MedalSuccess.json';
 
 const MySwal = withReactContent(Swal);
-
-export default function Lainnya({ auth }) {
-    const user = auth?.user || {};
-    const [activeModal, setActiveModal] = useState(null); // 'quran' | 'puasa' | 'haid' | null
-    const [isHaidEnabled, setIsHaidEnabled] = useState(false);
-
-    // Quran Logic
-    const quranForm = useForm({
-        surah_start: '',
-        surah_end: '',
-        ayat_start: '',
-        ayat_end: ''
-=======
-import Lottie from 'lottie-react';
-import MedalAnimation from '../../../../../../../public/Success-Animation/MedalSuccess.json';
 
 // Simple Counter Component for the Popup
 const Counter = ({ from, to, duration = 2 }) => {
@@ -61,13 +39,14 @@ const Counter = ({ from, to, duration = 2 }) => {
 
 export default function Lainnya({ auth }) {
     const user = auth?.user || {};
-    const [activeModal, setActiveModal] = useState(null); // 'quran' | 'puasa' | null
+    const [activeModal, setActiveModal] = useState(null); // 'quran' | 'puasa' | 'haid' | null
+    const [isHaidEnabled, setIsHaidEnabled] = useState(false);
     const [showSuccessPopup, setShowSuccessPopup] = useState(false);
     const [earnedRewards, setEarnedRewards] = useState({ xp: 0, coin: 0 });
 
-    const { data, setData, post, processing } = useForm({
+    const { data, setData, post, processing, reset } = useForm({
         religion: 'islam',
-        tasks: [], // will contain 'tilawah' or 'puasa'
+        tasks: [],
         quran: {
             surahStart: '',
             surahEnd: '',
@@ -75,30 +54,14 @@ export default function Lainnya({ auth }) {
             ayatEnd: ''
         },
         fasting_type: null,
->>>>>>> 2dbe137ef5aa6a6a9ad0f0317c58afb064428fcd
+        activity_haid: '',
+        photo_haid: null,
     });
 
     const handleSaveQuran = (e) => {
         e.preventDefault();
-<<<<<<< HEAD
-        quranForm.post(route('student.habit.ibadah.islam.quran.store'), {
-            onSuccess: (page) => {
-                celebrate();
-                setActiveModal(null);
-                quranForm.reset();
-                const flash = page.props.flash || {};
-                showSuccessPopup(flash.message, flash.xp_earned, flash.koin_earned);
-            },
-            onError: (err) => showErrorPopup(err)
-=======
-        
-        const updatedTasks = [...new Set([...data.tasks, 'tilawah'])];
-        
-        router.post(route('student.habit.store', 'beribadah'), {
-            religion: 'islam',
-            tasks: updatedTasks,
-            quran: data.quran,
-        }, {
+
+        post(route('student.habit.ibadah.islam.quran.store'), {
             onStart: () => {
                 setActiveModal(null);
                 Swal.fire({
@@ -111,44 +74,43 @@ export default function Lainnya({ auth }) {
                 Swal.close();
                 const flash = page.props.flash || {};
                 setEarnedRewards({ xp: flash.xp_earned || 0, coin: flash.koin_earned || 0 });
-                setData('tasks', updatedTasks);
+                celebrate();
+                setShowSuccessPopup(true);
+                reset('quran');
+            },
+            onError: (errors) => {
+                Swal.close();
+                Swal.fire('Gagal', Object.values(errors)[0] || 'Terjadi kesalahan', 'error');
+            }
+        });
+    };
+
+    const handleSavePuasa = (type) => {
+        setData('fasting_type', type);
+        post(route('student.habit.ibadah.islam.puasa.store'), {
+            onStart: () => {
+                setActiveModal(null);
+                Swal.fire({
+                    title: 'Mencatat Puasa...',
+                    allowOutsideClick: false,
+                    didOpen: () => { Swal.showLoading(); }
+                });
+            },
+            onSuccess: (page) => {
+                Swal.close();
+                const flash = page.props.flash || {};
+                setEarnedRewards({ xp: flash.xp_earned || 0, coin: flash.koin_earned || 0 });
                 celebrate();
                 setShowSuccessPopup(true);
             },
             onError: (errors) => {
                 Swal.close();
-                Swal.fire('Gagal', errors.error || 'Terjadi kesalahan', 'error');
+                Swal.fire('Gagal', Object.values(errors)[0] || 'Terjadi kesalahan', 'error');
             }
->>>>>>> 2dbe137ef5aa6a6a9ad0f0317c58afb064428fcd
         });
     };
-
-    // Puasa Logic
-    const puasaForm = useForm({ type: '' });
-    const handleSavePuasa = (type) => {
-<<<<<<< HEAD
-        puasaForm.setData('type', type);
-        puasaForm.post(route('student.habit.ibadah.islam.puasa.store'), {
-            onSuccess: (page) => {
-                celebrate();
-                setActiveModal(null);
-                const flash = page.props.flash || {};
-                showSuccessPopup(flash.message, flash.xp_earned, flash.koin_earned);
-            },
-            onError: (err) => showErrorPopup(err)
-        });
-    };
-
-    // Haid Logic
-    const haidForm = useForm({
-        activity: '',
-        photo: null
-    });
 
     const handleSaveHaid = (activity) => {
-        // We'll use a hidden file input for photo if needed, but for now simple selection
-        haidForm.setData('activity', activity);
-        // Normally requires photo, so we open a sub-modal or prompt
         Swal.fire({
             title: 'Upload Bukti',
             text: 'Silakan ambil foto kegiatanmu',
@@ -162,148 +124,35 @@ export default function Lainnya({ auth }) {
                 input.accept = 'image/*';
                 input.onchange = (e) => {
                     const file = e.target.files[0];
-                    haidForm.setData({
-                        activity: activity,
-                        photo: file
+                    setData({
+                        ...data,
+                        activity_haid: activity,
+                        photo_haid: file
                     });
 
-                    // Post immediately after photo choice
-                    haidForm.post(route('student.habit.ibadah.islam.alternative.store'), {
-                        onSuccess: (page) => {
-                            celebrate();
-                            setActiveModal(null);
-                            const flash = page.props.flash || {};
-                            showSuccessPopup(flash.message, flash.xp_earned, flash.koin_earned);
+                    post(route('student.habit.ibadah.islam.alternative.store'), {
+                        onStart: () => {
+                            Swal.fire({
+                                title: 'Mengirim...',
+                                allowOutsideClick: false,
+                                didOpen: () => { Swal.showLoading(); }
+                            });
                         },
-                        onError: (err) => showErrorPopup(err),
+                        onSuccess: (page) => {
+                            Swal.close();
+                            const flash = page.props.flash || {};
+                            setEarnedRewards({ xp: flash.xp_earned || 0, coin: flash.koin_earned || 0 });
+                            celebrate();
+                            setShowSuccessPopup(true);
+                        },
+                        onError: (errors) => {
+                            Swal.close();
+                            Swal.fire('Gagal', Object.values(errors)[0] || 'Terjadi kesalahan', 'error');
+                        },
                         forceFormData: true
                     });
                 };
                 input.click();
-            }
-        });
-    };
-
-    const showSuccessPopup = (message, xpEarned, koinEarned) => {
-        MySwal.fire({
-            html: (
-                <div className="flex flex-col items-center p-4 text-slate-800 font-outfit">
-                    <div className="text-[10px] font-black tracking-[0.3em] text-emerald-400 uppercase mb-2">IBADAH TERJAGA</div>
-                    <h3 className="text-3xl font-black tracking-tight text-slate-900 leading-tight mb-1 uppercase text-center">
-                        AMALAN DICATAT!
-                    </h3>
-                    <p className="text-slate-400 font-bold text-sm mb-8 text-center px-4">
-                        {message || 'Alhamdulillah, amalanmu telah berhasil dicatat.'}
-                    </p>
-
-                    <div className="relative mb-10 w-64 h-64 flex items-center justify-center">
-                        <div className="absolute inset-0 border-[3px] border-dashed border-emerald-100 rounded-full animate-[spin_30s_linear_infinite]"></div>
-                        <div className="w-48 h-48 relative z-10">
-                            <Lottie animationData={MedalSuccess} loop={false} />
-                        </div>
-                        <div className="absolute top-4 right-4 w-10 h-10 bg-emerald-500 rounded-full flex items-center justify-center text-white font-black text-xs shadow-lg shadow-emerald-200 border-4 border-white z-20">
-                            <Sparkles size={14} fill="white" />
-                        </div>
-                    </div>
-
-                    <div className="flex gap-8 w-full justify-center mb-4">
-                        <div className="flex flex-col items-center">
-                            <div className="flex items-center gap-2 mb-1">
-                                <div className="w-8 h-8 bg-yellow-400 rounded-lg flex items-center justify-center shadow-lg shadow-yellow-200">
-                                    <Lightning weight="fill" className="text-white" size={18} />
-                                </div>
-                                <span className="text-2xl font-black text-slate-800">
-                                    +<CountUp end={xpEarned} duration={2} />
-                                </span>
-                            </div>
-                            <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">EX POINTS</p>
-                        </div>
-
-                        <div className="flex flex-col items-center">
-                            <div className="flex items-center gap-2 mb-1">
-                                <div className="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center shadow-lg shadow-blue-200">
-                                    <Coins weight="fill" className="text-white" size={18} />
-                                </div>
-                                <span className="text-2xl font-black text-slate-800">
-                                    +<CountUp end={koinEarned} duration={2} />
-                                </span>
-                            </div>
-                            <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">FIT COINS</p>
-                        </div>
-                    </div>
-                </div>
-            ),
-            showConfirmButton: true,
-            confirmButtonText: 'MANTAP, TERIMA KASIH!',
-            buttonsStyling: false,
-            customClass: {
-                popup: 'rounded-[3.5rem] border-0 shadow-2xl overflow-hidden',
-                confirmButton: 'w-[calc(100%-4rem)] mx-8 mb-8 py-5 rounded-3xl bg-emerald-600 hover:bg-emerald-700 text-white font-black text-lg transition-all active:scale-95 shadow-xl shadow-emerald-100'
-            },
-            allowOutsideClick: false,
-        });
-    };
-
-    const showErrorPopup = (errors) => {
-        const firstError = Object.values(errors)[0];
-        MySwal.fire({
-            html: (
-                <div className="flex flex-col items-center p-4 text-slate-800 font-outfit">
-                    <div className="text-[10px] font-black tracking-[0.3em] text-red-400 uppercase mb-2">GAGAL MENCATAT</div>
-                    <h3 className="text-3xl font-black tracking-tight text-slate-900 leading-tight mb-1 uppercase text-center">
-                        ADA KENDALA!
-                    </h3>
-                    <p className="text-slate-400 font-bold text-sm mb-8 text-center px-4">
-                        {firstError || 'Terjadi kesalahan saat mencoba mencatat amalanmu.'}
-                    </p>
-
-                    <div className="relative mb-10 w-64 h-64 flex items-center justify-center opacity-50 grayscale">
-                        <div className="absolute inset-0 border-[3px] border-dashed border-red-100 rounded-full"></div>
-                        <div className="w-48 h-48 relative z-10">
-                            <Lottie animationData={MedalSuccess} loop={false} />
-                        </div>
-                    </div>
-
-                    <div className="bg-red-50 p-4 rounded-2xl border-2 border-red-100 w-full text-center">
-                        <p className="text-xs font-black text-red-600 uppercase tracking-widest">Pesan Kesalahan</p>
-                        <p className="text-sm font-bold text-red-500 mt-1">{firstError}</p>
-                    </div>
-                </div>
-            ),
-            showConfirmButton: true,
-            confirmButtonText: 'COBA LAGI NANTI',
-            buttonsStyling: false,
-            customClass: {
-                popup: 'rounded-[3.5rem] border-0 shadow-2xl',
-                confirmButton: 'w-[calc(100%-4rem)] mx-8 mb-8 py-5 rounded-3xl bg-red-500 hover:bg-red-600 text-white font-black text-lg transition-all active:scale-95 shadow-xl shadow-red-100'
-=======
-        const updatedTasks = [...new Set([...data.tasks, 'puasa'])];
-
-        router.post(route('student.habit.store', 'beribadah'), {
-            religion: 'islam',
-            tasks: updatedTasks,
-            fasting_type: type,
-        }, {
-            onStart: () => {
-                setActiveModal(null);
-                Swal.fire({
-                    title: 'Mencatat Puasa...',
-                    allowOutsideClick: false,
-                    didOpen: () => { Swal.showLoading(); }
-                });
-            },
-            onSuccess: (page) => {
-                Swal.close();
-                const flash = page.props.flash || {};
-                setEarnedRewards({ xp: flash.xp_earned || 0, coin: flash.koin_earned || 0 });
-                setData('tasks', updatedTasks);
-                celebrate();
-                setShowSuccessPopup(true);
-            },
-            onError: (errors) => {
-                Swal.close();
-                Swal.fire('Gagal', errors.error || 'Terjadi kesalahan', 'error');
->>>>>>> 2dbe137ef5aa6a6a9ad0f0317c58afb064428fcd
             }
         });
     };
@@ -491,13 +340,8 @@ export default function Lainnya({ auth }) {
                                             type="text"
                                             placeholder="Nama Surah"
                                             className="w-full bg-gray-50 border-2 border-gray-100 rounded-2xl p-4 text-sm font-bold focus:border-emerald-500 focus:ring-0 transition-all"
-<<<<<<< HEAD
-                                            value={quranForm.data.surah_start}
-                                            onChange={e => quranForm.setData('surah_start', e.target.value)}
-=======
                                             value={data.quran.surahStart}
                                             onChange={e => setData('quran', { ...data.quran, surahStart: e.target.value })}
->>>>>>> 2dbe137ef5aa6a6a9ad0f0317c58afb064428fcd
                                         />
                                     </div>
                                     <div className="space-y-2">
@@ -507,13 +351,8 @@ export default function Lainnya({ auth }) {
                                             type="text"
                                             placeholder="Nama Surah"
                                             className="w-full bg-gray-50 border-2 border-gray-100 rounded-2xl p-4 text-sm font-bold focus:border-emerald-500 focus:ring-0 transition-all"
-<<<<<<< HEAD
-                                            value={quranForm.data.surah_end}
-                                            onChange={e => quranForm.setData('surah_end', e.target.value)}
-=======
                                             value={data.quran.surahEnd}
                                             onChange={e => setData('quran', { ...data.quran, surahEnd: e.target.value })}
->>>>>>> 2dbe137ef5aa6a6a9ad0f0317c58afb064428fcd
                                         />
                                     </div>
                                 </div>
@@ -526,13 +365,8 @@ export default function Lainnya({ auth }) {
                                             type="number"
                                             placeholder="0"
                                             className="w-full bg-gray-50 border-2 border-gray-100 rounded-2xl p-4 text-sm font-bold focus:border-emerald-500 focus:ring-0 transition-all"
-<<<<<<< HEAD
-                                            value={quranForm.data.ayat_start}
-                                            onChange={e => quranForm.setData('ayat_start', e.target.value)}
-=======
                                             value={data.quran.ayatStart}
                                             onChange={e => setData('quran', { ...data.quran, ayatStart: e.target.value })}
->>>>>>> 2dbe137ef5aa6a6a9ad0f0317c58afb064428fcd
                                         />
                                     </div>
                                     <div className="space-y-2">
@@ -542,28 +376,18 @@ export default function Lainnya({ auth }) {
                                             type="number"
                                             placeholder="0"
                                             className="w-full bg-gray-50 border-2 border-gray-100 rounded-2xl p-4 text-sm font-bold focus:border-emerald-500 focus:ring-0 transition-all"
-<<<<<<< HEAD
-                                            value={quranForm.data.ayat_end}
-                                            onChange={e => quranForm.setData('ayat_end', e.target.value)}
-=======
                                             value={data.quran.ayatEnd}
                                             onChange={e => setData('quran', { ...data.quran, ayatEnd: e.target.value })}
->>>>>>> 2dbe137ef5aa6a6a9ad0f0317c58afb064428fcd
                                         />
                                     </div>
                                 </div>
 
                                 <button
                                     type="submit"
-<<<<<<< HEAD
-                                    disabled={quranForm.processing}
-                                    className="w-full py-4 bg-gradient-to-r from-emerald-500 to-green-600 text-white font-black rounded-2xl shadow-xl shadow-emerald-200 hover:scale-[1.02] transition-all active:scale-[0.98] flex items-center justify-center gap-2 disabled:opacity-50"
-=======
                                     disabled={processing}
                                     className="w-full py-4 bg-gradient-to-r from-emerald-500 to-green-600 text-white font-black rounded-2xl shadow-xl shadow-emerald-200 hover:scale-[1.02] transition-all active:scale-[0.98] flex items-center justify-center gap-2"
->>>>>>> 2dbe137ef5aa6a6a9ad0f0317c58afb064428fcd
                                 >
-                                    <Save size={20} /> {quranForm.processing ? 'Menyimpan...' : 'Simpan Tilawah'}
+                                    <Save size={20} /> {processing ? 'Menyimpan...' : 'Simpan Tilawah'}
                                 </button>
                             </form>
                         </motion.div>
@@ -652,7 +476,7 @@ export default function Lainnya({ auth }) {
                             exit={{ scale: 0.5, opacity: 0, y: 50 }}
                             className="bg-white rounded-[3rem] p-8 w-full max-w-sm relative z-10 text-center shadow-2xl overflow-hidden"
                         >
-                            <motion.div 
+                            <motion.div
                                 animate={{ rotate: 360 }}
                                 transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
                                 className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] opacity-10 pointer-events-none"
@@ -662,10 +486,10 @@ export default function Lainnya({ auth }) {
 
                             <div className="relative z-10">
                                 <div className="w-48 h-48 mx-auto -mt-10 mb-2">
-                                    <Lottie animationData={MedalAnimation} loop={false} />
+                                    <Lottie animationData={MedalSuccess} loop={false} />
                                 </div>
 
-                                <motion.h2 
+                                <motion.h2
                                     initial={{ y: 10, opacity: 0 }}
                                     animate={{ y: 0, opacity: 1 }}
                                     transition={{ delay: 0.5 }}
@@ -674,7 +498,7 @@ export default function Lainnya({ auth }) {
                                     BARAKALLAH!
                                 </motion.h2>
 
-                                <motion.p 
+                                <motion.p
                                     initial={{ y: 10, opacity: 0 }}
                                     animate={{ y: 0, opacity: 1 }}
                                     transition={{ delay: 0.6 }}
@@ -684,7 +508,7 @@ export default function Lainnya({ auth }) {
                                 </motion.p>
 
                                 <div className="flex gap-4 justify-center mb-8">
-                                    <motion.div 
+                                    <motion.div
                                         initial={{ x: -20, opacity: 0 }}
                                         animate={{ x: 0, opacity: 1 }}
                                         transition={{ delay: 0.8 }}
@@ -697,7 +521,7 @@ export default function Lainnya({ auth }) {
                                         </p>
                                     </motion.div>
 
-                                    <motion.div 
+                                    <motion.div
                                         initial={{ x: 20, opacity: 0 }}
                                         animate={{ x: 0, opacity: 1 }}
                                         transition={{ delay: 1 }}
@@ -715,7 +539,7 @@ export default function Lainnya({ auth }) {
                                     initial={{ y: 20, opacity: 0 }}
                                     animate={{ y: 0, opacity: 1 }}
                                     transition={{ delay: 1.2 }}
-                                    onClick={() => router.visit(route('student.dashboard'))}
+                                    onClick={() => setShowSuccessPopup(false)}
                                     className="w-full py-4 bg-emerald-500 hover:bg-emerald-600 text-white font-black rounded-2xl shadow-xl shadow-emerald-200 transition-all active:scale-95"
                                 >
                                     SAMA-SAMA

@@ -12,9 +12,9 @@ import Lottie from 'lottie-react';
 import CountUp from 'react-countup';
 
 // Import Animations
-import BangunOnTime from '../../../../../public/Habit/Bangun_1.json';
-import BangunLate from '../../../../../public/Habit/Bangun_2.json';
-import MedalSuccess from '../../../../../../../public/Success-Animation/MedalSuccess.json';
+import BangunOnTime from '@/Animations/Bangun_1.json';
+import BangunLate from '@/Animations/Bangun_2.json';
+import MedalSuccess from '@/Animations/MedalSuccess.json';
 
 const MySwal = withReactContent(Swal);
 
@@ -364,8 +364,8 @@ export default function Bangun({ serverTime }) {
                         {/* FOTO BUKTI */}
                         <div className="space-y-4 pt-4">
                             <label className="text-xs font-black text-slate-500 uppercase tracking-widest">Bukti Bangun Pagi (Foto)</label>
-                            
-                            <div 
+
+                            <div
                                 onClick={() => document.getElementById('photo-upload').click()}
                                 className={`relative w-full h-48 rounded-3xl border-4 border-dashed transition-all cursor-pointer flex flex-col items-center justify-center overflow-hidden
                                     ${imagePreview ? 'border-blue-500 bg-blue-50' : 'border-slate-200 bg-slate-50 hover:bg-slate-100 hover:border-slate-300'}`}
@@ -384,13 +384,13 @@ export default function Bangun({ serverTime }) {
                                         <p className="text-[10px] text-slate-300 mt-1 uppercase font-black">Selfie atau bukti suasana pagi</p>
                                     </>
                                 )}
-                                <input 
+                                <input
                                     id="photo-upload"
-                                    type="file" 
-                                    accept="image/*" 
+                                    type="file"
+                                    accept="image/*"
                                     capture="user"
                                     onChange={handleImageChange}
-                                    className="hidden" 
+                                    className="hidden"
                                 />
                             </div>
                             {errors.image && (

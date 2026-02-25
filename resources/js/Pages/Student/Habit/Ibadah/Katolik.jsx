@@ -10,7 +10,7 @@ import StudentLayout from '@/Layouts/StudentLayout';
 import confetti from 'canvas-confetti';
 import Swal from 'sweetalert2';
 import Lottie from 'lottie-react';
-import MedalAnimation from '../../../../../../../public/Success-Animation/MedalSuccess.json';
+import MedalAnimation from '@/Animations/MedalSuccess.json';
 
 // Simple Counter Component for the Popup
 const Counter = ({ from, to, duration = 2 }) => {
@@ -117,14 +117,14 @@ export default function Katolik({ auth }) {
             const [sH, sM] = win.start.split(':').map(Number);
             const [eH, eM] = win.end.split(':').map(Number);
             const startMins = sH * 60 + sM;
-            const endMins   = eH * 60 + eM;
+            const endMins = eH * 60 + eM;
             const allowedFrom = startMins - win.graceMins;
 
             if (nowMins >= allowedFrom && nowMins < endMins) return 'active';
             if (nowMins < allowedFrom) isFuture = isFuture && true;
             else isFuture = false;
         }
-        
+
         return isFuture ? 'not_yet' : 'passed';
     };
 
@@ -157,7 +157,7 @@ export default function Katolik({ auth }) {
 
     const handleSave = () => {
         const updatedTasks = [...data.tasks, selectedTask.id];
-        
+
         router.post(route('student.habit.store', 'beribadah'), {
             religion: 'katolik',
             tasks: updatedTasks,
@@ -175,7 +175,7 @@ export default function Katolik({ auth }) {
                 const flash = page.props.flash || {};
                 const xp = flash.xp_earned || 0;
                 const coin = flash.koin_earned || 0;
-                
+
                 setEarnedRewards({ xp, coin });
                 setWorshipStatus(prev => ({
                     ...prev,
@@ -283,25 +283,23 @@ export default function Katolik({ auth }) {
                                     whileHover={!status.completed && !isLocked ? { scale: 1.02, x: 5 } : {}}
                                     whileTap={!status.completed && !isLocked ? { scale: 0.98 } : {}}
                                     onClick={() => handleOpenModal(activity)}
-                                    className={`relative group cursor-pointer rounded-3xl p-5 border-2 transition-all duration-300 ${
-                                        status.completed
+                                    className={`relative group cursor-pointer rounded-3xl p-5 border-2 transition-all duration-300 ${status.completed
                                             ? 'bg-white border-violet-500 shadow-[0_0_20px_rgba(139,92,246,0.2)]'
                                             : isLocked
                                                 ? 'bg-white/50 border-gray-100 opacity-60'
                                                 : isPassed
                                                     ? 'bg-white/40 border-red-100 opacity-50'
                                                     : 'bg-white shadow-xl border-transparent hover:border-violet-200'
-                                    }`}
+                                        }`}
                                 >
                                     <div className="flex items-center justify-between">
                                         <div className="flex items-center gap-4">
-                                            <div className={`w-14 h-14 rounded-2xl flex items-center justify-center transition-all duration-500 ${
-                                                status.completed 
-                                                    ? 'bg-violet-500 text-white rotate-[360deg]' 
+                                            <div className={`w-14 h-14 rounded-2xl flex items-center justify-center transition-all duration-500 ${status.completed
+                                                    ? 'bg-violet-500 text-white rotate-[360deg]'
                                                     : isLocked || isPassed
                                                         ? 'bg-gray-100 text-gray-300'
                                                         : 'bg-violet-50 text-violet-600 group-hover:bg-violet-100'
-                                            }`}>
+                                                }`}>
                                                 <activity.icon size={28} />
                                             </div>
                                             <div>
@@ -325,13 +323,12 @@ export default function Katolik({ auth }) {
                                                 </div>
                                             </div>
                                         </div>
-                                        <div className={`w-10 h-10 rounded-full flex items-center justify-center border-2 transition-all duration-500 ${
-                                            status.completed 
-                                                ? 'bg-violet-500 border-violet-500 text-white' 
+                                        <div className={`w-10 h-10 rounded-full flex items-center justify-center border-2 transition-all duration-500 ${status.completed
+                                                ? 'bg-violet-500 border-violet-500 text-white'
                                                 : isLocked || isPassed
                                                     ? 'border-gray-100 text-gray-200'
                                                     : 'border-violet-100 text-violet-300 group-hover:border-violet-300 group-hover:text-violet-500'
-                                        }`}>
+                                            }`}>
                                             {status.completed ? <Check size={20} strokeWidth={3} /> : <Plus size={20} />}
                                         </div>
                                     </div>
@@ -442,7 +439,7 @@ export default function Katolik({ auth }) {
                             exit={{ scale: 0.5, opacity: 0, y: 50 }}
                             className="bg-white rounded-[3rem] p-8 w-full max-w-sm relative z-10 text-center shadow-2xl overflow-hidden"
                         >
-                            <motion.div 
+                            <motion.div
                                 animate={{ rotate: 360 }}
                                 transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
                                 className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] opacity-10 pointer-events-none"
@@ -455,7 +452,7 @@ export default function Katolik({ auth }) {
                                     <Lottie animationData={MedalAnimation} loop={false} />
                                 </div>
 
-                                <motion.h2 
+                                <motion.h2
                                     initial={{ y: 10, opacity: 0 }}
                                     animate={{ y: 0, opacity: 1 }}
                                     transition={{ delay: 0.5 }}
@@ -464,7 +461,7 @@ export default function Katolik({ auth }) {
                                     DEO GRATIAS!
                                 </motion.h2>
 
-                                <motion.p 
+                                <motion.p
                                     initial={{ y: 10, opacity: 0 }}
                                     animate={{ y: 0, opacity: 1 }}
                                     transition={{ delay: 0.6 }}
@@ -474,7 +471,7 @@ export default function Katolik({ auth }) {
                                 </motion.p>
 
                                 <div className="flex gap-4 justify-center mb-8">
-                                    <motion.div 
+                                    <motion.div
                                         initial={{ x: -20, opacity: 0 }}
                                         animate={{ x: 0, opacity: 1 }}
                                         transition={{ delay: 0.8 }}
@@ -487,7 +484,7 @@ export default function Katolik({ auth }) {
                                         </p>
                                     </motion.div>
 
-                                    <motion.div 
+                                    <motion.div
                                         initial={{ x: 20, opacity: 0 }}
                                         animate={{ x: 0, opacity: 1 }}
                                         transition={{ delay: 1 }}
